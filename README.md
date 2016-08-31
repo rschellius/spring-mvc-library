@@ -1,6 +1,8 @@
 Spring Boot and Thymeleaf with Maven
 ====================================
 
+Forked from https://github.com/kolorobot/spring-boot-thymeleaf.
+
 - Spring Boot with Maven and Spring IO Platform for dependency management
 - Web application (WAR) packaging as well as self-contained JAR
 - Thymeleaf with Java 8 Time (Java8TimeDialect)
