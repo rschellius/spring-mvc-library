@@ -2,14 +2,11 @@
 <!--<html layout:decorator="views/member/layout">-->
 <html>
 <head>
-    <title>Members</title>
+    <title>Hello Spring Boot!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
-          rel="stylesheet" media="screen" />
-    <link href="../static/css/core.css"
-          th:href="@{/css/core.css}"
-          rel="stylesheet" media="screen" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
 </head>
 <body>
 
@@ -26,7 +23,7 @@
                 <p><em>This is a simple list of tasks!</em></p>
             </th:block>
         </div>
-
+        <!--/* Demonstrating layout:include */-->
         <div layout:include="views/member/alert :: alert" th:with="type='danger', header='Oh snap! You got an error!'" th:remove="tag">
             <!--/* Implements alert content fragment with full-blown HTML content */-->
             <th:block layout:fragment="alert-content">
@@ -38,7 +35,10 @@
             </th:block>
         </div>
 
-        <table class="table table-bordered table-striped">
+        <h1>Overzicht van Members</h1>
+        <p>Deze pagina geeft een overzicht van de members in het systeem. Klik op een naam voor meer informatie.</p>
+
+        <table class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
                 <td>ID</td>
@@ -52,20 +52,18 @@
             </tr>
             <tr th:each="member : ${members}">
                 <td th:text="${member.id}">1</td>
-                <td><a href="#" th:text="${member.name}">Naam ...</a></td>
+                <td><a th:href="@{/member/{id}(id=${member.id})}" th:text="${member.name}">Naam ...</a></td>
                 <td th:text="${member.email}">Email ...</td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <footer>
+    <footer class="footer">
         <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
     </footer>
 
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js"
-            th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
-    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js"
-            th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
 </body>
 </html>

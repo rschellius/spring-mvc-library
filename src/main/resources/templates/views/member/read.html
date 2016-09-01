@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 
+<!DOCTYPE html>
+<!--<html layout:decorator="views/member/layout">-->
+<html>
 <head>
     <title>Hello Spring Boot!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -9,22 +10,27 @@
     <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
 </head>
 <body>
+
     <!-- Header -->
     <div th:replace="fragments/header :: header"></div>
 
-    <div class="container" role="main">
+    <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
+    <div class="container" layout:fragment="content">
 
-        <!-- Main jumbotron for a primary marketing message or call to action -->
-        <div class="jumbotron">
-            <h1 th:text="'Hello, ' + ${name} + '!'">Hi there!</h1>
-            <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it.</p>
+            <h1>Informatie</h1>
+            <p>Deze pagina laat een member zien.</p>
+                <!--<p th:if="${member.empty}"> No members found.</p>-->
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2 th:text="${member.name}">Naam ...</h2>
+                <p th:text="${member.email}">Email ...</p>
+            </div>
         </div>
 
-        <div class="page-header">
-            <h1>Meer tekst</h1>
-        </div>
-
-        <p>Hier komt later tekst te staan. </p>
+        <p>
+            <a href="/member" class="btn btn-primary btn-lg active" role="button">Terug naar het overzicht</a>
+        </p>
     </div>
 
     <footer class="footer">
