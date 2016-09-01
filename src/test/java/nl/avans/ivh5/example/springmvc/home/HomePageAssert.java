@@ -1,4 +1,4 @@
-package pl.codeleak.demos.sbt.home;
+package nl.avans.ivh5.example.springmvc.home;
 
 import org.assertj.core.api.AbstractAssert;
 import org.openqa.selenium.WebElement;

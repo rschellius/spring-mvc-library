@@ -1,4 +1,4 @@
-package pl.codeleak.demos.sbt;
+package nl.avans.ivh5.example.springmvc;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;

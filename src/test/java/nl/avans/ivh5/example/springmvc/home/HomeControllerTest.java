@@ -1,4 +1,4 @@
-package pl.codeleak.demos.sbt.home;
+package nl.avans.ivh5.example.springmvc.home;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import pl.codeleak.demos.sbt.Application;
+import nl.avans.ivh5.example.springmvc.Application;
 import pl.codeleak.selenium.support.SeleniumTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)

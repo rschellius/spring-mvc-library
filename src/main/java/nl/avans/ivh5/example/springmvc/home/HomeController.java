@@ -1,4 +1,4 @@
-package pl.codeleak.demos.sbt.home;
+package nl.avans.ivh5.example.springmvc.home;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +13,8 @@ class HomeController {
     @RequestMapping("/")
     String index(Model model) {
         model.addAttribute("now", LocalDateTime.now());
+        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+        model.addAttribute("classActiveHome","active");
         return "index";
     }
 
