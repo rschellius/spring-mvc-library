@@ -39,8 +39,20 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
-                <li role="presentation" th:class="${classActiveMember}">
-                    <a href="/member" th:href="@{/member}">Members</a>
+                <li class="dropdown" th:classappend="*{classActiveMember}? ' active' : ''">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Member<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation" th:class="${classActiveMember}">
+                            <a href="/greeting" th:href="@{/member}">List members</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="/greeting?name=Robin" th:href="@{/member/create}">Create member</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Nav header</li>
+                        <li><a href="#">Separated link</a></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>

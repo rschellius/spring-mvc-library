@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--<html layout:decorator="views/member/layout">-->
+<html>
+<head>
+    <title>Hello Spring Boot!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
+</head>
+<body>
+
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container">
+
+        <h1 th:text="#{title.new}">Create Member</h1>
+        <p>Hier kunt je een nieuwe member toevoegen.</p>
+
+        <form action="#" th:action="@{/memberctrl}" th:object="${member}" method="post">
+
+            <fieldset>
+
+                <legend th:text="#{seedstarter.data}">Seed Starter Data</legend>
+
+                <!--<ul th:if="${#fields.hasErrors('*')}" class="errorlist">-->
+                    <!--<li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>-->
+                <!--</ul>-->
+
+                <div>
+                    <label for="name">
+                        <span>Naam</span>
+                    </label>
+                    <input type="text" th:field="*{name}"/>
+                </div>
+                <div>
+                    <label for="email">
+                        <span>Email</span>
+                    </label>
+                    <input type="text" th:field="*{email}"/>
+                </div>
+
+                <div class="submit">
+                    <button type="submit" name="save">Add Seed Starter</button>
+                </div>
+
+            </fieldset>
+
+        </form>
+    </div>
+
+    <footer class="footer">
+        <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
+    </footer>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+</body>
+</html>
