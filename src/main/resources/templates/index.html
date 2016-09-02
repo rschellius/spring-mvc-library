@@ -29,18 +29,19 @@
             </div>
         </div>
     </div>
+
     <div class="container">
-        <div class="hero-unit">
-            <h1>Test</h1>
+        <div class="jumbotron">
+            <h1>Welkom in de Bibliotheek</h1>
             <p>
-                Welcome to the Spring Boot Thymeleaf Application! The time is: <strong th:text="${#temporals.format(now, 'dd/MMM/yyyy HH:mm')}">31/12/2015 15:00</strong>
+                Dit is een Spring Boot Thymeleaf MVc Application! Het is nu <span th:text="${#temporals.format(now, 'd MM yyyy HH:mm')}">31/12/2015 15:00</span>
             </p>
             <p>
                 <a href="#" th:href="@{properties}" class="btn btn-large btn-success">System Properties</a>
             </p>
         </div>
         <div>
-            <h1>Spring Actuator</h1>
+            <h2>Spring Actuator</h2>
             <p>
                 Actuator endpoints allow you to monitor and interact with your application.
                 Spring Boot includes a number of built-in endpoints and you can also add your own.

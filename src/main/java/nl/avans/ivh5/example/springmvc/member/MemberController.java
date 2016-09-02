@@ -19,16 +19,6 @@ class MemberController {
     @Autowired
     public MemberController(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        // init();
-    }
-
-    /**
-     * Zet waarden in de dtb als je dat wilt
-     */
-    private void init() {
-        memberRepository.create(new Member("Robin Schellius", "r.schellius@avans.nl"));
-        memberRepository.create(new Member("Jan Montizaan", "j.montizaan@avans.nl"));
-        memberRepository.create(new Member("Frans Spijkerman", "f.spijkerman@avans.nl"));
     }
 
     @ModelAttribute("page")

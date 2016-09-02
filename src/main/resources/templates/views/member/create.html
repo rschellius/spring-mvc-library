@@ -15,37 +15,75 @@
 
     <div class="container">
 
-        <h1 th:text="#{title.new}">Create Member</h1>
+        <div class="page-header">
+            <h1>Create Member</h1>
+        </div>
         <p>Hier kunt je een nieuwe member toevoegen.</p>
 
+        <!-- Form om een nieuwe member te maken. Het object 'member' is het object waarin de
+            waarden uit het formulier worden ingevuld. Het is afkomstig uit de MemberController. -->
         <form action="#" th:action="@{/memberctrl}" th:object="${member}" method="post">
 
-            <fieldset>
+            <!--<ul th:if="${#fields.hasErrors('*')}" class="errorlist">-->
+                <!--<li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>-->
+            <!--</ul>-->
 
-                <legend th:text="#{seedstarter.data}">Seed Starter Data</legend>
-
-                <!--<ul th:if="${#fields.hasErrors('*')}" class="errorlist">-->
-                    <!--<li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>-->
-                <!--</ul>-->
-
-                <div>
-                    <label for="name">
-                        <span>Naam</span>
-                    </label>
-                    <input type="text" th:field="*{name}"/>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="firstname">Voornaam</label>
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <input type="text" class="form-control" id="firstname" th:field="*{firstName}"/>
+                    </div>
                 </div>
-                <div>
-                    <label for="email">
-                        <span>Email</span>
-                    </label>
-                    <input type="text" th:field="*{email}"/>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="lastname">Achternaam</label>
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <input type="text" class="form-control" id="lastname" th:field="*{lastName}"/>
+                    </div>
+                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="street">Straat</label>
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <input type="text" class="form-control" id="street" th:field="*{street}"/>
+                    </div>
                 </div>
-
-                <div class="submit">
-                    <button type="submit" name="save">Add Seed Starter</button>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="housenumber">Huisnummer</label>
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <input type="text" class="form-control" id="housenumber" th:field="*{houseNumber}"/>
+                    </div>
                 </div>
-
-            </fieldset>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="city">Stad</label>
+                        <input type="text" class="form-control" id="city" th:field="*{city}"/>
+                    </div>
+                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" th:field="*{emailAddress}"/>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="phone">Telefoon</label>
+                        <input type="text" class="form-control" id="phone" th:field="*{phoneNumber}"/>
+                    </div>
+                </div>
+            </div>
+            <!-- De button die voor verzenden van het formulier zorgt.
+                De name 'save' is een parameter waarmee in de MemberController de juiste
+                save-actie wordt gestart. -->
+            <button type="submit" class="btn btn-default" name="save">Submit</button>
 
         </form>
     </div>

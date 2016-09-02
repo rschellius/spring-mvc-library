@@ -16,14 +16,20 @@
     <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
     <div class="container" layout:fragment="content">
 
+        <div class="page-header">
             <h1>Informatie</h1>
-            <p>Deze pagina laat een member zien.</p>
-                <!--<p th:if="${member.empty}"> No members found.</p>-->
+        </div>
+        <p>Deze pagina laat een member zien.</p>
+            <!--<p th:if="${member.empty}"> No members found.</p>-->
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <h2 th:text="${member.name}">Naam ...</h2>
-                <p th:text="${member.email}">Email ...</p>
+                <h2 th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</h2>
+                <p th:text="${member.street} + ' ' + ${member.houseNumber}">Email ...</p>
+                <p th:text="${member.city}">Stad ...</p>
+                <p th:text="${member.phoneNumber}">Tele ...</p>
+                <p th:text="${member.emailAddress}">Email ...</p>
+                <p th:text="${member.fine}">Email ...</p>
             </div>
         </div>
 

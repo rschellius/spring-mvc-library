@@ -35,14 +35,17 @@
             </th:block>
         </div>
 
-        <h1>Overzicht van Members</h1>
+        <div class="page-header">
+            <h1>Overzicht van Members</h1>
+        </div>
         <p>Deze pagina geeft een overzicht van de members in het systeem. Klik op een naam voor meer informatie.</p>
 
         <table class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
-                <td>ID</td>
-                <td>Title</td>
+                <td>MembershipNr</td>
+                <td>Name</td>
+                <td>Telefoon</td>
                 <td>Email</td>
             </tr>
             </thead>
@@ -51,9 +54,10 @@
                 <td colspan="4">No members</td>
             </tr>
             <tr th:each="member : ${members}">
-                <td th:text="${member.id}">1</td>
-                <td><a th:href="@{/member/{id}(id=${member.id})}" th:text="${member.name}">Naam ...</a></td>
-                <td th:text="${member.email}">Email ...</td>
+                <td th:text="${member.membershipNumber}">1</td>
+                <td><a th:href="@{/member/{id}(id=${member.membershipNumber})}" th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</a></td>
+                <td th:text="${member.phoneNumber}">telefoon ...</td>
+                <td th:text="${member.emailAddress}">Email ...</td>
             </tr>
             </tbody>
         </table>

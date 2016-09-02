@@ -112,12 +112,13 @@ ALTER TABLE `member` AUTO_INCREMENT = 1000;
 --
 
 INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) VALUES
-('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '0765238754', 'ppth.vangastel@avans.nl', 0),
-('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '0765231234', 'e.argante@avans.nl', 0),
-('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '0765231234', 'j.montizaan@avans.nl', 0),
-('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '0765231234', 'f.spijkerman@avans.nl', 0),
-('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '0765231234', 'r.schellius@avans.nl', 0),
-('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '0765236789', 'mmcm.bastiaensen@avans.nl', 5);
+('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '076-5238754', 'ppth.vangastel@avans.nl', 0),
+('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'e.argante@avans.nl', 0),
+('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'j.montizaan@avans.nl', 0),
+('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'f.spijkerman@avans.nl', 0),
+('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'r.schellius@avans.nl', 0),
+('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'mpg.vanhaperen@avans.nl', 0),
+('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236789', 'mmcm.bastiaensen@avans.nl', 5);
 
 -- --------------------------------------------------------
 
