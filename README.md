@@ -1,10 +1,10 @@
-Spring Boot and Thymeleaf with Maven
+Library Worked Example using Spring Boot MVC and Thymeleaf
 ====================================
 
 Forked from https://github.com/kolorobot/spring-boot-thymeleaf.
 
 - Spring Boot MVC with Maven and Spring IO
-- Thymeleaf with Java 8 Time (Java8TimeDialect)
+- Thymeleaf templating engine with Java 8 Time (Java8TimeDialect)
 - WebJars
 - Selenium configuration included
 
