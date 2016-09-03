@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Member
 {
-    private int membershipNumber;
+    private int memberID;
     private String firstName;
     private String lastName;
     private String street;
@@ -32,7 +32,7 @@ public class Member
         this.fine = fine;
         // ID is de auto increment waarde uit de database.
         // wordt hier ingevuld wanneer een Member aangemaakt wordt in de dtb.
-        this.membershipNumber = 0;
+        this.memberID = 0;
     }
 
     public String getFirstName() {
@@ -99,12 +99,12 @@ public class Member
         this.fine = fine;
     }
 
-    public void setMembershipNumber(int membershipNumber) {
-        this.membershipNumber = membershipNumber;
+    public void setMemberID(int memberID) {
+        this.memberID = memberID;
     }
 
-    public int getMembershipNumber() {
-        return membershipNumber;
+    public int getMemberID() {
+        return memberID;
     }
 
     public Date getLastUpdated() {

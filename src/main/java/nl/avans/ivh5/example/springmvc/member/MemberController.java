@@ -1,5 +1,6 @@
 package nl.avans.ivh5.example.springmvc.member;
 
+import nl.avans.ivh5.example.springmvc.loan.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 class MemberController {
 
     private MemberRepository memberRepository;
+    private LoanRepository loanRepository;
 
     @Autowired
-    public MemberController(MemberRepository memberRepository) {
+    public MemberController(MemberRepository memberRepository, LoanRepository loanRepository) {
         this.memberRepository = memberRepository;
+        this.loanRepository = loanRepository;
     }
 
     @ModelAttribute("page")
@@ -33,7 +36,7 @@ class MemberController {
      */
     @RequestMapping(value = "/member", method = RequestMethod.GET)
     public String listMembers(Model model) {
-        // Zet de opgevraagde waarden in het model
+        // Zet de opgevraagde members in het model
         model.addAttribute("members", memberRepository.findAll());
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveMember","active");
@@ -83,6 +86,8 @@ class MemberController {
     public String listOneMember(Model model, @PathVariable int id) {
         // Zet de opgevraagde waarden in het model
         model.addAttribute("member", memberRepository.findMemberById(id));
+        // Zet de opgevraagde uitleningen van deze member in het model
+        model.addAttribute("loans", loanRepository.findAllByMemberId(id));
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveMember", "active");
         // Open de juiste view template als resultaat.

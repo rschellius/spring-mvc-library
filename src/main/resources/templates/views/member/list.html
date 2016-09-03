@@ -54,8 +54,8 @@
                 <td colspan="4">No members</td>
             </tr>
             <tr th:each="member : ${members}">
-                <td th:text="${member.membershipNumber}">1</td>
-                <td><a th:href="@{/member/{id}(id=${member.membershipNumber})}" th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</a></td>
+                <td th:text="${member.memberID}">1</td>
+                <td><a th:href="@{/member/{id}(id=${member.memberID})}" th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</a></td>
                 <td th:text="${member.phoneNumber}">telefoon ...</td>
                 <td th:text="${member.emailAddress}">Email ...</td>
             </tr>

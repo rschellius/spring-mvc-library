@@ -23,24 +23,6 @@ CREATE TABLE `book` (
   PRIMARY KEY (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `book`
---
-
-INSERT INTO `book` (`ISBN`, `Title`, `Author`, `Edition`) VALUES
-(1011, 'De avonden', 'Gerard van het Reve', 9),
-(1014, 'Het boek van violet en dood', 'Gerard Reve', 9),
-(1021, 'Ik heb nooit iets gelezen', 'Karel van het Reve', 2),
-(1111, 'Het leven is vurrukkulluk', 'Remco Campert', 1),
-(2222, 'De Ontdekking van de Hemel', 'Harry Mulisch', 5),
-(2223, 'De Aanslag', 'Harry Mulisch', 8),
-(3333, 'De Aanslag', 'Belastingdienst', 1),
-(4001, 'De geverfde vogel', 'Jerzy Kosinski', 2),
-(4003, 'Cockpit', 'Jerzy Kosinski', 1),
-(4005, 'Aanwezig', 'Jerzy Kosinski', 4),
-(8000, 'Ik, Jan Cremer', 'Jan Cremer', 22),
-(8888, 'Ik, Jan Klaassen', 'Herman Finkers', 22);
-
 -- --------------------------------------------------------
 
 --
@@ -60,40 +42,6 @@ ALTER TABLE `copy` AUTO_INCREMENT = 1000;
 ALTER TABLE `copy`
   ADD KEY `BookISBN` (`BookISBN`);
 
-INSERT INTO `copy` (`LendingPeriod`, `BookISBN`) VALUES
-(5, 2222),
-(5, 2222),
-(5, 2222),
-(5, 1011),
-(5, 1011),
-(5, 1011),
-(5, 1014),
-(5, 1014),
-(5, 1014),
-(5, 1021),
-(5, 1021),
-(5, 1111),
-(5, 1111),
-(5, 2222),
-(5, 2222),
-(5, 2222),
-(5, 2222),
-(5, 2223),
-(5, 2223),
-(5, 2223),
-(5, 3333),
-(5, 3333),
-(5, 4001),
-(5, 4003),
-(5, 4005),
-(5, 4005),
-(5, 4005),
-(5, 8000),
-(5, 8888),
-(21, 1111),
-(21, 1111),
-(21, 1111);
-
 -- --------------------------------------------------------
 
 --
@@ -101,28 +49,14 @@ INSERT INTO `copy` (`LendingPeriod`, `BookISBN`) VALUES
 --
 
 CREATE TABLE `loan` (
-  `LoanDate` TIMESTAMP NOT NULL,
-  `ReturnedDate` TIMESTAMP,
+  `LoanID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `LoanDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ReturnedDate` TIMESTAMP NULL,
   `MemberID` INT(11) UNSIGNED NOT NULL,
-  `CopyID` INT(11) UNSIGNED NOT NULL
+  `CopyID` INT(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (`LoanID`),
+  KEY (`MemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE `loan`
-  ADD PRIMARY KEY (`ReturnedDate`,`MemberID`,`CopyID`),
-  ADD KEY `MemberID` (`MemberID`);
-
-INSERT INTO `loan` (`LoanDate`, `MemberID`, `CopyID`) VALUES
-(NOW(), 1000, 1001),
-(NOW(), 1006, 1001),
-(NOW(), 1002, 1011),
-(NOW(), 1001, 1014),
-(NOW(), 1005, 1014),
-(NOW(), 1000, 1023),
-(NOW(), 1003, 1021),
-(NOW(), 1001, 1021),
-(NOW(), 1004, 1011),
-(NOW(), 1000, 1021),
-(NOW(), 1001, 1013);
 
 -- --------------------------------------------------------
 
@@ -146,19 +80,6 @@ CREATE TABLE `member` (
 
 ALTER TABLE `member` AUTO_INCREMENT = 1000;
 
---
--- Dumping data for table `member`
---
-
-INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) VALUES
-('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '076-5238754', 'ppth.vangastel@avans.nl', 0),
-('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'e.argante@avans.nl', 0),
-('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'j.montizaan@avans.nl', 0),
-('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'f.spijkerman@avans.nl', 0),
-('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'r.schellius@avans.nl', 0),
-('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'mpg.vanhaperen@avans.nl', 0),
-('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236789', 'mmcm.bastiaensen@avans.nl', 5);
-
 -- --------------------------------------------------------
 
 --
@@ -178,13 +99,6 @@ ALTER TABLE `reservation`
   ADD PRIMARY KEY (`ReservationDate`,`MemberID`,`CopyID`),
   ADD KEY `MemberID` (`MemberID`),
   ADD KEY `CopyID` (`CopyID`);
-
---
--- Dumping data for table `reservation`
---
-
-INSERT INTO `reservation` (`ReservationDate`, `MemberID`, `CopyID`) VALUES
-(NOW(), 1002, 1012);
 
 --
 -- Constraints for table `copy`
@@ -221,6 +135,7 @@ GRANT ALL ON `library`.* TO 'spring'@'localhost';
 --
 CREATE OR REPLACE VIEW `view_all_loans` AS 
 SELECT 
+	`loan`.`LoanID`,
 	`loan`.`LoanDate`,
 	`loan`.`ReturnedDate`,
 	`book`.`ISBN`,
@@ -271,3 +186,98 @@ SELECT
 	`book`.`Edition`
 FROM `copy`
 LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`;
+
+
+-- -----------------------------------------------------
+-- We doen de inserts als laatste. Op dit moment zijn alle PK en FK constraints
+-- in stelling gebracht. Iedere insert die lukt geeft dus een valide record 
+-- in die tabel. 
+--
+
+INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) VALUES
+('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '076-5238754', 'ppth.vangastel@avans.nl', 0),
+('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'e.argante@avans.nl', 0),
+('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'j.montizaan@avans.nl', 0),
+('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'f.spijkerman@avans.nl', 0),
+('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'r.schellius@avans.nl', 0),
+('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'mpg.vanhaperen@avans.nl', 0),
+('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236789', 'mmcm.bastiaensen@avans.nl', 5);
+
+--
+-- Dumping data for table `book`
+--
+
+INSERT INTO `book` (`ISBN`, `Title`, `Author`, `Edition`) VALUES
+(1011, 'De avonden', 'Gerard van het Reve', 9),
+(1014, 'Het boek van violet en dood', 'Gerard Reve', 9),
+(1021, 'Ik heb nooit iets gelezen', 'Karel van het Reve', 2),
+(1111, 'Het leven is vurrukkulluk', 'Remco Campert', 1),
+(2222, 'De Ontdekking van de Hemel', 'Harry Mulisch', 5),
+(2223, 'De Aanslag', 'Harry Mulisch', 8),
+(3333, 'De Aanslag', 'Belastingdienst', 1),
+(4001, 'De geverfde vogel', 'Jerzy Kosinski', 2),
+(4003, 'Cockpit', 'Jerzy Kosinski', 1),
+(4005, 'Aanwezig', 'Jerzy Kosinski', 4),
+(8000, 'Ik, Jan Cremer', 'Jan Cremer', 22),
+(8888, 'Ik, Jan Klaassen', 'Herman Finkers', 22);
+
+
+INSERT INTO `copy` (`LendingPeriod`, `BookISBN`) VALUES
+(5, 2222),
+(5, 2222),
+(5, 2222),
+(5, 1011),
+(5, 1011),
+(5, 1011),
+(5, 1014),
+(5, 1014),
+(5, 1014),
+(5, 1021),
+(5, 1021),
+(5, 1111),
+(5, 1111),
+(5, 2222),
+(5, 2222),
+(5, 2222),
+(5, 2222),
+(5, 2223),
+(5, 2223),
+(5, 2223),
+(5, 3333),
+(5, 3333),
+(5, 4001),
+(5, 4003),
+(5, 4005),
+(5, 4005),
+(5, 4005),
+(5, 8000),
+(5, 8888),
+(21, 1111),
+(21, 1111),
+(21, 1111);
+
+--
+-- Dumping data for table `loan`
+--
+
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES
+(1000, 1001),
+(1006, 1001),
+(1002, 1011),
+(1001, 1014),
+(1005, 1014),
+(1000, 1023),
+(1003, 1021),
+(1001, 1021),
+(1004, 1011),
+(1000, 1021),
+(1001, 1022);
+
+
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`ReservationDate`, `MemberID`, `CopyID`) VALUES
+(NOW(), 1002, 1012);
+

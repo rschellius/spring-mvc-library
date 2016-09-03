@@ -28,7 +28,7 @@ public class MemberRepository
     @Transactional(readOnly=true)
     public Member findMemberById(int id) {
         return jdbcTemplate.queryForObject(
-                "SELECT * FROM member WHERE MembershipNumber=?",
+                "SELECT * FROM member WHERE MemberID=?",
                 new Object[]{id}, new MemberRowMapper());
     }
 
@@ -55,8 +55,8 @@ public class MemberRepository
         }, holder);
 
         // Zet de auto increment waarde in de Member
-        int newUserId = holder.getKey().intValue();
-        member.setMembershipNumber(newUserId);
+        int newMemberId = holder.getKey().intValue();
+        member.setMemberID(newMemberId);
         return member;
     }
 }

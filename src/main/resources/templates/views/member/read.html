@@ -22,14 +22,53 @@
         <p>Deze pagina laat een member zien.</p>
             <!--<p th:if="${member.empty}"> No members found.</p>-->
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2 th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</h2>
-                <p th:text="${member.street} + ' ' + ${member.houseNumber}">Email ...</p>
-                <p th:text="${member.city}">Stad ...</p>
-                <p th:text="${member.phoneNumber}">Tele ...</p>
-                <p th:text="${member.emailAddress}">Email ...</p>
-                <p th:text="${member.fine}">Email ...</p>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</h2>
+                        <p th:text="${member.street} + ' ' + ${member.houseNumber}">Email ...</p>
+                        <p th:text="${member.city}">Stad ...</p>
+                        <p th:text="${member.phoneNumber}">Tele ...</p>
+                        <p th:text="${member.emailAddress}">Email ...</p>
+                        <p th:text="${member.fine}">Email ...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Boeken in bezit</h2>
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td>ISBN</td>
+                                <td>Titel</td>
+                                <td>Auteur</td>
+                                <td>Geleend op</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${loans.empty}">
+                                <td colspan="4">Geen uitleningen gevonden.</td>
+                            </tr>
+                            <tr th:each="loan : ${loans}">
+                                <td th:text="${loan.bookISBN}">ISBN</td>
+                                <td th:text="${loan.bookTitle}">Titel</td>
+                                <td th:text="${loan.bookAuthor}">Author</td>
+                                <td th:text="${loan.loanDate}">Date</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Reserveringen</h2>
+                    </div>
+                </div>
             </div>
         </div>
 
