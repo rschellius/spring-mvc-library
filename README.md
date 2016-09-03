@@ -3,17 +3,18 @@ Spring Boot and Thymeleaf with Maven
 
 Forked from https://github.com/kolorobot/spring-boot-thymeleaf.
 
-- Spring Boot with Maven and Spring IO Platform for dependency management
-- Web application (WAR) packaging as well as self-contained JAR
+- Spring Boot MVC with Maven and Spring IO
 - Thymeleaf with Java 8 Time (Java8TimeDialect)
 - WebJars
 - Selenium configuration included
-- Maven Wrapper included
 
 Prerequisites
 -------------
 
-- JDK 8 and JAVA_HOME environment variable set 
+- JDK 8 and JAVA_HOME environment variable set
+- Maven installed
+- MySql database with library.sql script imported and running on local host
+- Importing the .sql script should provide a user 'spring' with pwd 'test' and access to 'library' database.
 
 Building the project
 --------------------
@@ -28,11 +29,11 @@ Navigate to the newly created folder:
 
 Run the project with:
 
-> mvnw clean spring-boot:run
+> mvn clean compile spring-boot:run
 
-To package the project run:
+To package the project into a fat jar run:
 
-> mvnw clean package
+> mvn clean package
 
 
 Referenced articles:
