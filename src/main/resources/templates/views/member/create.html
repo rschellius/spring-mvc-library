@@ -23,11 +23,28 @@
 
         <!-- Form om een nieuwe member te maken. Het object 'member' is het object waarin de
             waarden uit het formulier worden ingevuld. Het is afkomstig uit de MemberController. -->
-        <form action="#" th:action="@{/memberctrl}" th:object="${member}" method="post">
+        <form action="#" th:action="@{/member/create}" th:object="${member}" method="post">
 
+            <!-- Het formulier wordt na verzenden gevalideerd in de MemberController.
+                Als er fouten waren kun je hier een lijst met foutmeldingen tonen.
+                Je kunt ook de melding bij het inputveld tonen (zie code hieronder) en evt. de CSS class
+                van het inputveld veranderen. -->
             <!--<ul th:if="${#fields.hasErrors('*')}" class="errorlist">-->
                 <!--<li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>-->
             <!--</ul>-->
+
+            <div th:if="${#fields.hasErrors('*')}">
+                <div layout:include="views/member/alert :: alert" th:with="type='danger', header='Fouten in het formulier'" th:remove="tag">
+                    <!--/* Implements alert content fragment with full-blown HTML content */-->
+                    <th:block layout:fragment="alert-content">
+                        <p>Niet alle velden in het formulier zijn correct ingevuld. Corrigeer deze en verzend opnieuw.</p>
+                        <!--<p>-->
+                            <!--<button type="button" class="btn btn-danger">Take this action</button>-->
+                            <!--<button type="button" class="btn btn-default">Or do this</button>-->
+                        <!--</p>-->
+                    </th:block>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-sm-4">
@@ -35,6 +52,7 @@
                         <label for="firstname">Voornaam</label>
                         <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
                         <input type="text" class="form-control" id="firstname" th:field="*{firstName}"/>
+                        <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error</p>
                     </div>
                 </div>
                 <div class="col-sm-8">
@@ -42,6 +60,7 @@
                         <label for="lastname">Achternaam</label>
                         <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
                         <input type="text" class="form-control" id="lastname" th:field="*{lastName}"/>
+                        <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name Error</p>
                     </div>
                  </div>
             </div>
@@ -51,6 +70,7 @@
                         <label for="street">Straat</label>
                         <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
                         <input type="text" class="form-control" id="street" th:field="*{street}"/>
+                        <p th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Name Error</p>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -58,6 +78,7 @@
                         <label for="housenumber">Huisnummer</label>
                         <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
                         <input type="text" class="form-control" id="housenumber" th:field="*{houseNumber}"/>
+                        <p th:if="${#fields.hasErrors('houseNumber')}" th:errors="*{houseNumber}">Name Error</p>
                     </div>
                 </div>
             </div>
@@ -66,18 +87,21 @@
                     <div class="form-group">
                         <label for="city">Stad</label>
                         <input type="text" class="form-control" id="city" th:field="*{city}"/>
+                        <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Name Error</p>
                     </div>
                  </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="text" class="form-control" id="email" th:field="*{emailAddress}"/>
+                        <p th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}">Name Error</p>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label for="phone">Telefoon</label>
                         <input type="text" class="form-control" id="phone" th:field="*{phoneNumber}"/>
+                        <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Name Error</p>
                     </div>
                 </div>
             </div>

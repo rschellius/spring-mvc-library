@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import javax.validation.Valid;
 
 @Controller
 // @Secured("ROLE_USER")
@@ -17,6 +18,7 @@ class MemberController {
 
     private MemberRepository memberRepository;
     private LoanRepository loanRepository;
+    private Member member;
 
     @Autowired
     public MemberController(MemberRepository memberRepository, LoanRepository loanRepository) {
@@ -45,6 +47,18 @@ class MemberController {
     }
 
     /**
+     * Hiermee open je de create view om een nieuwe member aan te maken.
+     *
+     * @param member Dit object wordt aan de view meegegeven. Het object wordt gevuld met de waarden uit het formulier.
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/member/create", method = RequestMethod.GET)
+    public String showCreateMemberForm(final Member member, final ModelMap model) {
+        return "/views/member/create";
+    }
+
+    /**
      * Deze methode handelt een ingevuld formulier af. Als er fouten zijn opgetreden blijven we in dezelfde view.
      * Als er geen fouten waren maken we een nieuwe member en gaan we direct naar de list view voor het overzicht.
      * De nieuwe member moet dan in het overzicht staan.
@@ -54,27 +68,18 @@ class MemberController {
      * @param model
      * @return
      */
-    @RequestMapping(value="/memberctrl", params={"save"})
-    public String saveMember(final Member member, final BindingResult bindingResult, final ModelMap model) {
+    @RequestMapping(value="/member/create", method = RequestMethod.POST)
+    public String validateAndSaveMember(@Valid Member member, final BindingResult bindingResult, final ModelMap model) {
+        this.member = member;
         if (bindingResult.hasErrors()) {
-            return "/member/create";
+            return "/views/member/create";
         }
         this.memberRepository.create(member);
         model.clear();
-        return "redirect:/member";
+        // return "redirect:/member";
+        return "views/member";
     }
 
-    /**
-     * Hiermee open je de create view om een nieuwe member aan te maken.
-     *
-     * @param member Dit object wordt aan de view meegegeven. Het object wordt gevuld met de waarden uit het formulier.
-     * @param model
-     * @return
-     */
-    @RequestMapping(value="/member/create")
-    public String saveMember(final Member member, final ModelMap model) {
-        return "/views/member/create";
-    }
 
     /**
      * Haal het member met gegeven ID uit de database en toon deze in een view.

@@ -1,21 +1,57 @@
 package nl.avans.ivh5.example.springmvc.member;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
- * Created by Robin Schellius on 31-8-2016.
+ *
  */
 public class Member
 {
+    // Attributen. Voor info over validatie, zie
+    // https://docs.oracle.com/cd/E19798-01/821-1841/gkahq/index.html
+    // http://docs.oracle.com/javaee/6/api/javax/validation/constraints/package-summary.html
+    // https://spring.io/guides/gs/validating-form-input/
+
     private int memberID;
+
+    @NotNull
+    @Size(min = 1, max = 32)
     private String firstName;
+
+    @NotNull
+    @Size(min = 1, max = 32)
     private String lastName;
+
+    @NotNull
+    @Size(min = 1, max = 32)
     private String street;
+
+    @NotNull
+    @DecimalMin("1")
     private String houseNumber;
+
+    @NotNull
+    @Size(min = 1, max = 32)
     private String city;
+
+    @NotNull
+    @Size(min = 1, max = 32)
     private String phoneNumber;
+
+    @NotNull
+    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+            +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+            +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+            message="{invalid.email}")
     private String emailAddress;
+
+    @DecimalMin("0.0")
     private double fine;
+
     private Date lastUpdated;
 
 

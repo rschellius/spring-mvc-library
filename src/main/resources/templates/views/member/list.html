@@ -24,17 +24,6 @@
                 <p><em>This is a simple list of tasks!</em></p>
             </th:block>
         </div>
-        <!--/* Demonstrating layout:include */-->
-        <div layout:include="views/member/alert :: alert" th:with="type='danger', header='Oh snap! You got an error!'" th:remove="tag">
-            <!--/* Implements alert content fragment with full-blown HTML content */-->
-            <th:block layout:fragment="alert-content">
-                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
-                <p>
-                    <button type="button" class="btn btn-danger">Take this action</button>
-                    <button type="button" class="btn btn-default">Or do this</button>
-                </p>
-            </th:block>
-        </div>
 
         <div class="page-header">
             <h1>Overzicht van Members</h1>
