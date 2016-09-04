@@ -1,5 +1,7 @@
 package nl.avans.ivh5.example.springmvc.member;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -20,25 +22,32 @@ public class MemberRepository
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private final Logger logger = LoggerFactory.getLogger(MemberRepository.class);;
+
     @Transactional(readOnly=true)
     public List<Member> findAll() {
+        logger.debug("findAll");
         return jdbcTemplate.query("SELECT * FROM member", new MemberRowMapper());
     }
 
     @Transactional(readOnly=true)
     public Member findMemberById(int id) {
+        logger.debug("findMemberById");
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM member WHERE MemberID=?",
                 new Object[]{id}, new MemberRowMapper());
     }
 
     public Member create(final Member member) {
+
+        logger.debug("create");
         final String sql = "INSERT INTO member(`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) " +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+                "VALUES(?,?,?,?,?,?,?,?)";
 
         // KeyHolder gaat de auto increment key uit de database bevatten.
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
+
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -49,7 +58,7 @@ public class MemberRepository
                 ps.setString(5, member.getCity());
                 ps.setString(6, member.getPhoneNumber());
                 ps.setString(7, member.getEmailAddress());
-                ps.setDouble(8, member.getFine());
+                ps.setDouble(8, 0.0);
                 return ps;
             }
         }, holder);

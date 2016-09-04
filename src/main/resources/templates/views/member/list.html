@@ -17,11 +17,11 @@
     <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
     <div class="container" layout:fragment="content">
 
-        <!--/* Demonstrating layout:include */-->
-        <div layout:include="views/member/alert :: alert" th:with="type='info', header='Info'" th:remove="tag">
+        <!--/* Als er een nieuw member is toegevoegd tonen we een info bericht. */-->
+        <div th:if="${info}" layout:include="views/member/alert :: alert" th:with="type='info', header='Info'" th:remove="tag">
             <!--/* Implements alert content fragment with simple content */-->
             <th:block layout:fragment="alert-content">
-                <p><em>This is a simple list of tasks!</em></p>
+                <p th:text="${info}"><em>Info bericht</em></p>
             </th:block>
         </div>
 

@@ -38,10 +38,15 @@
                     <!--/* Implements alert content fragment with full-blown HTML content */-->
                     <th:block layout:fragment="alert-content">
                         <p>Niet alle velden in het formulier zijn correct ingevuld. Corrigeer deze en verzend opnieuw.</p>
-                        <!--<p>-->
-                            <!--<button type="button" class="btn btn-danger">Take this action</button>-->
-                            <!--<button type="button" class="btn btn-default">Or do this</button>-->
-                        <!--</p>-->
+                        <!--<p><button type="button" class="btn btn-danger">Take this action</button></p>-->
+                    </th:block>
+                </div>
+            </div>
+            <div th:if="${exception}">
+                <div layout:include="views/member/alert :: alert" th:with="type='danger', header='Fouten in het formulier'" th:remove="tag">
+                    <!--/* Implements alert content fragment with full-blown HTML content */-->
+                    <th:block layout:fragment="alert-content">
+                        <p th:text="${exception}">Exception message</p>
                     </th:block>
                 </div>
             </div>

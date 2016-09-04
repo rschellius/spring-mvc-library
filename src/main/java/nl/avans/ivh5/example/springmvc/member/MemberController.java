@@ -1,16 +1,18 @@
 package nl.avans.ivh5.example.springmvc.member;
 
+import com.mysql.jdbc.SQLError;
 import nl.avans.ivh5.example.springmvc.loan.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 @Controller
 // @Secured("ROLE_USER")
@@ -70,14 +72,23 @@ class MemberController {
      */
     @RequestMapping(value="/member/create", method = RequestMethod.POST)
     public String validateAndSaveMember(@Valid Member member, final BindingResult bindingResult, final ModelMap model) {
-        this.member = member;
+
         if (bindingResult.hasErrors()) {
+            // Als er velden in het formulier zijn die niet correct waren ingevuld vinden we die hier.
+            // We blijven dan op dezelfde pagina. De foutmeldingen worden daar getoond
+            // (zie het create.html bestand.
             return "/views/member/create";
         }
-        this.memberRepository.create(member);
-        model.clear();
-        // return "redirect:/member";
-        return "views/member";
+        // Maak de member aan via de repository
+        Member newMember = this.memberRepository.create(member);
+        // We gaan de lijst met members tonen, met een bericht dat de nieuwe member toegevoegd is.
+        // Zet de opgevraagde members in het model
+        model.addAttribute("members", memberRepository.findAll());
+        model.addAttribute("info", "Member '" + newMember.getFullName() + "' is toegevoegd.");
+        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+        model.addAttribute("classActiveMember","active");
+        // Open de juiste view template als resultaat.
+        return "views/member/list";
     }
 
 
@@ -97,6 +108,21 @@ class MemberController {
         model.addAttribute("classActiveMember", "active");
         // Open de juiste view template als resultaat.
         return "views/member/read";
+    }
+
+    @ExceptionHandler(value = SQLException.class)
+    public ModelAndView handleError(HttpServletRequest req, SQLException ex) {
+        // logger.error("Request: " + req.getRequestURL() + " raised " + ex);
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", ex);
+        mav.addObject("title", "Exception in MemberController");
+        mav.addObject("url", req.getRequestURL());
+        // Je kunt hier kiezen in welke view je een melding toont - op een
+        // aparte pagina, of als alertbox op de huidige pagina.
+         mav.setViewName("error/error");
+//        mav.setViewName("views/member/create");
+        return mav;
     }
 
 }

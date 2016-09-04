@@ -87,6 +87,8 @@ public class Member
         this.lastName = lastName;
     }
 
+    public String getFullName() { return this.firstName + " " + this.lastName; }
+
     public String getStreet() {
         return street;
     }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--<html layout:decorator="views/member/layout">-->
+<html>
+<head>
+    <title>Hello Spring Boot!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container">
+
+        <div class="page-header">
+            <!--<h1 th:text="${error.bericht}">Error page</h1>-->
+            <h1>404 - Pagina niet gevonden</h1>
+        </div>
+        <p>Hier kun je een betere foutmelding neerzetten ...</p>
+    </div>
+
+    <footer class="footer">
+        <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
+    </footer>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+</body>
+</html>

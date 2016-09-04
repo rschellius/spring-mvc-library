@@ -16,4 +16,15 @@ public class GreetingController {
         return "greeting";
     }
 
+    /**
+     * URL om te testen of Exceptions goed worden afgehandeld. Als je in de browser naar /exception gaat
+     * zou deze foutmelding zichtbaar moeten zijn.
+     *
+     * @param model
+     * @throws Exception
+     */
+    @RequestMapping("/exception")
+    public void throwException(Model model) throws Exception{
+        throw new Exception("Er was een Exception, dit is een test. Als je dit bericht ziet was de Exception zichtbaar.");
+    }
 }
