@@ -71,8 +71,8 @@ CREATE TABLE `member` (
   `Street` VARCHAR(32) NOT NULL,
   `HouseNumber` VARCHAR(4) NOT NULL,
   `City` VARCHAR(32) NOT NULL,
-  `PhoneNumber` VARCHAR(16) NOT NULL,
-  `EmailAddress` VARCHAR(32) NOT NULL,
+  `PhoneNumber` VARCHAR(16) UNIQUE NOT NULL,
+  `EmailAddress` VARCHAR(32) UNIQUE NOT NULL,
   `Fine` double NOT NULL,
   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`MemberID`)
@@ -196,12 +196,12 @@ LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`;
 
 INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) VALUES
 ('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '076-5238754', 'ppth.vangastel@avans.nl', 0),
-('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'e.argante@avans.nl', 0),
-('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'j.montizaan@avans.nl', 0),
-('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'f.spijkerman@avans.nl', 0),
-('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'r.schellius@avans.nl', 0),
-('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231234', 'mpg.vanhaperen@avans.nl', 0),
-('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236789', 'mmcm.bastiaensen@avans.nl', 5);
+('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231235', 'e.argante@avans.nl', 0),
+('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231236', 'j.montizaan@avans.nl', 0),
+('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231237', 'f.spijkerman@avans.nl', 0),
+('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231238', 'r.schellius@avans.nl', 0),
+('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231239', 'mpg.vanhaperen@avans.nl', 0),
+('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236790', 'mmcm.bastiaensen@avans.nl', 5);
 
 --
 -- Dumping data for table `book`
