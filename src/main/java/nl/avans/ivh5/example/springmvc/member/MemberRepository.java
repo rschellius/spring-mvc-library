@@ -68,4 +68,10 @@ public class MemberRepository
         member.setMemberID(newMemberId);
         return member;
     }
+
+    public void deleteMemberById(int id) {
+        logger.debug("deleteMemberById");
+        jdbcTemplate.update("DELETE FROM member WHERE MemberID=?", new Object[]{id});
+    }
+
 }

@@ -28,11 +28,25 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h2 th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</h2>
-                        <p th:text="${member.street} + ' ' + ${member.houseNumber}">Email ...</p>
-                        <p th:text="${member.city}">Stad ...</p>
-                        <p th:text="${member.phoneNumber}">Tele ...</p>
-                        <p th:text="${member.emailAddress}">Email ...</p>
-                        <p th:text="${member.fine}">Email ...</p>
+                        <div class="row">
+                            <div class="col-xs-3">Adres</div>
+                            <div class="col-xs-9">
+                                <p>
+                                    <span th:text="${member.street} + ' ' + ${member.houseNumber}">Adres</span><br/>
+                                    <span th:text="${member.city}">Street</span>
+                                </p>
+                            </div>
+                            <div class="col-xs-3">Email</div>
+                                <div class="col-xs-9"><p th:text="${member.emailAddress}">Email ...</p>
+                            </div>
+                            <div class="col-xs-3">Telefoon</div>
+                                <div class="col-xs-9"><p th:text="${member.phoneNumber}">Tele ...</p>
+                            </div>
+                            <div class="col-xs-3">Boete</div>
+                            <div class="col-xs-9">
+                                <p th:text="${member.fine}">Email ...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,14 +87,59 @@
             </div>
         </div>
 
-        <p>
-            <a href="/member" class="btn btn-primary btn-lg active" role="button">Terug naar het overzicht</a>
-        </p>
+        <div class="row">
+            <div class="col-sm-6">
+                <a href="/member" class="btn btn-primary btn-lg active pull-left" role="button">Terug naar het overzicht</a>
+            </div>
+            <div class="col-sm-6">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-danger btn-lg pull-right" data-toggle="modal" data-target="#myModal">
+                    Verwijderen
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Member verwijderen</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Weet je zeker dat je deze member wilt verwijderen?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Nee, annuleer</button>
+
+                        <!--
+                            We willen hier een HTTP DELETE bericht sturen ... Nog uitzoeken hoe. JavaScript AJAX wsch.
+                        -->
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Ja, verwijder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer class="footer">
         <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
     </footer>
+
+    <script>
+        function sendAjaxDeleteRequest(id) {
+            $.ajax({
+                url: '/member/id',
+                type: 'DELETE',
+                success: function(result) {
+                    // Do something with the result
+                }
+            });
+         }
+    </script>
 
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
     <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>

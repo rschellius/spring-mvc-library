@@ -91,6 +91,20 @@ class MemberController {
         return "views/member/list";
     }
 
+    @RequestMapping(value = "/member/{id}", method = RequestMethod.DELETE)
+    public String deleteMember(Model model, @PathVariable int id) {
+
+        // Delete de member aan via de repository
+        this.memberRepository.deleteMemberById(id);
+        // We gaan de lijst met members tonen, met een bericht dat de nieuwe member toegevoegd is.
+        // Zet de opgevraagde members in het model
+        model.addAttribute("members", memberRepository.findAll());
+        model.addAttribute("info", "Member is verwijderd.");
+        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+        model.addAttribute("classActiveMember","active");
+        // Open de juiste view template als resultaat.
+        return "views/member/list";
+    }
 
     /**
      * Haal het member met gegeven ID uit de database en toon deze in een view.
