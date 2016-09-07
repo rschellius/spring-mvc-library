@@ -123,7 +123,7 @@ ALTER TABLE `reservation`
 -- --------------------------------------------------------
 -- Gebruikersaccount maken voor Spring MVC applicatie
 --
-DROP USER 'spring'@'localhost';
+-- DROP USER 'spring'@'localhost';
 CREATE USER 'spring'@'localhost' IDENTIFIED BY 'test';
 
 GRANT ALL ON `library`.* TO 'spring'@'localhost';
