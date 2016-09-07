@@ -1,20 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--<html layout:decorator="views/member/layout">-->
+<html>
 <head>
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
-          rel="stylesheet" media="screen" />
-    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.2.0/js/bootstrap.min.js"
-          th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"
-          rel="stylesheet" media="screen" />
-    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.1/jquery.min.js"
-            th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <title>Hello Spring Boot!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
 </head>
 <body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
+
     <div th:fragment="alert (type, message)" class="alert alert-dismissable" th:classappend="'alert-' + ${type}">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <span th:text="${message}">Test</span>
     </div>
+
+    <footer class="footer">
+        <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
+    </footer>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
 </body>
 </html>
-

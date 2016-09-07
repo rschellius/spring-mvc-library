@@ -15,12 +15,21 @@
     <div th:replace="fragments/header :: header"></div>
 
     <div class="container">
-
-        <div class="page-header">
-            <h1 th:text="${title}">Error page</h1>
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 th:text="${title}" class="page-header">Error page</h1>
+                <p th:text="${lead}" class="lead">Er is een fout opgetreden.</p>
+                <p th:utext="${message}">Er is een fout opgetreden.</p>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p th:text="${exception}">Exception message </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <!--<p style="font-size: 12em; color: #dddddd; font-weight: bold;">Error</p>-->
+            </div>
         </div>
-        <p class="lead">Er is een fout opgetreden.</p>
-        <p th:text="${exception}">Java Exception message </p>
     </div>
 
     <footer class="footer">
