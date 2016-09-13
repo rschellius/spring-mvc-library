@@ -9,13 +9,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.sql.SQLException;
 
 @Controller
-// @Secured("ROLE_USER")
 class MemberController {
 
     private MemberRepository memberRepository;
