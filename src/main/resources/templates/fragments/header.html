@@ -58,8 +58,11 @@
                 <li class="dropdown" th:classappend="*{classActiveBooks}? ' active' : ''">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Book<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li role="presentation" th:class="${classActivebooks}">
+                        <li role="presentation" th:class="${classActiveBooks}">
                             <a href="/book" th:href="@{/book}">List books via REST API</a>
+                        </li>
+                        <li role="presentation" th:class="${classActiveCatalogus}">
+                            <a href="#" th:href="@{/catalogus}">Search in Bol.com catalogus</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">Nav header</li>

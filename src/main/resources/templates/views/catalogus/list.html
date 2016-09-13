@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--<html layout:decorator="views/member/layout">-->
+<html>
+<head>
+    <title>Hello Spring Boot!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
+    <div class="container" layout:fragment="content">
+
+        <div class="page-header">
+            <h1>Catalogus</h1>
+        </div>
+        <p>Op deze pagina zoeken naar boeken die via de REST API van Bol.com worden opgezocht.</p>
+
+        <!-- Form om boeken (Product) bij Bol.com op te halen.
+            Bij method=GET worden de name en value van ieder input veld in de RequestParams gezet.
+            Die kunnen we dus in de controller ophalen (en je ziet ze in de URL) -->
+        <form action="#" th:action="@{/catalogus}" th:object="${searchTerm}" method="GET">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="searchterm"></label>
+                        <!-- de parameters name en value worden in de GET URL gezet als ?name=value -->
+                        <input type="text" class="form-control" id="searchterm" name="search" th:value="${search}"/>
+                        <!--<p th:if="${#fields.hasErrors('searchTerm')}" th:errors="*{searchTerm}">Search error</p>-->
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>EAN</th>
+                <th>Titel</th>
+                <th>Rating</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${catalogus.empty}">
+                <td colspan="4">Geen boeken gevonden</td>
+            </tr>
+            <tr th:each="product : ${catalogus}">
+                <td th:text="${product.Id}">1</td>
+                <td th:text="${product.EAN}">1</td>
+                <td><a th:href="@{/catalogus/{id}(id=${product.EAN})}" th:text="${product.Title}">Titel...</a></td>
+                <td th:text="${product.Rating}">Content...</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer">
+        <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
+    </footer>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+</body>
+</html>
