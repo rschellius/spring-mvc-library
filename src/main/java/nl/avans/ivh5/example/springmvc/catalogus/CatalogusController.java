@@ -96,6 +96,7 @@ public class CatalogusController {
                     .term(id)           // Het ID dat we zoeken
                     .search();
             catalogus = results.getProducts();  // catalogus gaat het model in.
+//            List<MediaEntry> images = catalogus.get(1).getImages();
         }
 
         if(catalogus.size() > 1){
@@ -105,6 +106,7 @@ public class CatalogusController {
         // Zet de gevonden catalogus waarden in het model
         // Omdat we hier maar 1 waarde verwachten nemen we listitem 0. Kan tricky zijn.
         model.addAttribute("product", catalogus.get(0));
+        model.addAttribute("images", catalogus.get(0).getImages());
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveCatalogus","active");
         model.addAttribute("classActiveBooks","active");
