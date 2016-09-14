@@ -16,3 +16,8 @@ body {
     display: inline-block;
     margin: auto;
 }
+
+.searchform {
+    margin-top: 10px;
+    margin-bottom: 25px;
+}

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +19,7 @@ import java.util.List;
 @Controller
 public class CatalogusController {
 
-    private final Logger logger = LoggerFactory.getLogger(CatalogusController.class);;
+    private final Logger logger = LoggerFactory.getLogger(CatalogusController.class);
 
     // Lees een property uit resources/application.properties
     @Value("${bol.com.openapi.v4.apikey}")
@@ -55,7 +56,9 @@ public class CatalogusController {
             OpenApiClient client = OpenApiClient.withDefaultClient(apiKey);
             SearchResults results = client.searchBuilder()
                     .term(searchTerm)           // De input uit het formulier
-                    .term("boek")               // we zoeken hier alleen boeken.
+                    .term("boek")               // we zoeken hier alleen boeken
+                    .limit(50)
+                    .includeAttributes()
                     .search();
             catalogus = results.getProducts();  // catalogus gaat het model in.
         }
@@ -68,6 +71,45 @@ public class CatalogusController {
         model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
         return "views/catalogus/list";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping(value = "/catalogus/{id}", method = RequestMethod.GET)
+    public String searchItemById(@PathVariable String id, final ModelMap model) {
+
+        logger.debug("processCatalogusSearch zoeken");
+
+        // Ondanks dat je maar 1 waarde zou verwachten komt er een List terug.
+        List<Product> catalogus = new ArrayList<>();
+
+        if(id != null && !id.isEmpty()) {
+            logger.debug("Zoeken naar " + id);
+
+            // Gebruik de bol.com OpenApiClient om te zoeken in hun catalogus.
+            // Je moet hiervoor een apikey hebben, die je aanvraagt op
+            // https://developers.bol.com. Zie application.properties
+            OpenApiClient client = OpenApiClient.withDefaultClient(apiKey);
+            SearchResults results = client.searchBuilder()
+                    .term(id)           // Het ID dat we zoeken
+                    .search();
+            catalogus = results.getProducts();  // catalogus gaat het model in.
+        }
+
+        if(catalogus.size() > 1){
+            logger.error("size van het resultaat is " + catalogus.size());
+        }
+
+        // Zet de gevonden catalogus waarden in het model
+        // Omdat we hier maar 1 waarde verwachten nemen we listitem 0. Kan tricky zijn.
+        model.addAttribute("product", catalogus.get(0));
+        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+        model.addAttribute("classActiveCatalogus","active");
+        model.addAttribute("classActiveBooks","active");
+        // Open de juiste view template als resultaat.
+        return "views/catalogus/read";
     }
 
 }
