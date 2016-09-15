@@ -15,10 +15,12 @@ USE `library` ;
 --
 
 CREATE TABLE `book` (
-  `ISBN` INT(11) UNSIGNED NOT NULL,
+  `ISBN` BIGINT UNSIGNED NOT NULL,
   `Title` VARCHAR(64) NOT NULL,
   `Author` VARCHAR(32) NOT NULL,
-  `Edition` INT(6) UNSIGNED NOT NULL,
+  `ShortDescription` VARCHAR(1000),
+  `Edition` VARCHAR(64),
+  `ImageURL` VARCHAR(256),
   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -31,8 +33,8 @@ CREATE TABLE `book` (
 
 CREATE TABLE `copy` (
   `CopyID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `LendingPeriod` INT(11) NOT NULL,
-  `BookISBN` INT(11) UNSIGNED NOT NULL,
+  `LendingPeriod` INT(11) UNSIGNED NOT NULL,
+  `BookISBN` BIGINT UNSIGNED NOT NULL,
   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`CopyID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -207,19 +209,19 @@ INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, 
 -- Dumping data for table `book`
 --
 
-INSERT INTO `book` (`ISBN`, `Title`, `Author`, `Edition`) VALUES
-(1011, 'De avonden', 'Gerard van het Reve', 9),
-(1014, 'Het boek van violet en dood', 'Gerard Reve', 9),
-(1021, 'Ik heb nooit iets gelezen', 'Karel van het Reve', 2),
-(1111, 'Het leven is vurrukkulluk', 'Remco Campert', 1),
-(2222, 'De Ontdekking van de Hemel', 'Harry Mulisch', 5),
-(2223, 'De Aanslag', 'Harry Mulisch', 8),
-(3333, 'De Aanslag', 'Belastingdienst', 1),
-(4001, 'De geverfde vogel', 'Jerzy Kosinski', 2),
-(4003, 'Cockpit', 'Jerzy Kosinski', 1),
-(4005, 'Aanwezig', 'Jerzy Kosinski', 4),
-(8000, 'Ik, Jan Cremer', 'Jan Cremer', 22),
-(8888, 'Ik, Jan Klaassen', 'Herman Finkers', 22);
+INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`) VALUES
+(1011, 'De avonden', 'Gerard van het Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(1014, 'Het boek van violet en dood', 'Gerard Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(1021, 'Ik heb nooit iets gelezen', 'Karel van het Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(1111, 'Het leven is vurrukkulluk', 'Remco Campert', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(2222, 'De Ontdekking van de Hemel', 'Harry Mulisch', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(2223, 'De Aanslag', 'Harry Mulisch', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(3333, 'De Aanslag', 'Belastingdienst', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(4001, 'De geverfde vogel', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(4003, 'Cockpit', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(4005, 'Aanwezig', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(8000, 'Ik, Jan Cremer', 'Jan Cremer', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+(8888, 'Ik, Jan Klaassen', 'Herman Finkers', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975');
 
 
 INSERT INTO `copy` (`LendingPeriod`, `BookISBN`) VALUES
