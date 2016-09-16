@@ -1,5 +1,7 @@
 package nl.avans.ivh5.example.springmvc.copy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 @Repository
 public class CopyRepository {
+
+    private final Logger logger = LoggerFactory.getLogger(CopyRepository.class);;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -42,6 +46,8 @@ public class CopyRepository {
      */
     public Copy create(final Copy copy) {
         final String sql = "INSERT INTO copy(`LendingPeriod`, `BookISBN`) VALUES(5,?)";
+
+        logger.debug("create copy voor ISBN " + copy.getISBN());
 
         // KeyHolder gaat de auto increment key uit de database bevatten.
         KeyHolder holder = new GeneratedKeyHolder();

@@ -43,27 +43,31 @@ public class BookRepository {
      *
      * @return
      */
-    public Book create(final Book book) {
+    public Book create(final Book book)  {
         logger.debug("Create a book");
 
         final String sql = "INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`, `ImageURL`) VALUES(?,?,?,?,?,?)";
 
         // KeyHolder gaat de auto increment key uit de database bevatten.
         KeyHolder holder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setLong(1, book.getEAN());
-                ps.setString(2, book.getTitle());
-                ps.setString(3, book.getAuthor());
-                ps.setString(4, book.getShortDescription());
-                ps.setString(5, book.getEdition());
-                ps.setString(6, book.getImageURL());
-                return ps;
-            }
-        }, holder);
 
+        try {
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    ps.setLong(1, book.getEAN());
+                    ps.setString(2, book.getTitle());
+                    ps.setString(3, book.getAuthor());
+                    ps.setString(4, book.getShortDescription());
+                    ps.setString(5, book.getEdition());
+                    ps.setString(6, book.getImageURL());
+                    return ps;
+                }
+            }, holder);
+        } catch (Exception ex) {
+            logger.warn("Boek bestond al in de database.");
+        }
         return book;
     }
 

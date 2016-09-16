@@ -70,21 +70,18 @@ public class CopyController {
         }
 
         // Als het boek nog niet bestond in de Database moeten we het eerst toevoegen.
-        Book newBook = new Book.Builder(ean, product.getTitle(), product.getSpecsTag())
+        Book book = new Book.Builder(ean, product.getTitle(), product.getSpecsTag())
                 .shortDescription(product.getShortDescription())
                 .edition(product.getSummary())
                 .imageUrl(imageUrl)
                 .build();
-        try {
-            bookRepository.create(newBook);
-        } catch (Exception ex) {
-            // Als het boek al bestaat (EAN/id == primary key) dan volgt een exception.
-            // We gaan er hier van uit dat áls er een exception komt, dat door de primary key komt.
-            // Dat is natuurlijk tricky. We zouden beter de MySql errorcode kunnen checken.
-        }
+
+        // Maak een nieuw boek. De bookRepository handelt de exception af als het boek al bestaat.
+        bookRepository.create(book);
+
         // Als het boek in de database zit maken we een nieuwe copie aan.
         // Er kunnen meerdere copies van hetzelfde boek zijn. Die copies zijn ieder wel uniek.
-        Copy newCopy = this.copyRepository.create(new Copy(newBook.getEAN()));
-        return newCopy;
+        Copy copy = this.copyRepository.create(new Copy(book.getEAN()));
+        return copy;
     }
 }
