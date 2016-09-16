@@ -1,5 +1,6 @@
 package nl.avans.ivh5.example.springmvc.home;
 
+import nl.avans.ivh5.example.springmvc.book.Book;
 import nl.avans.ivh5.example.springmvc.book.BookRepository;
 import nl.avans.ivh5.example.springmvc.copy.CopyRepository;
 import nl.avans.ivh5.example.springmvc.loan.LoanRepository;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 class HomeController {
@@ -41,9 +43,9 @@ class HomeController {
         logger.debug("index");
 
         //
-//        List<Copy> copies = copyRepository.findAll();
+        List<Book> books = bookRepository.findAll();
 
-
+        model.addAttribute("books", books);
 
         // Stuur de tijd mee naar de view - niet omdat het moet, ...
         model.addAttribute("now", LocalDateTime.now());

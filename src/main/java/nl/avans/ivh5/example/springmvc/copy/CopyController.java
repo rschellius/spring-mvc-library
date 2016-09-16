@@ -7,10 +7,12 @@ import nl.avans.ivh5.example.springmvc.book.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class CopyController {
     // De data repositories die we willen gebruiken
     private CopyRepository copyRepository;
     private BookRepository bookRepository;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Autowired
     public CopyController(CopyRepository copyRepository, BookRepository bookRepository) {
@@ -64,8 +69,14 @@ public class CopyController {
         logger.debug("createBookAndCopy - product.EAN = " + ean + " title = " + product.getTitle());
 
         String imageUrl = "";
-        if(product.getMedia().size()> 0){
-            imageUrl = product.getMedia().get(0).getUrl();
+        try {
+            if(product.getMedia().size()> 0){
+                imageUrl = product.getMedia().get(0).getUrl();
+            } else {
+                imageUrl = resourceLoader.getResource("classpath:resources/static/img/notavailable.jpg").getFile().getCanonicalPath();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // Als het boek nog niet bestond in de Database moeten we het eerst toevoegen.
