@@ -1,7 +1,7 @@
 body {
     font-family: 'Raleway', Verdana, Geneva, sans-serif;
     padding-top: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 50px;
 }
 
 .social-links {
@@ -23,5 +23,6 @@ body {
 }
 
 img.thumbnail {
+    height: 230px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

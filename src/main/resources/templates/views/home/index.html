@@ -5,27 +5,26 @@
     <title>Hello Spring Boot!</title>
     <meta http-equiv="Content-Type" summary="text/html; charset=UTF-8"/>
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
-    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
+    <link href="../../../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../../../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
 </head>
 <body>
     <!-- Header -->
     <div th:replace="fragments/header :: header"></div>
 
-    <div class="container" role="main">
-
-        <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="container">
         <div class="jumbotron">
-            <h1 th:text="'Hello, ' + ${name} + '!'">Hi there!</h1>
-            <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it.</p>
+            <h1>Welkom in de Bibliotheek</h1>
+            <p>
+                Dit is een Spring Boot Thymeleaf MVC Application! Het is nu <span th:text="${#temporals.format(now, 'd MM yyyy HH:mm')}">31/12/2015 15:00</span>
+            </p>
         </div>
 
-        <div class="page-header">
-            <h1>Meer tekst</h1>
-        </div>
 
-        <p>Hier komt later tekst te staan. </p>
+
+
+
     </div>
 
     <footer class="footer">

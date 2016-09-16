@@ -27,11 +27,20 @@ public class CopyRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     *
+     * @return
+     */
     @Transactional(readOnly=true)
     public List<Copy> findAll() {
         return jdbcTemplate.query("SELECT * FROM copy", new CopyRowMapper());
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Transactional(readOnly=true)
     public List<Copy> findById(int id) {
         return jdbcTemplate.query(

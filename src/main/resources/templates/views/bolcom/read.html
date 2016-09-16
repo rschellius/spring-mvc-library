@@ -19,7 +19,7 @@
 
         <div class="page-header">
             <h1 th:text="${product.Title}">Boek informatie</h1>
-            <p class="lead" th:text="'Auteur: ' + ${product.SpecsTag} + '  EAN: ' + ${product.EAN}">Auteur en EAN</p>
+            <p class="lead" th:text="${product.SpecsTag}">Auteur</p>
         </div>
 
         <div class="row">
@@ -27,47 +27,59 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
+                            <div class="col-sm-3">EAN</div>
+                            <div class="col-sm-9">
+                                <p th:text="${product.EAN}">EAN</p>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-3">Summary</div>
                             <div class="col-sm-9">
-                                <p th:text="${product.Summary}">Beschrijving</p>
+                                <p th:utext="${product.Summary}">Beschrijving</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3">Short Description</div>
-                            <div class="col-sm-7">
-                                <p th:text="${product.ShortDescription}">Beschrijving</p>
+                            <div class="col-sm-6">
+                                <p th:utext="${product.ShortDescription}">Beschrijving</p>
                             </div>
-                            <div class="col-sm-2">
-                                <!-- images is een array van URLs naar de productafbeeldingen, van XS via L naar XL. -->
-                                <img class="thumbnail" th:src="${images[2].url}"/>
+                            <div class="col-sm-3">
+                                <img class="thumbnail" th:if="${!product.media.empty}" th:src="${product.media[0].url}"/>
+                                <img class="thumbnail" th:if="${product.media.empty}" th:src="@{/img/notavailable.jpg}"/>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-3">Attribute Groups</div>
-                            <div class="col-sm-9">
-                                <p th:if="${attributeGroups.empty}"> Geen info gevonden </p>
-                                <p th:each="attGroup : ${attributeGroups}">
-                                    <p th:text="${attGroup.Title}">1</p>
-                                    <!--<p th:text="${product.EAN}">1</p>-->
-                                    <!--<p th:text="${product.Title}">Titel...</p>-->
-                                    <!--<p th:text="${product.Rating}">Content...</p>-->
-                                </p>
+                        <div th:if="${product.AttributeGroups != null}">
+                            <div th:each="attGroup : ${product.AttributeGroups}">
+                                <div th:if="${attGroup.Attributes != null}">
+                                    <div th:each="entity : ${attGroup.Attributes}">
+                                        <div class="row">
+                                            <div class="col-sm-3" th:text="${entity.label}">label</div>
+                                            <div class="col-sm-9" th:text="${entity.value}">label</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-sm-6">
                 <a href="/catalogus" class="btn btn-primary btn-lg active pull-left" role="button">Terug naar het overzicht</a>
             </div>
             <div class="col-sm-6">
-                <p id="createCopyResult">
-                    <!-- Hier zetten we het resultaat van de copy actie neer. -->
-                </p>
-                <button type="button" class="btn btn-outline-success btn-lg pull-right" onclick="createCopy()">Maak Copy</button>
+                <button type="button" class="btn btn-success btn-lg pull-right" onclick="createCopy()">
+                    <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;Bewaar Copy
+                </button>
+
+                <!-- Als het toevoegen van de copie gelukt is zie je hier een alertbox.
+                    Als het mislut is toont deze box een error message. Zie de JS code onderaan. -->
+                <div id="alertBox" class="alert" role="alert" style="display: none;width: 250px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span id="createCopyResult"><!-- Jquery zet hier de message. --></span>
+                </div>
+
             </div>
         </div>
     </div>
@@ -79,8 +91,6 @@
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
     <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
 
-
-
     <script th:inline="javascript">
 
         //
@@ -88,6 +98,7 @@
         //
         var url = "/createcopy";
         var product = /*[[${product}]]*/ null;
+
         console.log("EAN = " + product.EAN);
         console.dir(product);
 
@@ -102,18 +113,27 @@
                 timeout : 100000,
                 success : function(data) {
                     console.log("SUCCESS: ", data);
-                    $( "#createCopyResult" ).text("Gelukt");
-                    // displayData(data);
+                    $("#createCopyResult").text("Copy is toegevoegd");
+                    $("#alertBox").addClass("alert-success").show( "fast", callback );
                 },
                 error : function(e) {
                     console.log("ERROR: ", e);
-                    // displayData(e);
+                    $("#createCopyResult").text("Niet gelukt");
+                    $("#alertBox").addClass("alert-danger").show( "fast", callback );
                 },
                 done : function(e) {
                     console.log("DONE");
                 }
             });
         }
+
+        //callback function to hide a message box
+        function callback() {
+            setTimeout(function() {
+                $("#alertBox").fadeOut();
+            }, 1000 );
+        }
+
     </script>
 
 </body>

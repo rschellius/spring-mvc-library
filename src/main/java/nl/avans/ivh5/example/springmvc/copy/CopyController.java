@@ -1,7 +1,6 @@
 package nl.avans.ivh5.example.springmvc.copy;
 
 import com.bol.api.openapi_4_0.Entry;
-import com.bol.api.openapi_4_0.MediaEntry;
 import com.bol.api.openapi_4_0.Product;
 import nl.avans.ivh5.example.springmvc.book.Book;
 import nl.avans.ivh5.example.springmvc.book.BookRepository;
@@ -23,6 +22,7 @@ public class CopyController {
 
     private final Logger logger = LoggerFactory.getLogger(CopyController.class);;
 
+    // De data repositories die we willen gebruiken
     private CopyRepository copyRepository;
     private BookRepository bookRepository;
 
@@ -64,9 +64,8 @@ public class CopyController {
         logger.debug("createBookAndCopy - product.EAN = " + ean + " title = " + product.getTitle());
 
         String imageUrl = "";
-        List<MediaEntry> images = product.getImages();
-        if(images.size() > 0){
-            imageUrl = images.get(0).getUrl();
+        if(product.getMedia().size()> 0){
+            imageUrl = product.getMedia().get(0).getUrl();
         }
 
         // Als het boek nog niet bestond in de Database moeten we het eerst toevoegen.

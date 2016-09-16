@@ -25,21 +25,6 @@
                 <li role="presentation" th:class="${classActiveHome}">
                     <a href="#" th:href="@{/}">Home</a>
                 </li>
-                <li class="dropdown" th:classappend="*{classActiveGreeting}? ' active' : ''">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Basis<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li role="presentation" th:class="${classActiveGreeting}">
-                            <a href="/greeting" th:href="@{/greeting}">Greeting</a>
-                        </li>
-                        <li role="presentation">
-                            <a href="/greeting?name=name=Zie%20de%20URL" th:href="@{/greeting?name=Zie%20de%20URL}">Greeting met GET params</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Error handling demo</li>
-                        <li><a href="/niet-bestaande-pagina">Niet bestaande pagina</a></li>
-                        <li><a href="/exception">Throw/Catch Exception</a></li>
-                    </ul>
-                </li>
                 <li class="dropdown" th:classappend="*{classActiveMember}? ' active' : ''">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Member<span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -69,7 +54,26 @@
                         <li><a href="#">Separated link</a></li>
                         <li><a href="#">One more separated link</a></li>
                     </ul>
-                </li>            </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Info<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation">
+                            <a href="" target="_blank" th:href="@{/logfile}">Logfile</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="" target="_blank" th:href="@{/health}">Health</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="" target="_blank" th:href="@{/metrics}">Metrics</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Error handling demo</li>
+                        <li><a href="/niet-bestaande-pagina">Niet bestaande pagina</a></li>
+                        <li><a href="/exception">Throw/Catch Exception</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         <!--/.nav-collapse -->
     </div>

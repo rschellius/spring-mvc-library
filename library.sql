@@ -209,77 +209,77 @@ INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, 
 -- Dumping data for table `book`
 --
 
-INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`) VALUES
-(1011, 'De avonden', 'Gerard van het Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(1014, 'Het boek van violet en dood', 'Gerard Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(1021, 'Ik heb nooit iets gelezen', 'Karel van het Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(1111, 'Het leven is vurrukkulluk', 'Remco Campert', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(2222, 'De Ontdekking van de Hemel', 'Harry Mulisch', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(2223, 'De Aanslag', 'Harry Mulisch', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(3333, 'De Aanslag', 'Belastingdienst', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(4001, 'De geverfde vogel', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(4003, 'Cockpit', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(4005, 'Aanwezig', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(8000, 'Ik, Jan Cremer', 'Jan Cremer', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
-(8888, 'Ik, Jan Klaassen', 'Herman Finkers', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975');
+-- INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`) VALUES
+-- (1011, 'De avonden', 'Gerard van het Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (1014, 'Het boek van violet en dood', 'Gerard Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (1021, 'Ik heb nooit iets gelezen', 'Karel van het Reve', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (1111, 'Het leven is vurrukkulluk', 'Remco Campert', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (2222, 'De Ontdekking van de Hemel', 'Harry Mulisch', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (2223, 'De Aanslag', 'Harry Mulisch', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (3333, 'De Aanslag', 'Belastingdienst', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (4001, 'De geverfde vogel', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (4003, 'Cockpit', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (4005, 'Aanwezig', 'Jerzy Kosinski', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (8000, 'Ik, Jan Cremer', 'Jan Cremer', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975'),
+-- (8888, 'Ik, Jan Klaassen', 'Herman Finkers', 'Hier de ShortDescription.', 'Nederlandstalig|Hardcover|1975');
 
 
-INSERT INTO `copy` (`LendingPeriod`, `BookISBN`) VALUES
-(5, 2222),
-(5, 2222),
-(5, 2222),
-(5, 1011),
-(5, 1011),
-(5, 1011),
-(5, 1014),
-(5, 1014),
-(5, 1014),
-(5, 1021),
-(5, 1021),
-(5, 1111),
-(5, 1111),
-(5, 2222),
-(5, 2222),
-(5, 2222),
-(5, 2222),
-(5, 2223),
-(5, 2223),
-(5, 2223),
-(5, 3333),
-(5, 3333),
-(5, 4001),
-(5, 4003),
-(5, 4005),
-(5, 4005),
-(5, 4005),
-(5, 8000),
-(5, 8888),
-(21, 1111),
-(21, 1111),
-(21, 1111);
+-- INSERT INTO `copy` (`LendingPeriod`, `BookISBN`) VALUES
+-- (5, 2222),
+-- (5, 2222),
+-- (5, 2222),
+-- (5, 1011),
+-- (5, 1011),
+-- (5, 1011),
+-- (5, 1014),
+-- (5, 1014),
+-- (5, 1014),
+-- (5, 1021),
+-- (5, 1021),
+-- (5, 1111),
+-- (5, 1111),
+-- (5, 2222),
+-- (5, 2222),
+-- (5, 2222),
+-- (5, 2222),
+-- (5, 2223),
+-- (5, 2223),
+-- (5, 2223),
+-- (5, 3333),
+-- (5, 3333),
+-- (5, 4001),
+-- (5, 4003),
+-- (5, 4005),
+-- (5, 4005),
+-- (5, 4005),
+-- (5, 8000),
+-- (5, 8888),
+-- (21, 1111),
+-- (21, 1111),
+-- (21, 1111);
 
 --
 -- Dumping data for table `loan`
 --
 
-INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES
-(1000, 1001),
-(1006, 1001),
-(1002, 1011),
-(1001, 1014),
-(1005, 1014),
-(1000, 1023),
-(1003, 1021),
-(1001, 1021),
-(1004, 1011),
-(1000, 1021),
-(1001, 1022);
+-- INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES
+-- (1000, 1001),
+-- (1006, 1001),
+-- (1002, 1011),
+-- (1001, 1014),
+-- (1005, 1014),
+-- (1000, 1023),
+-- (1003, 1021),
+-- (1001, 1021),
+-- (1004, 1011),
+-- (1000, 1021),
+-- (1001, 1022);
 
 
 --
 -- Dumping data for table `reservation`
 --
 
-INSERT INTO `reservation` (`ReservationDate`, `MemberID`, `CopyID`) VALUES
-(NOW(), 1002, 1012);
+-- INSERT INTO `reservation` (`ReservationDate`, `MemberID`, `CopyID`) VALUES
+-- (NOW(), 1002, 1012);
 

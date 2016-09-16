@@ -1,4 +1,4 @@
-package nl.avans.ivh5.example.springmvc.catalogus;
+package nl.avans.ivh5.example.springmvc.bolcom;
 
 import com.bol.api.openapi_4_0.*;
 import com.bol.openapi.OpenApiClient;
@@ -17,9 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 
 @Controller
-public class CatalogusController {
+public class BolAPIController {
 
-    private final Logger logger = LoggerFactory.getLogger(CatalogusController.class);
+    private final Logger logger = LoggerFactory.getLogger(BolAPIController.class);
 
     // Lees een property uit resources/application.properties
     @Value("${bol.com.openapi.v4.apikey}")
@@ -40,7 +40,7 @@ public class CatalogusController {
         if(searchTerm != null && !searchTerm.isEmpty()) {
             logger.debug("Zoeken naar " + searchTerm);
 
-            // Gebruik de bol.com OpenApiClient om te zoeken in hun catalogus.
+            // Gebruik de bol.com OpenApiClient om te zoeken in hun bolcom.
             // Je moet hiervoor een apikey hebben, die je aanvraagt op
             // https://developers.bol.com. Zie application.properties
             OpenApiClient client = OpenApiClient.withDefaultClient(apiKey);
@@ -50,17 +50,17 @@ public class CatalogusController {
                     .limit(50)
                     .includeAttributes()
                     .search();
-            catalogus = results.getProducts();  // catalogus gaat het model in.
+            catalogus = results.getProducts();  // bolcom gaat het model in.
         }
 
         model.addAttribute("search", searchTerm);
-        // Zet de gevonden catalogus waarden in het model
+        // Zet de gevonden bolcom waarden in het model
         model.addAttribute("catalogus", catalogus);
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveCatalogus","active");
         model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
-        return "views/catalogus/list";
+        return "views/bolcom/list";
     }
 
     /**
@@ -78,7 +78,7 @@ public class CatalogusController {
         if(id != null && !id.isEmpty()) {
             logger.debug("Zoeken naar " + id);
 
-            // Gebruik de bol.com OpenApiClient om te zoeken in hun catalogus.
+            // Gebruik de bol.com OpenApiClient om te zoeken in hun bolcom.
             // Je moet hiervoor een apikey hebben, die je aanvraagt op
             // https://developers.bol.com. Zie application.properties
             OpenApiClient client = OpenApiClient.withDefaultClient(apiKey);
@@ -88,31 +88,31 @@ public class CatalogusController {
                     .includeAttributes()
                     .limit(1)
                     .search();
-            products = searchResults.getProducts();  // catalogus gaat het model in.
+            products = searchResults.getProducts();  // bolcom gaat het model in.
+
             logger.debug("products.EAN = " + products.get(0).getEAN());
             List<AttributeGroup> attributeGroups = products.get(0).getAttributeGroups();
             Iterator<AttributeGroup> attributeGroupIterator = attributeGroups.iterator();
             while(attributeGroupIterator.hasNext()){
                 AttributeGroup group = attributeGroupIterator.next();
-                System.out.println("Attribute group title = " + group.getTitle());
+                logger.info("Attribute group title = " + group.getTitle());
                 Iterator<Entry> entries = group.getAttributes().iterator();
                 while (entries.hasNext()){
                     Entry e = entries.next();
-                    System.out.println(" - entry : key = " + e.getKey() + " value = " + e.getValue() + " label = " + e.getLabel());
+                    logger.info(" - entry : key = " + e.getKey() + " value = " + e.getValue() + " label = " + e.getLabel());
                 }
             }
         }
 
-        // Zet de gevonden catalogus waarden in het model
+        // Zet de gevonden bolcom waarden in het model
         // Omdat we hier maar 1 waarde verwachten nemen we listitem 0. Kan tricky zijn.
         model.addAttribute("product", products.get(0));
-        model.addAttribute("images", products.get(0).getImages());
-        model.addAttribute("attributeGroups", products.get(0).getAttributeGroups());
+        model.addAttribute("images", products.get(0).getMedia());
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveCatalogus","active");
         model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
-        return "views/catalogus/read";
+        return "views/bolcom/read";
     }
 
 }
