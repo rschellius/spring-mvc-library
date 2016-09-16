@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Hello Spring Boot!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" summary="text/html; charset=UTF-8"/>
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
     <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
@@ -15,12 +15,12 @@
     <div th:replace="fragments/header :: header"></div>
 
     <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
-    <div class="container" layout:fragment="content">
+    <div class="container" layout:fragment="summary">
 
         <!--/* Als er een nieuw member is toegevoegd tonen we een info bericht. */-->
         <div th:if="${info}" layout:include="views/member/alert :: alert" th:with="type='info', header='Info'" th:remove="tag">
-            <!--/* Implements alert content fragment with simple content */-->
-            <th:block layout:fragment="alert-content">
+            <!--/* Implements alert summary fragment with simple summary */-->
+            <th:block layout:fragment="alert-summary">
                 <p th:text="${info}"><em>Info bericht</em></p>
             </th:block>
         </div>

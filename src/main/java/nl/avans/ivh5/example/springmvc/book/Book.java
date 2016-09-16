@@ -1,42 +1,65 @@
 package nl.avans.ivh5.example.springmvc.book;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class Book {
 
-    private final long id;
-    private final String content;
+    private final Long EAN;
     private final String title;
     private final String author;
+    private final String shortDescription;
+    private final String edition;
+    private final String imageURL;
 
-    @Autowired
-    public Book(long id, String content, String title, String author) {
-        this.id = id;
-        this.content = content;
-        this.author = author;
-        this.title = title;
+    // Builder pattern
+    public static class Builder {
+
+        // Required parameters
+        private final Long EAN;
+        private final String title;
+        private final String author;
+
+        // Optional parameters
+        private String edition = "";
+        private String shortDescription = "";
+        private String imageURL = "";
+
+        public Builder(Long EAN, String title, String author) {
+            this.EAN = EAN;
+            this.title = title;
+            this.author = author;
+        }
+
+        public Builder edition(String edition) {
+            this.edition = edition;
+            return this;
+        }
+
+        public Builder shortDescription(String shortDescription) {
+            this.shortDescription = shortDescription;
+            return this;
+        }
+
+        public Builder imageUrl(String imageURL) {
+            this.imageURL = imageURL;
+            return this;
+        }
+
+        public Book build() {
+            return new Book(this);
+
+        }
     }
 
-    /**
-     * Wanneer we boeken in de boekenlijst opzoeken moeten we een
-     * boek hebben met het id dat we zoeken. De overige attributen zijn niet van belang
-     * omdat ze niet meedoen in de vergelijking van de twee boeken.
-     * Zie BookController.validateId()
-     *
-     * @param id
-     */
-    @Autowired
-    public Book(long id) {
-        this.id = id;
-        this.content = this.title = this.author = null;
+    private Book(Builder builder){
+        this.EAN = builder.EAN;
+        this.title = builder.title;
+        this.author = builder.author;
+        this.shortDescription = builder.shortDescription;
+        this.edition = builder.edition;
+        this.imageURL = builder.imageURL;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getContent() {
-        return content;
+    public Long getEAN() {
+        return EAN;
     }
 
     public String getTitle() {
@@ -45,6 +68,18 @@ public class Book {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 
     /**
@@ -62,17 +97,17 @@ public class Book {
 
         Book book = (Book) o;
 
-        return getId() == book.getId();
+        return getEAN() == book.getEAN();
     }
 
     /**
-     * Deze methode zorgt dat we een Book in een Hashlist kunnen opslaan. Maken we
+     * Deze methode zorgt dat we een Copy in een Hashlist kunnen opslaan. Maken we
      * momenteel nog geen gebruik van.
      *
      * @return
      */
     @Override
     public int hashCode() {
-        return (int) (getId() ^ (getId() >>> 32));
+        return (int) (getEAN() ^ (getEAN() >>> 32));
     }
 }

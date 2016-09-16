@@ -1,6 +1,5 @@
 package nl.avans.ivh5.example.springmvc.member;
 
-import com.mysql.jdbc.SQLError;
 import nl.avans.ivh5.example.springmvc.loan.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

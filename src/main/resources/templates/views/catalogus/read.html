@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Hello Spring Boot!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" summary="text/html; charset=UTF-8"/>
     <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
     <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
     <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
@@ -15,30 +15,44 @@
     <div th:replace="fragments/header :: header"></div>
 
     <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
-    <div class="container" layout:fragment="content">
+    <div class="container" layout:fragment="summary">
 
         <div class="page-header">
             <h1 th:text="${product.Title}">Boek informatie</h1>
+            <p class="lead" th:text="'Auteur: ' + ${product.SpecsTag} + '  EAN: ' + ${product.EAN}">Auteur en EAN</p>
         </div>
-        <p>Deze pagina laat detailinfo over een boek zien.</p>
 
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <!--<h2 th:text="${product.Title}">Naam ...</h2>-->
                         <div class="row">
-                            <div class="col-xs-4">Summary</div>
-                            <div class="col-xs-6">
+                            <div class="col-sm-3">Summary</div>
+                            <div class="col-sm-9">
                                 <p th:text="${product.Summary}">Beschrijving</p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4">Short Description</div>
-                            <div class="col-xs-6">
+                            <div class="col-sm-3">Short Description</div>
+                            <div class="col-sm-7">
                                 <p th:text="${product.ShortDescription}">Beschrijving</p>
                             </div>
-                            <img class="thumbnail" th:src="${images[2].url}"/>
+                            <div class="col-sm-2">
+                                <!-- images is een array van URLs naar de productafbeeldingen, van XS via L naar XL. -->
+                                <img class="thumbnail" th:src="${images[2].url}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">Attribute Groups</div>
+                            <div class="col-sm-9">
+                                <p th:if="${attributeGroups.empty}"> Geen info gevonden </p>
+                                <p th:each="attGroup : ${attributeGroups}">
+                                    <p th:text="${attGroup.Title}">1</p>
+                                    <!--<p th:text="${product.EAN}">1</p>-->
+                                    <!--<p th:text="${product.Title}">Titel...</p>-->
+                                    <!--<p th:text="${product.Rating}">Content...</p>-->
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -50,7 +64,10 @@
                 <a href="/catalogus" class="btn btn-primary btn-lg active pull-left" role="button">Terug naar het overzicht</a>
             </div>
             <div class="col-sm-6">
-                <button type="button" class="btn btn-outline-success btn-lg pull-right">Sla op als Exemplaar</button>
+                <p id="createCopyResult">
+                    <!-- Hier zetten we het resultaat van de copy actie neer. -->
+                </p>
+                <button type="button" class="btn btn-outline-success btn-lg pull-right" onclick="createCopy()">Maak Copy</button>
             </div>
         </div>
     </div>
@@ -61,5 +78,43 @@
 
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
     <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+
+
+
+    <script th:inline="javascript">
+
+        //
+        // Zie: https://www.mkyong.com/spring-mvc/spring-mvc-refactoring-a-jquery-ajax-post-example/
+        //
+        var url = "/createcopy";
+        var product = /*[[${product}]]*/ null;
+        console.log("EAN = " + product.EAN);
+        console.dir(product);
+
+        function createCopy() {
+
+            $.ajax({
+                type : "POST",
+                contentType : "application/json",
+                url : url,
+                data : JSON.stringify(product),
+                dataType : 'json',
+                timeout : 100000,
+                success : function(data) {
+                    console.log("SUCCESS: ", data);
+                    $( "#createCopyResult" ).text("Gelukt");
+                    // displayData(data);
+                },
+                error : function(e) {
+                    console.log("ERROR: ", e);
+                    // displayData(e);
+                },
+                done : function(e) {
+                    console.log("DONE");
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

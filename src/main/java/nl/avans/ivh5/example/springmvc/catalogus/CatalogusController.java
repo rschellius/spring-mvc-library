@@ -1,7 +1,6 @@
 package nl.avans.ivh5.example.springmvc.catalogus;
 
-import com.bol.api.openapi_4_0.Product;
-import com.bol.api.openapi_4_0.SearchResults;
+import com.bol.api.openapi_4_0.*;
 import com.bol.openapi.OpenApiClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -24,16 +24,6 @@ public class CatalogusController {
     // Lees een property uit resources/application.properties
     @Value("${bol.com.openapi.v4.apikey}")
     private String apiKey;
-
-//    @ModelAttribute("searchTerm")
-//    public String getSearchString() {
-//        return "search";
-//    }
-//
-//    @ModelAttribute("catalogus")
-//    public String module() {
-//        return "catalogus";
-//    }
 
     /**
      *
@@ -80,10 +70,10 @@ public class CatalogusController {
     @RequestMapping(value = "/catalogus/{id}", method = RequestMethod.GET)
     public String searchItemById(@PathVariable String id, final ModelMap model) {
 
-        logger.debug("processCatalogusSearch zoeken");
+        logger.debug("searchItemById zoeken");
 
         // Ondanks dat je maar 1 waarde zou verwachten komt er een List terug.
-        List<Product> catalogus = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
 
         if(id != null && !id.isEmpty()) {
             logger.debug("Zoeken naar " + id);
@@ -92,21 +82,32 @@ public class CatalogusController {
             // Je moet hiervoor een apikey hebben, die je aanvraagt op
             // https://developers.bol.com. Zie application.properties
             OpenApiClient client = OpenApiClient.withDefaultClient(apiKey);
-            SearchResults results = client.searchBuilder()
-                    .term(id)           // Het ID dat we zoeken
+            SearchResults searchResults = client.searchBuilder()
+                    .term(id)
+                    .category("8299")       // zoek binnen 'boeken'.
+                    .includeAttributes()
+                    .limit(1)
                     .search();
-            catalogus = results.getProducts();  // catalogus gaat het model in.
-//            List<MediaEntry> images = catalogus.get(1).getImages();
-        }
-
-        if(catalogus.size() > 1){
-            logger.error("size van het resultaat is " + catalogus.size());
+            products = searchResults.getProducts();  // catalogus gaat het model in.
+            logger.debug("products.EAN = " + products.get(0).getEAN());
+            List<AttributeGroup> attributeGroups = products.get(0).getAttributeGroups();
+            Iterator<AttributeGroup> attributeGroupIterator = attributeGroups.iterator();
+            while(attributeGroupIterator.hasNext()){
+                AttributeGroup group = attributeGroupIterator.next();
+                System.out.println("Attribute group title = " + group.getTitle());
+                Iterator<Entry> entries = group.getAttributes().iterator();
+                while (entries.hasNext()){
+                    Entry e = entries.next();
+                    System.out.println(" - entry : key = " + e.getKey() + " value = " + e.getValue() + " label = " + e.getLabel());
+                }
+            }
         }
 
         // Zet de gevonden catalogus waarden in het model
         // Omdat we hier maar 1 waarde verwachten nemen we listitem 0. Kan tricky zijn.
-        model.addAttribute("product", catalogus.get(0));
-        model.addAttribute("images", catalogus.get(0).getImages());
+        model.addAttribute("product", products.get(0));
+        model.addAttribute("images", products.get(0).getImages());
+        model.addAttribute("attributeGroups", products.get(0).getAttributeGroups());
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveCatalogus","active");
         model.addAttribute("classActiveBooks","active");

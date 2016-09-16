@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @Controller
 public class BookController {
 
-    private static final Logger log = LoggerFactory.getLogger(BookController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     // Lees een property uit resources/application.properties
     @Value("${avans.library.bookserver.url}")
@@ -31,12 +31,12 @@ public class BookController {
     public BookController() {}
 
     /**
-     * Retourneer alle boeken in de repository.
+     * Lees alle boeken die via de REST API beschikbaar zijn.
      *
      * @return
      */
     @RequestMapping(value = "/book", method = RequestMethod.GET)
-    public String listBooks(Model model) {
+    public String listBooksAtRESTServer(Model model) {
 
         // Aanroep naar de boekenserver - die moet wel draaien...
         RestTemplate restTemplate = new RestTemplate();
@@ -44,17 +44,17 @@ public class BookController {
         try {
             books = restTemplate.getForObject(urlListAllBooks, ArrayList.class);
         } catch (ResourceAccessException e) {
-            log.error(urlListAllBooks + " is not available - is the server running?");
+            logger.error(urlListAllBooks + " is not available - is the server running?");
             // We gooien de exception door. Verderop in deze controller staat
             // een handler hiervoor. Die handelt deze exception af.
             throw e;
         } catch (RestClientException e) {
-            log.error(urlListAllBooks + " is not available - is the server running?");
+            logger.error(urlListAllBooks + " is not available - is the server running?");
             // Zie hierboven; wordt afgehandeld.
             throw e;
         }
 
-        log.debug("findAllBooks", books);
+        logger.debug("listBooksAtRESTServer", books);
 
         // Zet de opgevraagde members in het model
         model.addAttribute("books", books);
@@ -74,7 +74,7 @@ public class BookController {
      */
     @ExceptionHandler({ResourceAccessException.class, RestClientException.class})
     public ModelAndView handleError(HttpServletRequest req, Exception ex) {
-        log.error("Request " + req.getRequestURL() + " raised " + ex);
+        logger.error("Request " + req.getRequestURL() + " raised " + ex);
 
         ModelAndView mav = new ModelAndView();
         mav.addObject("title", "Ooops :-(");
