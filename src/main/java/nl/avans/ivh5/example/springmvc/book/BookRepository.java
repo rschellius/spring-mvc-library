@@ -33,7 +33,7 @@ public class BookRepository {
     }
 
     @Transactional(readOnly=true)
-    public List<Book> findById(int id) {
+    public List<Book> findById(Long id) {
         return jdbcTemplate.query(
                 "SELECT * FROM book WHERE ISBN=?",
                 new Object[]{id}, new BookRowMapper());

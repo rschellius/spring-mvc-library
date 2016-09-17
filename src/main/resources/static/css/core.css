@@ -46,13 +46,7 @@ div.thumbnail.frontpage:hover {
 }
 
 div.caption.frontpage {
-    height: 140px;
-    /*clear: both;*/
+    height: 150px;
     display: block;
 }
 
-.bottom-align {
-    /*position: absolute;*/
-    /*bottom: 0;*/
-    /*right: 0;*/
-}

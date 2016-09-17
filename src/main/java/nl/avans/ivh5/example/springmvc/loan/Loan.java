@@ -10,10 +10,10 @@ public class Loan
     private int loanID;
     private Date loanDate;
     private Date returnedDate;
-    private int bookISBN;
+    private Long bookISBN;
     private String bookTitle;
     private String bookAuthor;
-    private int bookEdition;
+    private String bookEdition;
     private int copyID;
     private int lendingPeriod;
     private int memberID;
@@ -25,8 +25,8 @@ public class Loan
     /**
      * Een Loan object wordt gemaakt wanneer het gelezen wordt uit de database, of wanneer er niewe Loan info wordt toegevoegd.
      */
-    public Loan(Date loanDate, Date returnedDate, int bookISBN, String bookTitle,
-                String bookAuthor, int bookEdition, int copyID, int lendingPeriod, int memberID,
+    public Loan(Date loanDate, Date returnedDate, Long bookISBN, String bookTitle,
+                String bookAuthor, String bookEdition, int copyID, int lendingPeriod, int memberID,
                 String memberFirstName, String memberLastName) {
         this.loanID = loanID;
         this.loanDate = loanDate;
@@ -67,11 +67,11 @@ public class Loan
         this.returnedDate = returnedDate;
     }
 
-    public int getBookISBN() {
+    public Long getBookISBN() {
         return bookISBN;
     }
 
-    public void setBookISBN(int bookISBN) {
+    public void setBookISBN(Long bookISBN) {
         this.bookISBN = bookISBN;
     }
 
@@ -91,11 +91,11 @@ public class Loan
         this.bookAuthor = bookAuthor;
     }
 
-    public int getBookEdition() {
+    public String getBookEdition() {
         return bookEdition;
     }
 
-    public void setBookEdition(int bookEdition) {
+    public void setBookEdition(String bookEdition) {
         this.bookEdition = bookEdition;
     }
 

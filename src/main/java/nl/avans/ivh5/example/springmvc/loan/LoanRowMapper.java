@@ -17,10 +17,10 @@ public class LoanRowMapper  implements RowMapper<Loan>
         loan.setLoanID(rs.getInt("LoanID"));
         loan.setLoanDate(rs.getDate("LoanDate"));
         loan.setReturnedDate(rs.getDate("ReturnedDate"));
-        loan.setBookISBN(rs.getInt("ISBN"));
+        loan.setBookISBN(rs.getLong("ISBN"));
         loan.setBookTitle(rs.getString("Title"));
         loan.setBookAuthor(rs.getString("Author"));
-        loan.setBookEdition(rs.getInt("Edition"));
+        loan.setBookEdition(rs.getString("Edition"));
         loan.setCopyID(rs.getInt("CopyID"));
         loan.setLendingPeriod(rs.getInt("LendingPeriod"));
         loan.setMemberID(rs.getInt("MemberID"));

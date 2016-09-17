@@ -68,22 +68,24 @@ public class CopyController {
 
         logger.debug("createBookAndCopy - product.EAN = " + ean + " title = " + product.getTitle());
 
-        String imageUrl = "";
+        // Sommige boeken hebben geen cover image. Om toch een afbeelding te kunnen laten zien
+        // voegen we er zelf een toe. Deze code is een
+        String bookCoverURL = "http://www.modny73.com/wp-content/uploads/2014/12/shutterstock_172777709-1024x1024.jpg";
         try {
             if(product.getMedia().size()> 0){
-                imageUrl = product.getMedia().get(0).getUrl();
+                bookCoverURL = product.getMedia().get(0).getUrl();
             } else {
-                imageUrl = resourceLoader.getResource("classpath:resources/static/img/notavailable.jpg").getFile().getCanonicalPath();
+                bookCoverURL = resourceLoader.getResource("http://localhost:8080/static/img/notavailable.jpg").getFile().getCanonicalPath();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Kon cover image niet vinden - " + e.getMessage());
         }
 
         // Als het boek nog niet bestond in de Database moeten we het eerst toevoegen.
         Book book = new Book.Builder(ean, product.getTitle(), product.getSpecsTag())
                 .shortDescription(product.getShortDescription())
                 .edition(product.getSummary())
-                .imageUrl(imageUrl)
+                .imageUrl(bookCoverURL)
                 .build();
 
         // Maak een nieuw boek. De bookRepository handelt de exception af als het boek al bestaat.
@@ -94,4 +96,7 @@ public class CopyController {
         Copy copy = this.copyRepository.create(new Copy(book.getEAN()));
         return copy;
     }
+
+
+
 }

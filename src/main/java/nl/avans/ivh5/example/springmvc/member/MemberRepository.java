@@ -24,12 +24,21 @@ public class MemberRepository
 
     private final Logger logger = LoggerFactory.getLogger(MemberRepository.class);;
 
+    /**
+     *
+     * @return
+     */
     @Transactional(readOnly=true)
     public List<Member> findAll() {
         logger.debug("findAll");
         return jdbcTemplate.query("SELECT * FROM member", new MemberRowMapper());
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Transactional(readOnly=true)
     public Member findMemberById(int id) {
         logger.debug("findMemberById");
@@ -38,6 +47,11 @@ public class MemberRepository
                 new Object[]{id}, new MemberRowMapper());
     }
 
+    /**
+     *
+     * @param member
+     * @return
+     */
     public Member create(final Member member) {
 
         logger.debug("create");

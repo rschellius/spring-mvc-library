@@ -18,7 +18,7 @@
     <div class="container" layout:fragment="summary">
 
         <!--/* Als er een nieuw member is toegevoegd tonen we een info bericht. */-->
-        <div th:if="${info}" layout:include="views/member/alert :: alert" th:with="type='info', header='Info'" th:remove="tag">
+        <div th:if="${info}" layout:include="fragments/alert :: alert" th:with="type='info', header='Info'" th:remove="tag">
             <!--/* Implements alert summary fragment with simple summary */-->
             <th:block layout:fragment="alert-summary">
                 <p th:text="${info}"><em>Info bericht</em></p>

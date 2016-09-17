@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.List;
+
 /**
  *
  */
@@ -20,5 +22,14 @@ public class LoanController {
     @ModelAttribute("page")
     public String module() {
         return "loans";
+    }
+
+    /**
+     *
+     * @param ean
+     * @return
+     */
+    public List<Loan> getLoansByBookEAN(Long ean) {
+        return loanRepository.findAllByBookEAN(ean);
     }
 }

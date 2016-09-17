@@ -47,6 +47,33 @@
                                 <img class="thumbnail" th:src="${book.ImageURL}"/>
                             </div>
                         </div>
+                        <!-- Info over de lopende uitleningen van dit boek -->
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h3>Beschikbaarheid</h3>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>LoanID</th>
+                                        <th>MemberID</th>
+                                        <th>Naam</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${loans.empty}">
+                                        <td colspan="4">Geen info</td>
+                                    </tr>
+                                    <tr th:each="loan : ${loans}">
+                                        <td th:text="${loan.LoanID}">1</td>
+                                        <!--<td><a th:href="@{/member/{id}(id=${member.memberID})}" th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</a></td>-->
+                                        <td th:text="${loan.MemberID}">telefoon ...</td>
+                                        <td th:text="${loan.memberFirstName} + ' ' + ${loan.memberLastName}">Naam ...</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

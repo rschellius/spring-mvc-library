@@ -20,6 +20,7 @@ import java.util.List;
 @Repository
 public class LoanRepository {
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -28,6 +29,11 @@ public class LoanRepository {
         return jdbcTemplate.query("SELECT * FROM view_all_loans", new LoanRowMapper());
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Transactional(readOnly=true)
     public List<Loan> findAllByMemberId(int id) {
         return jdbcTemplate.query(
@@ -35,6 +41,23 @@ public class LoanRepository {
                 new Object[]{id}, new LoanRowMapper());
     }
 
+    /**
+     *
+     * @param ean Het ISBN nummer van het boek waarvan we loaninfo ophalen.
+     * @return
+     */
+    @Transactional(readOnly=true)
+    public List<Loan> findAllByBookEAN(Long ean) {
+        return jdbcTemplate.query(
+                "SELECT * FROM view_all_loans WHERE (ReturnedDate IS NULL) AND (ISBN=?)",
+                new Object[]{ean}, new LoanRowMapper());
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Transactional(readOnly=true)
     public Loan findLoanById(int id) {
         return jdbcTemplate.queryForObject(
@@ -42,6 +65,11 @@ public class LoanRepository {
                 new Object[]{id}, new LoanRowMapper());
     }
 
+    /**
+     *
+     * @param loan
+     * @return
+     */
     public Loan create(final Loan loan) {
         final String sql = "INSERT INTO loan(`MemberID`, `CopyID`) VALUES(?,?)";
 
@@ -62,5 +90,4 @@ public class LoanRepository {
         loan.setLoanID(newLoanId);
         return loan;
     }
-
 }
