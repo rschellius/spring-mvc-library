@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--<html layout:decorator="views/member/layout">-->
+<html>
+<head>
+    <title>Hello Spring Boot!</title>
+    <meta http-equiv="Content-Type" summary="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Header -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
+    <div class="container" layout:fragment="summary">
+
+        <div class="page-header">
+            <h1 th:text="${book.Title}">Boek informatie</h1>
+            <p class="lead" th:text="${book.Author}">Auteur</p>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">EAN</div>
+                            <div class="col-sm-9">
+                                <p th:text="${book.EAN}">EAN</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">Summary</div>
+                            <div class="col-sm-9">
+                                <p th:utext="${book.Edition}">Beschrijving</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">Short Description</div>
+                            <div class="col-sm-6">
+                                <p th:utext="${book.ShortDescription}">Beschrijving</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <img class="thumbnail" th:src="${book.ImageURL}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--<div class="col-sm-6">-->
+                <!--<a href="/catalogus" class="btn btn-primary btn-lg active pull-left" role="button">Terug naar het overzicht</a>-->
+            <!--</div>-->
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-success btn-lg pull-right" onclick="createCopy()">
+                    <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;Leen dit boek
+                </button>
+
+                <!-- Als het toevoegen van de copie gelukt is zie je hier een alertbox.
+                    Als het mislut is toont deze box een error message. Zie de JS code onderaan. -->
+                <div id="alertBox" class="alert" role="alert" style="display: none;width: 250px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span id="createCopyResult"><!-- Jquery zet hier de message. --></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
+    </footer>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:href="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+
+    <script th:inline="javascript">
+
+        //
+        // Zie: https://www.mkyong.com/spring-mvc/spring-mvc-refactoring-a-jquery-ajax-post-example/
+        //
+        var url = "/nogmaken";
+        var product = /*[[${product}]]*/ null;
+
+        console.log("EAN = " + product.EAN);
+        console.dir(product);
+
+        function createCopy() {
+
+            $.ajax({
+                type : "POST",
+                contentType : "application/json",
+                url : url,
+                data : JSON.stringify(product),
+                dataType : 'json',
+                timeout : 100000,
+                success : function(data) {
+                    console.log("SUCCESS: ", data);
+                    $("#createCopyResult").text("Copy is toegevoegd");
+                    $("#alertBox").addClass("alert-success").show( "fast", callback );
+                },
+                error : function(e) {
+                    console.log("ERROR: ", e);
+                    $("#createCopyResult").text("Niet gelukt");
+                    $("#alertBox").addClass("alert-danger").show( "fast", callback );
+                },
+                done : function(e) {
+                    console.log("DONE");
+                }
+            });
+        }
+
+        //callback function to hide a message box
+        function callback() {
+            setTimeout(function() {
+                $("#alertBox").fadeOut();
+            }, 1000 );
+        }
+
+    </script>
+
+</body>
+</html>

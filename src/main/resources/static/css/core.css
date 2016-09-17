@@ -25,10 +25,20 @@ body {
 img.thumbnail {
     height: 230px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 0;
 }
 
 div.thumbnail.frontpage {
     padding-top: 10px;
+    position: relative;
+}
+
+div.thumbnail.frontpage p {
+    margin-bottom: 2px;
+}
+
+div.thumbnail.frontpage h3 a:hover {
+    text-decoration: none;
 }
 
 div.thumbnail.frontpage:hover {
@@ -36,5 +46,13 @@ div.thumbnail.frontpage:hover {
 }
 
 div.caption.frontpage {
-    height: 180px;
+    height: 140px;
+    /*clear: both;*/
+    display: block;
+}
+
+.bottom-align {
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*right: 0;*/
 }
