@@ -1,7 +1,10 @@
 package nl.avans.ivh5.example.springmvc.book;
 
+import nl.avans.ivh5.example.springmvc.copy.Copy;
+import nl.avans.ivh5.example.springmvc.copy.CopyController;
 import nl.avans.ivh5.example.springmvc.loan.Loan;
-import nl.avans.ivh5.example.springmvc.loan.LoanController;
+import nl.avans.ivh5.example.springmvc.member.Member;
+import nl.avans.ivh5.example.springmvc.member.MemberController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +36,18 @@ public class BookController {
 
     // De repository waarin we onze boeken zoeken
     private BookRepository bookRepository;
-
-    private LoanController loanController;
+    // De controller waarin we memberinfo opzoeken
+    private MemberController memberController;
+    // De controller waarin we copyinfo opzoeken
+    private CopyController copyController;
 
     @Autowired
-    public BookController(BookRepository bookRepository, LoanController loanController) {
+    public BookController(BookRepository bookRepository,
+                          MemberController memberController,
+                          CopyController copyController) {
         this.bookRepository = bookRepository;
-        this.loanController = loanController;
+        this.memberController = memberController;
+        this.copyController = copyController;
     }
 
     /**
@@ -85,20 +93,29 @@ public class BookController {
         logger.debug("getBookByEAN");
 
         List<Book> books = bookRepository.findById(ean);
+        // Bij het lenen van een boek moet je in ons geval een member selecteren.
+        List<Member> members = memberController.findAllMembers();
+        // Info over de copies van het boek dat we bekijken.
+        List<Copy> copies = copyController.findLendingInfoByBookEAN(ean);
 
-        List<Loan> loans = loanController.getLoansByBookEAN(ean);
-
+        // De gebruiker kan bij het bekijken van het boek via de view kiezen
+        // of hij het wil lenen. In de view zit een formulier met een knop om een copy te lenen.
+        // Daarvoor moet een Loan object ingevuld worden dat we hier meegeven.
+        // Dat Loan object wordt via het formulier gePOST naar de LoanController (create).
+        Loan loan = new Loan();
 
         // Zet de gevonden boeken in het model
         // Omdat we hier maar 1 waarde verwachten nemen we listitem 0. Kan tricky zijn.
         model.addAttribute("book", books.get(0));
-        model.addAttribute("loans", loans);
+        model.addAttribute("copies", copies);
+        model.addAttribute("members", members);
+        // Het Loan object dat in het formulier voor het lenen van een boek wordt ingevuld.
+        model.addAttribute("loan", loan);
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
         return "views/book/read";
     }
-
 
     /**
      * Exception handler for this BookController. Deze handler vangt de genoemde

@@ -97,6 +97,14 @@ public class CopyController {
         return copy;
     }
 
+    /**
+     *
+     * @param ean
+     * @return
+     */
+    public List<Copy> findLendingInfoByBookEAN(Long ean) {
+        return copyRepository.findLendingInfoByBookEAN(ean);
+    }
 
 
 }

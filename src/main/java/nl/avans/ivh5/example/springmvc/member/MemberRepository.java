@@ -19,6 +19,7 @@ import java.util.List;
 @Repository
 public class MemberRepository
 {
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

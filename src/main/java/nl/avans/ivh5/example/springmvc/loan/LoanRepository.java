@@ -1,5 +1,7 @@
 package nl.avans.ivh5.example.springmvc.loan;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 @Repository
 public class LoanRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoanRepository.class);
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
@@ -71,6 +75,9 @@ public class LoanRepository {
      * @return
      */
     public Loan create(final Loan loan) {
+
+        logger.debug("create loan copyID " + loan.getCopyID() + ", member " + loan.getMemberID());
+
         final String sql = "INSERT INTO loan(`MemberID`, `CopyID`) VALUES(?,?)";
 
         // KeyHolder gaat de auto increment key uit de database bevatten.
@@ -78,16 +85,14 @@ public class LoanRepository {
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, loan.getMemberID());
-                ps.setInt(2, loan.getCopyID());
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.NO_GENERATED_KEYS);
+                ps.setLong(1, loan.getMemberID());
+                ps.setLong(2, loan.getCopyID());
                 return ps;
             }
         }, holder);
 
         // Zet de auto increment waarde in de Member
-        int newLoanId = holder.getKey().intValue();
-        loan.setLoanID(newLoanId);
         return loan;
     }
 }

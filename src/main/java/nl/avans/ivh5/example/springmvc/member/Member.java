@@ -54,7 +54,6 @@ public class Member
 
     private Date lastUpdated;
 
-
     public Member() {  }
 
     public Member(String firstName, String lastName, String street, String houseNumber, String city, String phoneNumber, String emailAddress, double fine) {

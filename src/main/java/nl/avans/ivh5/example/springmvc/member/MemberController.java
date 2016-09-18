@@ -11,9 +11,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
-class MemberController {
+public class MemberController {
 
     private MemberRepository memberRepository;
     private LoanRepository loanRepository;
@@ -135,5 +136,13 @@ class MemberController {
 //        mav.setViewName("views/member/create");
         return mav;
     }
+
+    /**
+     * Retourneer alle members. Wordt gebruikt bij het uitlenen van een boek,
+     * om een uitlening aan een member te koppelen.
+     *
+     * @return
+     */
+    public List<Member> findAllMembers() { return memberRepository.findAll(); }
 
 }

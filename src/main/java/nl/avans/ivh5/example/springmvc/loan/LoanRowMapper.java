@@ -21,9 +21,9 @@ public class LoanRowMapper  implements RowMapper<Loan>
         loan.setBookTitle(rs.getString("Title"));
         loan.setBookAuthor(rs.getString("Author"));
         loan.setBookEdition(rs.getString("Edition"));
-        loan.setCopyID(rs.getInt("CopyID"));
+        loan.setCopyID(rs.getLong("CopyID"));
         loan.setLendingPeriod(rs.getInt("LendingPeriod"));
-        loan.setMemberID(rs.getInt("MemberID"));
+        loan.setMemberID(rs.getLong("MemberID"));
         loan.setMemberFirstName(rs.getString("FirstName"));
         loan.setMemberLastName(rs.getString("LastName"));
         return loan;

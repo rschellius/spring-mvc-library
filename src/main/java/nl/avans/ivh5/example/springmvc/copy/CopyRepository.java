@@ -14,7 +14,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Robin Schellius on 3-9-2016.
@@ -22,8 +25,9 @@ import java.util.List;
 @Repository
 public class CopyRepository {
 
-    private final Logger logger = LoggerFactory.getLogger(CopyRepository.class);;
+    private final Logger logger = LoggerFactory.getLogger(CopyRepository.class);
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -37,15 +41,79 @@ public class CopyRepository {
     }
 
     /**
+     * Haal een lijst van gegevens over uitleningen van een boek.
+     * Een uitlening is een copy van een boek die ofwel uitgeleend is maar nog
+     * niet teruggebracht (ReturnedDate is NULL), of een copy die is teruggebracht
+     * (de meest recente ReturnedDate van dat boek).
      *
-     * @param id
+     * @param ean
      * @return
      */
     @Transactional(readOnly=true)
-    public List<Copy> findById(int id) {
-        return jdbcTemplate.query(
-                "SELECT * FROM copy WHERE CopyID=?",
-                new Object[]{id}, new CopyRowMapper());
+    public List<Copy> findLendingInfoByBookEAN(Long ean) {
+
+        logger.debug("findLendingInfoByBookEAN " + ean);
+
+        //
+        // Querystring met named parameters.
+        //
+        final String sql = "SELECT * FROM `view_booklending` WHERE `ISBN` = '" + ean +
+                            "' AND ((`ReturnedDate` IS NULL)" +
+                            "OR (`ReturnedDate` = (SELECT `ReturnedDate` FROM `loan` " +
+                            "WHERE `ISBN`= '" + ean +"' ORDER BY `ReturnedDate` DESC LIMIT 1)));";
+
+        // Map de de actuele waarde van ean op de named parameter.
+//        SqlParameterSource namedParameters = new MapSqlParameterSource("isbn", ean);
+
+        //
+        // queryForList geeft een lijst (array) van key-value mappings terug.
+        // Map heeft de vorm [{name=Bob, id=1}, {name=Mary, id=2}].
+        // We moeten dus per entry in de map een Copy aanmaken, de waarden uit de map lezen,
+        // en die in onze copy zetten.
+        // Zie http://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html
+        //
+        List<Copy> copies = new ArrayList<>();
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+        logger.debug("Query gaf " + rows.size() + " records terug.");
+        for (Map row : rows) {
+
+            logger.debug("Adding copy id " + (Long)row.get("CopyID"));
+            Copy copy = new Copy(ean);
+
+            // Deze attributen worden door de database gegenereerd.
+            // Zijn dus altijd aanwezig (hoeven dus niet op null te checken).
+            copy.setCopyID((Long)row.get("CopyID"));
+            copy.setLendingPeriod((Long)row.get("LendingPeriod"));
+
+            if(row.get("MemberID") == null)
+                copy.setMemberID(null);
+            else copy.setMemberID((Long)row.get("MemberID"));
+
+            if(row.get("FirstName") == null)
+                copy.setFirstName(null);
+            else copy.setFirstName((String) row.get("FirstName"));
+
+            if(row.get("LastName") == null)
+                copy.setLastName(null);
+            else copy.setLastName((String) row.get("LastName"));
+
+            if(row.get("LoanDate") == null)
+                copy.setLoanDate(null);
+            else copy.setLoanDate((Date) row.get("LoanDate"));
+
+            if(row.get("ReturnedDate") == null)
+                copy.setReturnedDate(null);
+            else copy.setReturnedDate((Date) row.get("ReturnedDate"));
+
+            if(row.get("LoanID") == null)
+                copy.setLoanID(null);
+            else copy.setLoanID((Long) row.get("LoanID"));
+
+            logger.debug(copy.toString());
+            copies.add(copy);
+        }
+
+        return copies;
     }
 
     /**
@@ -69,8 +137,8 @@ public class CopyRepository {
             }
         }, holder);
 
-        // Zet de auto increment waarde in de Member
-        int newCopyId = holder.getKey().intValue();
+        // Zet de auto increment waarde in de Copy
+        Long newCopyId = holder.getKey().longValue();
         copy.setCopyID(newCopyId);
         return copy;
     }

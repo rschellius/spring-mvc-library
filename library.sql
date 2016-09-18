@@ -54,7 +54,7 @@ CREATE TABLE `loan` (
   `LoanID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `LoanDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ReturnedDate` TIMESTAMP NULL,
-  `MemberID` INT(11) UNSIGNED NOT NULL,
+  `MemberID` INT(6) UNSIGNED NOT NULL,
   `CopyID` INT(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`LoanID`),
   KEY (`MemberID`)
@@ -91,7 +91,7 @@ ALTER TABLE `member` AUTO_INCREMENT = 1000;
 CREATE TABLE `reservation` (
   `ReservationID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ReservationDate` TIMESTAMP NOT NULL,
-  `MemberID` INT(11) UNSIGNED NOT NULL,
+  `MemberID` INT(6) UNSIGNED NOT NULL,
   `CopyID` INT(11) UNSIGNED NOT NULL,
   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY (`ReservationID`)
@@ -189,6 +189,68 @@ SELECT
 FROM `copy`
 LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`;
 
+-- -----------------------------------------------------
+-- Toon alle copies per boek, met informatie over beschikbaarheid.
+-- We willen zien of een boek beschikbaar is, en zo niet, aan wie het dan uitgeleend is.
+--
+CREATE OR REPLACE VIEW `view_lending` AS 
+SELECT 
+	`loan`.`LoanID`,
+	`copy`.`CopyID`,
+	`book`.`ISBN`,
+	`loan`.`LoanDate`,
+	`loan`.`ReturnedDate`,
+	`copy`.`LendingPeriod`,
+	`member`.`MemberID`,
+	`member`.`FirstName`,
+	`member`.`LastName`
+FROM `loan`
+RIGHT JOIN `copy` USING(`CopyID`)
+LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`
+LEFT JOIN `member` ON `loan`.`MemberID` = `member`.`MemberID`;
+
+
+-- -----------------------------------------------------
+-- Toon alle copies per boek, met informatie over beschikbaarheid.
+-- We willen zien of een boek beschikbaar is, en zo niet, aan wie het dan uitgeleend is.
+--
+CREATE OR REPLACE VIEW `view_booklending` AS 
+SELECT 
+	`book`.`ISBN`,
+	`copy`.`CopyID`,
+	`loan`.`LoanID`,
+	`loan`.`LoanDate`,
+	`loan`.`ReturnedDate`,
+	`copy`.`LendingPeriod`,
+	`member`.`MemberID`,
+	`member`.`FirstName`,
+	`member`.`LastName`
+FROM `book`
+LEFT JOIN `copy` ON `copy`.`BookISBN` = `book`.`ISBN`
+LEFT JOIN `loan` USING(`CopyID`)
+LEFT JOIN `member` ON `loan`.`MemberID` = `member`.`MemberID`
+ORDER BY `CopyID`, `LoanID`;
+select * from view_booklending;
+
+
+
+SELECT * FROM `view_booklending`
+WHERE `ISBN`='9781683688815'
+AND 
+	(
+		(`ReturnedDate` IS NULL)
+		OR
+		(`ReturnedDate` = (
+			SELECT `ReturnedDate`
+			FROM `loan`
+			WHERE `ISBN`='9781683688815'
+			ORDER BY `ReturnedDate` DESC -- this means highest number (most recent) first
+   			LIMIT 1 
+		))
+	)
+;
+
+
 
 -- -----------------------------------------------------
 -- We doen de inserts als laatste. Op dit moment zijn alle PK en FK constraints
@@ -225,58 +287,69 @@ INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`, `I
 (9789043017961, 'Kritisch denken', 'T. ter Berg', 'Kritische denkvaardigheden bezit u niet van nature. Wel kunt u deze trainen. Dit kan met behulp van de unieke methodiek ''Kritische Denken met Rationale'', waar dit boek bij hoort.<br /><br />Rationale is de naam van een softwareprogramma dat u helpt informatie te ordenen, redeneringen te visualiseren en vervolgens een goed en gefundeerd betoog op te bouwen. Ook leert u hoe u redeneringen van anderen kunt herkennen, analyseren en beoordelen. Dit boek gaat in op de basisbegrippen van kritisch denken en geeft i...', 'Nederlandstalig | Paperback | 2009', 'https://s.s-bol.com/imgbase0/imagebase/large/FC/4/5/2/1/1001004006461254.jpg', '2016-09-16 20:19:35'),
 (9789044622294, 'Het leven van Pi', 'Yann Martel', 'Het leven van Pi vertelt het ongelooflijke verhaal van Piscine Patel (Pi), een zestienjarige Indiase jongen wiens vader een dierentuin in India heeft. Wanneer de familie besluit het land te verlaten, wordt de hele dierentuin ingescheept. Maar het schip vergaat en de enige overlevenden op de reddingssloep zijn Pi, een hyena, een zebra met een gebroken been en een tijger van 200 kilo.<br /><br />227 dagen dobbert de sloep over de Grote Oceaan _ het decor voor een buitengewoon fantasierijke roman. ''Dit verhaal doet je in God geloven,'' aldus een personage. Dat gaat misschien wat ver, maar wie Het leven van Pi leest, móet wel geloven in de onverwoestbare kracht van verhalen.', 'Nederlandstalig | Paperback | 2012', 'https://s.s-bol.com/imgbase0/imagebase/large/FC/7/5/7/0/9200000005930757.jpg', '2016-09-16 19:08:19');
 
-INSERT INTO `copy` (`CopyID`, `LendingPeriod`, `BookISBN`, `UpdatedDate`) VALUES
-(1000, 5, 9781683688815, '2016-09-16 19:03:31'),
-(1001, 5, 9781683688815, '2016-09-16 19:03:34'),
-(1002, 5, 9781683688815, '2016-09-16 19:03:36'),
-(1005, 5, 9781468963830, '2016-09-16 19:04:51'),
-(1006, 5, 9781468963830, '2016-09-16 19:04:52'),
-(1007, 5, 9781326244415, '2016-09-16 19:05:04'),
-(1008, 5, 9781326244415, '2016-09-16 19:05:05'),
-(1009, 5, 9781449388942, '2016-09-16 19:05:32'),
-(1010, 5, 9781457187971, '2016-09-16 19:05:39'),
-(1011, 5, 9781457187971, '2016-09-16 19:05:41'),
-(1012, 5, 9789023400226, '2016-09-16 19:07:11'),
-(1013, 5, 9789023400226, '2016-09-16 19:07:12'),
-(1014, 5, 9789023438786, '2016-09-16 19:07:44'),
-(1015, 5, 9789023438786, '2016-09-16 19:07:45'),
-(1016, 5, 9789023438786, '2016-09-16 19:07:47'),
-(1017, 5, 9789044622294, '2016-09-16 19:08:19'),
-(1018, 5, 9789044622294, '2016-09-16 19:08:21'),
-(1019, 5, 9789044622294, '2016-09-16 19:08:23'),
-(1020, 5, 9781118008188, '2016-09-16 19:46:24'),
-(1021, 5, 9781118008188, '2016-09-16 19:46:26'),
-(1022, 5, 9781118531648, '2016-09-16 19:46:37'),
-(1023, 5, 9781118531648, '2016-09-16 19:46:38'),
-(1024, 5, 9781118057322, '2016-09-16 19:46:46'),
-(1025, 5, 9780764570780, '2016-09-16 19:46:57'),
-(1026, 5, 9780764583063, '2016-09-16 20:06:32'),
-(1027, 5, 9780764583063, '2016-09-16 20:08:43'),
-(1028, 5, 9789023410843, '2016-09-16 20:09:50'),
-(1029, 5, 9789043017961, '2016-09-16 20:19:35');
+INSERT INTO `copy` (`CopyID`, `LendingPeriod`, `BookISBN`) VALUES
+(1000, 21, 9781683688815),
+(1001, 21, 9781683688815),
+(1002, 21, 9781683688815),
+(1005, 21, 9781468963830),
+(1006, 21, 9781468963830),
+(1007, 21, 9781326244415),
+(1008, 21, 9781326244415),
+(1009, 21, 9781449388942),
+(1010, 21, 9781457187971),
+(1011, 21, 9781457187971),
+(1012, 21, 9789023400226),
+(1013, 21, 9789023400226),
+(1014, 21, 9789023438786),
+(1015, 21, 9789023438786),
+(1016, 21, 9789023438786),
+(1017, 21, 9789044622294),
+(1018, 21, 9789044622294),
+(1019, 21, 9789044622294),
+(1020, 21, 9781118008188),
+(1021, 21, 9781118008188),
+(1022, 21, 9781118531648),
+(1023, 21, 9781118531648),
+(1024, 21, 9781118057322),
+(1025, 21, 9780764570780),
+(1026, 21, 9780764583063),
+(1027, 21, 9780764583063),
+(1028, 21, 9789023410843),
+(1029, 21, 9789043017961);
 
 --
--- Dumping data for table `loan`
+-- Voer een aantal leningen in.
 --
-
--- INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES
--- (1000, 1001),
--- (1006, 1001),
--- (1002, 1011),
--- (1001, 1014),
--- (1005, 1014),
--- (1000, 1023),
--- (1003, 1021),
--- (1001, 1021),
--- (1004, 1011),
--- (1000, 1021),
--- (1001, 1022);
-
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES
+(1000, 1001),
+(1005, 1005),
+(1002, 1011),
+(1004, 1012),
+(1001, 1014),
+(1005, 1015),
+(1000, 1016),
+(1003, 1017),
+(1001, 1018),
+(1000, 1021),
+(1001, 1026);
 
 --
--- Dumping data for table `reservation`
+-- Zorg dat een aantal boeken teruggebracht zijn.
 --
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1000;
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES (1004, 1000);
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1000;
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES (1004, 1000);
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1000;
 
--- INSERT INTO `reservation` (`ReservationDate`, `MemberID`, `CopyID`) VALUES
--- (NOW(), 1002, 1012);
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1001;
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES (1000, 1001);
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1001;
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES (1000, 1001);
+
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1002;
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES (1006, 1002);
+UPDATE `loan` SET `ReturnedDate` = CURDATE() WHERE `CopyID` = 1002;
+INSERT INTO `loan` (`MemberID`, `CopyID`) VALUES (1006, 1002);
+
 

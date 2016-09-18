@@ -14,34 +14,13 @@ public class Loan
     private String bookTitle;
     private String bookAuthor;
     private String bookEdition;
-    private int copyID;
+    private Long copyID;
     private int lendingPeriod;
-    private int memberID;
+    private Long memberID;
     private String memberFirstName;
     private String memberLastName;
 
     public Loan() {  }
-
-    /**
-     * Een Loan object wordt gemaakt wanneer het gelezen wordt uit de database, of wanneer er niewe Loan info wordt toegevoegd.
-     */
-    public Loan(Date loanDate, Date returnedDate, Long bookISBN, String bookTitle,
-                String bookAuthor, String bookEdition, int copyID, int lendingPeriod, int memberID,
-                String memberFirstName, String memberLastName) {
-        this.loanID = loanID;
-        this.loanDate = loanDate;
-        this.returnedDate = returnedDate;
-        this.bookISBN = bookISBN;
-        this.bookTitle = bookTitle;
-        this.bookAuthor = bookAuthor;
-        this.bookEdition = bookEdition;
-        this.copyID = copyID;
-        this.lendingPeriod = lendingPeriod;
-        this.memberID = memberID;
-        this.memberFirstName = memberFirstName;
-        this.memberLastName = memberLastName;
-        this.loanID = 0;    // Wordt ingevuld in LoanRepository bij opvragen van data uit de database (auto-increment ID)
-    }
 
     public int getLoanID() {
         return loanID;
@@ -99,11 +78,11 @@ public class Loan
         this.bookEdition = bookEdition;
     }
 
-    public int getCopyID() {
+    public Long getCopyID() {
         return copyID;
     }
 
-    public void setCopyID(int copyID) {
+    public void setCopyID(Long copyID) {
         this.copyID = copyID;
     }
 
@@ -115,11 +94,11 @@ public class Loan
         this.lendingPeriod = lendingPeriod;
     }
 
-    public int getMemberID() {
+    public Long getMemberID() {
         return memberID;
     }
 
-    public void setMemberID(int memberID) {
+    public void setMemberID(Long memberID) {
         this.memberID = memberID;
     }
 

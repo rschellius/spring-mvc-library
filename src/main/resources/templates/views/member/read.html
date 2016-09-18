@@ -24,7 +24,7 @@
             <!--<p th:if="${member.empty}"> No members found.</p>-->
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h2 th:text="${member.firstName} + ' ' + ${member.lastName}">Naam ...</h2>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h2>Boeken in bezit</h2>
@@ -58,10 +58,11 @@
                         <table class="table table-condensed">
                             <thead>
                             <tr>
-                                <th>ISBN</th>
-                                <th>Titel</th>
-                                <th>Auteur</th>
-                                <th>Geleend op</th>
+                                <th class="col-sm-2">ISBN</th>
+                                <th class="col-sm-1">CopyID</th>
+                                <th class="col-sm-4">Titel</th>
+                                <th class="col-sm-3">Auteur</th>
+                                <th class="col-sm-2">Geleend op</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -70,18 +71,14 @@
                             </tr>
                             <tr th:each="loan : ${loans}">
                                 <td th:text="${loan.bookISBN}">ISBN</td>
-                                <td th:text="${loan.bookTitle}">Titel</td>
+                                <td th:text="${loan.CopyID}">ISBN</td>
+                                <td><a th:href="@{/book/{id}(id=${loan.bookISBN})}" th:text="${loan.BookTitle}">Titel...</a></td>
                                 <td th:text="${loan.bookAuthor}">Author</td>
                                 <td th:text="${loan.loanDate}">Date</td>
                             </tr>
                             </tbody>
                         </table>
 
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h2>Reserveringen</h2>
                     </div>
                 </div>
             </div>
@@ -93,7 +90,7 @@
             </div>
             <div class="col-sm-6">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-outline-danger btn-lg pull-right" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-danger btn-lg pull-right" data-toggle="modal" data-target="#myModal">
                     Verwijderen
                 </button>
             </div>
