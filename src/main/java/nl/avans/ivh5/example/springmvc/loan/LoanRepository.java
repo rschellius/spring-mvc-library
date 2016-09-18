@@ -95,4 +95,16 @@ public class LoanRepository {
         // Zet de auto increment waarde in de Member
         return loan;
     }
+
+    /**
+     *
+     * @param loan
+     * @return
+     */
+    public void finish(final Loan loan) {
+        logger.debug("finish LoanID = " + loan.getLoanID());
+        final String sql = "UPDATE loan SET `ReturnedDate` = CURDATE() WHERE `LoanID` = ?";
+        jdbcTemplate.update(sql, loan.getLoanID());
+    }
+
 }

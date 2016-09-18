@@ -54,3 +54,6 @@ div.caption.frontpage {
     margin-right: 20px;
 }
 
+.glyphicon.nomargin {
+    margin-right: 0;
+}

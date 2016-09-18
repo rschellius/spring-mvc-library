@@ -63,22 +63,31 @@
                                 <th class="col-sm-4">Titel</th>
                                 <th class="col-sm-3">Auteur</th>
                                 <th class="col-sm-2">Geleend op</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:if="${loans.empty}">
-                                <td colspan="4">Geen uitleningen gevonden.</td>
-                            </tr>
-                            <tr th:each="loan : ${loans}">
-                                <td th:text="${loan.bookISBN}">ISBN</td>
-                                <td th:text="${loan.CopyID}">ISBN</td>
-                                <td><a th:href="@{/book/{id}(id=${loan.bookISBN})}" th:text="${loan.BookTitle}">Titel...</a></td>
-                                <td th:text="${loan.bookAuthor}">Author</td>
-                                <td th:text="${loan.loanDate}">Date</td>
-                            </tr>
+                                <tr th:if="${loans.empty}">
+                                    <td colspan="4">Geen uitleningen gevonden.</td>
+                                </tr>
+                                <tr th:each="loan : ${loans}">
+                                    <td th:text="${loan.bookISBN}">ISBN</td>
+                                    <td th:text="${loan.CopyID}">ISBN</td>
+                                    <td><a th:href="@{/book/{id}(id=${loan.bookISBN})}" th:text="${loan.BookTitle}">Titel...</a></td>
+                                    <td th:text="${loan.bookAuthor}">Author</td>
+                                    <td th:text="${loan.loanDate}">Date</td>
+                                    <td>
+                                        <form th:action="@{/loan/finish}" th:object="${loan}" method="POST" class="form-horizontal">
+                                            <input type="hidden" name="LoanID" th:value="${loan.LoanID}" />
+                                            <input type="hidden" name="memberID" th:value="${loan.memberID}" />
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-warning" name="save"><i class="glyphicon glyphicon-download-alt nomargin"></i></button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -111,7 +120,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Nee, annuleer</button>
-
                         <!--
                             We willen hier een HTTP DELETE bericht sturen ... Nog uitzoeken hoe. JavaScript AJAX wsch.
                         -->

@@ -42,7 +42,21 @@ public class LoanController {
         // Eerst wordt de controlle van deze URL aangeroepen;
         // die haalt de updated data op en toont de view.
         return "redirect:/book/" + loan.getBookISBN().toString();
-//        return "redirect:/";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping(value = "/loan/finish", method = RequestMethod.POST)
+    public String finishLoan(Loan loan, final ModelMap model) {
+
+        logger.debug("finishLoan LoanID = " + loan.getLoanID());
+        loanRepository.finish(loan);
+        // Open de juiste view template als resultaat.
+        // Eerst wordt de controlle van deze URL aangeroepen;
+        // die haalt de updated data op en toont de view.
+        return "redirect:/member/" + loan.getMemberID().toString();
     }
 
 }
