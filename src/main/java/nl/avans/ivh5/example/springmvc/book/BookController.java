@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -41,6 +38,16 @@ public class BookController {
     // De controller waarin we copyinfo opzoeken
     private CopyController copyController;
 
+    /**
+     * Met ModelAttribute kun je attributen (waarden) toevoegen aan het model, zodat
+     * je ze in de views kunt gebruiken. Hier kan dat buiten een method.
+     * Handig om bv. het 'kruimelpad' (breadcrumbs) of de titel van een pagina in te stellen.
+     */
+    @ModelAttribute("page")
+    public String module() {
+        return "BookController";
+    }
+
     @Autowired
     public BookController(BookRepository bookRepository,
                           MemberController memberController,
@@ -52,8 +59,10 @@ public class BookController {
 
     /**
      * Lees alle boeken die via de REST API beschikbaar zijn.
+     * De REST API is een aparte server die je los van de bibliotheek moet starten.
      *
-     * @return
+     * @return view die geopend wordt
+     * @see <a href="https://bitbucket.org/AEI-informatica/java-spring-boot-restserver">Bitbucket repo</a>
      */
     @RequestMapping(value = "/book", method = RequestMethod.GET)
     public String listBooksAtRESTServer(Model model) {
