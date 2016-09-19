@@ -31,6 +31,6 @@ ADD src /code/src
 RUN ["mvn", "compile"]
 RUN ["mvn", "package"]
 
-EXPOSE 8090
+EXPOSE 8080
 CMD ["java", "-jar", "target/spring-boot-thymeleaf-1.0.jar"]
 # done
