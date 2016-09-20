@@ -16,25 +16,25 @@ FROM gcr.io/google_appengine/java-compat
 VOLUME /tmp
 
 # Install maven
-RUN apt-get update
-RUN apt-get install -y maven
+# RUN apt-get update
+# RUN apt-get install -y maven
 
-WORKDIR /code
+# WORKDIR /code
 
 # Warning: JAVA_HOME environment variable is not set.
 # ENV JAVA_HOME /usr/java/default
 # ENV PATH $PATH:$JAVA_HOME/bin
 
 # Prepare by downloading dependencies
-ADD pom.xml *.iml /code/pom.xml
+# ADD pom.xml *.iml /code/pom.xml
 # RUN ["mvn", "dependency:resolve"]
 # RUN ["mvn", "verify"]
 
 # Adding source, compile and package into a fat jar
-ADD src /code/src
+# ADD src /code/src
 # RUN ["mvn", "clean"]
-RUN ["mvn", "compile"]
-RUN ["mvn", "package"]
+# RUN ["mvn", "compile"]
+# RUN ["mvn", "package"]
 
 ADD spring-boot-thymeleaf-1.0.jar app.jar
 EXPOSE 8080

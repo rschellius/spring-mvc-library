@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>nl.avans.ivh5.example.springmvc</groupId>
     <artifactId>spring-boot-thymeleaf</artifactId>
     <version>1.0</version>
     <name>spring-boot-thymeleaf</name>
     <packaging>jar</packaging>
 
+    <properties>
+        <java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source> <!-- REQUIRED -->
+		<maven.compiler.target>1.8</maven.compiler.target> <!-- REQUIRED -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
+		<appengine.maven.plugin>0.1.2</appengine.maven.plugin>
+		<!-- <jetty.maven.plugin>9.3.7.v20160115</jetty.maven.plugin> -->
+    </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.0.RELEASE</version>
     </parent>
+
+	<prerequisites>                       <!-- Optional, but suggested -->
+		<maven>3.3.9</maven>              <!-- Recommended minimum maven version -->
+	</prerequisites>
 
     <dependencies>
         <dependency>
@@ -91,11 +106,22 @@
             <version>2.53.0</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>        
+    </dependencies>
 
     <build>
         <plugins>
@@ -103,6 +129,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version>${appengine.maven.plugin}</version>
+				<configuration>
+					<!-- deploy configuration -->
+					<!--
+					<deploy.promote>true</deploy.promote>                           <!~~ DEFAULT value ~~>
+					<deploy.stopPreviousVersion>true</deploy.stopPreviousVersion>   <!~~ DEFAULT value ~~>
+					-->
+					</configuration>
+			</plugin>
+
         </plugins>
     </build>
 

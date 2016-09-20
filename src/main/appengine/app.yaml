@@ -1,0 +1,5 @@
+#
+# app.yaml - configuratiebestand voor Google Cloud App Engine
+#
+runtime: custom
+vm: true

@@ -7,7 +7,7 @@
 -- --------------------------------------------------------
 
 DROP SCHEMA IF EXISTS `library` ;
-CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
 USE `library` ;
 
 --
