@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,14 @@ public class BookRepository {
 
     @Transactional(readOnly=true)
     public List<Book> findAll() {
-        return jdbcTemplate.query("SELECT * FROM book", new BookRowMapper());
+        logger.debug("findAll aangeroepen");
+        List<Book> result = new ArrayList<>();
+        try {
+            result = jdbcTemplate.query("SELECT * FROM book", new BookRowMapper());
+        } catch(Exception ex) {
+            throw ex;
+        }
+        return result;
     }
 
     @Transactional(readOnly=true)
