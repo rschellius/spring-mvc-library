@@ -1,6 +1,8 @@
 package nl.avans.ivh5.example.springmvc.member;
 
 import nl.avans.ivh5.example.springmvc.loan.LoanRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.sql.SQLException;
@@ -15,6 +18,8 @@ import java.util.List;
 
 @Controller
 public class MemberController {
+
+    private final Logger logger = LoggerFactory.getLogger(MemberController.class);;
 
     private MemberRepository memberRepository;
     private LoanRepository loanRepository;
@@ -31,6 +36,10 @@ public class MemberController {
         return "members";
     }
 
+    // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+    @ModelAttribute("classActiveMember")
+    public String highlightNavMenuItem(){ return "active"; };
+
     /**
      * Haal een lijst van Members en toon deze in een view.
      * @param model
@@ -38,10 +47,9 @@ public class MemberController {
      */
     @RequestMapping(value = "/member", method = RequestMethod.GET)
     public String listMembers(Model model) {
+        logger.debug("listMembers");
         // Zet de opgevraagde members in het model
         model.addAttribute("members", memberRepository.findAll());
-        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
-        model.addAttribute("classActiveMember","active");
         // Open de juiste view template als resultaat.
         return "views/member/list";
     }
@@ -55,7 +63,8 @@ public class MemberController {
      */
     @RequestMapping(value="/member/create", method = RequestMethod.GET)
     public String showCreateMemberForm(final Member member, final ModelMap model) {
-        return "/views/member/create";
+        logger.debug("Create a member");
+        return "views/member/create";
     }
 
     /**
@@ -70,6 +79,7 @@ public class MemberController {
      */
     @RequestMapping(value="/member/create", method = RequestMethod.POST)
     public String validateAndSaveMember(@Valid Member member, final BindingResult bindingResult, final ModelMap model) {
+        logger.debug("Create a member - new member = " + member.getFullName());
 
         if (bindingResult.hasErrors()) {
             // Als er velden in het formulier zijn die niet correct waren ingevuld vinden we die hier.
@@ -83,14 +93,13 @@ public class MemberController {
         // Zet de opgevraagde members in het model
         model.addAttribute("members", memberRepository.findAll());
         model.addAttribute("info", "Member '" + newMember.getFullName() + "' is toegevoegd.");
-        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
-        model.addAttribute("classActiveMember","active");
         // Open de juiste view template als resultaat.
         return "views/member/list";
     }
 
     @RequestMapping(value = "/member/{id}", method = RequestMethod.DELETE)
     public String deleteMember(Model model, @PathVariable int id) {
+        logger.debug("deleteMember, id = " + id);
 
         // Delete de member aan via de repository
         this.memberRepository.deleteMemberById(id);
@@ -98,8 +107,6 @@ public class MemberController {
         // Zet de opgevraagde members in het model
         model.addAttribute("members", memberRepository.findAll());
         model.addAttribute("info", "Member is verwijderd.");
-        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
-        model.addAttribute("classActiveMember","active");
         // Open de juiste view template als resultaat.
         return "views/member/list";
     }
@@ -116,8 +123,6 @@ public class MemberController {
         model.addAttribute("member", memberRepository.findMemberById(id));
         // Zet de opgevraagde uitleningen van deze member in het model
         model.addAttribute("loans", loanRepository.findAllByMemberId(id));
-        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
-        model.addAttribute("classActiveMember", "active");
         // Open de juiste view template als resultaat.
         return "views/member/read";
     }

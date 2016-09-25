@@ -57,3 +57,8 @@ div.caption.frontpage {
 .glyphicon.nomargin {
     margin-right: 0;
 }
+
+a.navbar-brand.active {
+    color: white;
+    font-weight: bolder;
+}

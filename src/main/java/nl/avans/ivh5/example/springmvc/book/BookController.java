@@ -48,6 +48,10 @@ public class BookController {
         return "BookController";
     }
 
+    // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+    @ModelAttribute("classActiveBooks")
+    public String highlightNavMenuItem(){ return "active"; };
+
     @Autowired
     public BookController(BookRepository bookRepository,
                           MemberController memberController,
@@ -87,8 +91,6 @@ public class BookController {
 
         // Zet de opgevraagde members in het model
         model.addAttribute("books", books);
-        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
-        model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
         return "views/book/list";
     }
@@ -120,8 +122,6 @@ public class BookController {
         model.addAttribute("members", members);
         // Het Loan object dat in het formulier voor het lenen van een boek wordt ingevuld.
         model.addAttribute("loan", loan);
-        // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
-        model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
         return "views/book/read";
     }
