@@ -1,0 +1,45 @@
+
+Draai je applicatie in de Cloud!
+
+De IVH5 Spring Bibliotheek is een Java applicatie, gebouwd op het Spring Boot framework. Je kunt die applicatie
+prima lokaal op je eigen machine runnen, maar het leukste is toch om hem ook online te kunnen draaien. Dat kan!
+
+Er zijn een aantal leveranciers van Clouddiensten, die het mogelijk maken alles wat je op applicatiegebied zou 
+willen runnen 'ergens' op het Internet te doen. Ergens in een datacentrum, in de Cloud.
+
+Leveranciers zijn bijvoorbeeld:
+- CloudFoundry 		https://www.cloudfoundry.org/ 
+- Google Cloud 		https://cloud.google.com/
+- Heroku			https://www.heroku.com
+
+De meeste diensten zijn gratis voor niet-professionele applicaties, al moet je vaak wel creditcard gegevens 
+invoeren.
+
+De IVH5 Spring Bieb app draait ook in de cloud. Daarbij moesten we twee clouddiensten samenvoegen:
+- de applicatie zelf draait op Heroku. Die biedt de gemakkelijkste deploymenttechniek aan.
+- de database is een MySql database die draait op Google Cloud SQL.   
+
+Het bleek dat Google App Engine, waar je ook Spring kunt runnen, alleen Java 1.7 bood. Heroku heeft wel Java 1.8, 
+maar geen MySql database - wel een Progress database, maar conversie van MySql naar Progress was best lastig.
+
+Wat nodig is:
+- Maak een gratis account op Google Cloud en maak een SQL instantie aan.
+- Maak een gratis account op Heroku. Je kunt hier GitHub (Geen Bitbucket) koppelen als repository.
+  Je kunt hier ook instellen dat iedere push naar GitHub automatisch een nieuwe versie van je app start.
+- Op Heroku heb je geen vast IP-adres - je app gaat 'in slaap' als hij een half uur niet gebruikt wordt,
+  en kan op een ander adres opnieuw gestart worden. Google SQL heeft echter vaste IP adressen nodig voor 
+  toegang tot de database. 
+  Op Heroku voeg je daarom de QuotaGuard Static add-on toe. Hiermee krijg je een proxy die je een vast IP adres
+  levert. Dit IP adres voer je in bij de Google SQL dashboard.
+
+Je app draait nu dus zowel lokaal in je 'ontwikkelomgeving', als in de cloud in je 'productie omgeving'. Je hebt hiervoor
+in Spring twee configuraties nodig. Dat kun je doen door een kopie te maken van de application.properties naar 
+bijvoorbeeld application-production.properties, en deze bij het starten van je Spring app mee te geven.
+Om te zorgen dat Heroku van je productie-settings gebruik maakt maak je een 'Procfile' in de root van je project.
+Kijk in het voorbeeld om te zien hoe dat er uit ziet. Er staat eigenlijk maar één regel in.
+
+ 
+
+
+
+
