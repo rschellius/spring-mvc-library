@@ -1,1 +1,1 @@
-web: java -Dspring.profiles.active=production -Dserver.port=$PORT $JAVA_OPTS -jar target/spring-boot-thymeleaf-1.0.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar
