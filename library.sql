@@ -125,10 +125,10 @@ ALTER TABLE `reservation`
 -- --------------------------------------------------------
 -- Gebruikersaccount maken voor Spring MVC applicatie
 --
--- DROP USER 'spring'@'localhost';
-CREATE USER 'spring'@'localhost' IDENTIFIED BY 'test';
+-- 	
+CREATE USER 'spring'@'%' IDENTIFIED BY '_avans_spring_';
 
-GRANT ALL ON `library`.* TO 'spring'@'localhost';
+GRANT ALL ON `library`.* TO 'spring'@'%';
 
 
 
