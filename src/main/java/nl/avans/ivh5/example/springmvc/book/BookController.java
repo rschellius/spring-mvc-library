@@ -40,12 +40,12 @@ public class BookController {
 
     /**
      * Met ModelAttribute kun je attributen (waarden) toevoegen aan het model, zodat
-     * je ze in de views kunt gebruiken. Hier kan dat buiten een method.
+     * je ze in de views kunt gebruiken. Hier kan dat buiten een method .
      * Handig om bv. het 'kruimelpad' (breadcrumbs) of de titel van een pagina in te stellen.
      */
     @ModelAttribute("page")
     public String module() {
-        return "BookController";
+        return "BookController!";
     }
 
     // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.

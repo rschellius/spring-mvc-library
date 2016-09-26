@@ -26,6 +26,7 @@ img.thumbnail {
     height: 230px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 0;
+    border: 0px;
 }
 
 div.thumbnail.frontpage {
@@ -46,8 +47,20 @@ div.thumbnail.frontpage:hover {
 }
 
 div.caption.frontpage {
-    height: 150px;
+    height: 170px;
     display: block;
+}
+
+@media (max-width: 550px) {
+    img.thumbnail {
+        height: 160px;
+    }
+    div.caption.frontpage {
+        height: 192px;
+    }
+}
+
+@media (max-width: 992px) {
 }
 
 .glyphicon {

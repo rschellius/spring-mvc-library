@@ -35,9 +35,7 @@
                         <h3><a th:href="@{/book/{id}(id=${book.EAN})}" th:text="${#strings.abbreviate(book.title,32)}">Titel</a></h3>
                         <p th:text="${book.author}">Author</p>
                         <p th:text="${book.edition}">Edition</p>
-                    </div>
-                    <div class="bottom-align">
-                        <a href="#" class="btn btn-default" role="button">Leen dit boek</a>
+                        <p>3 Exemplaren aanwezig</p>
                     </div>
                 </div>
             </div>
