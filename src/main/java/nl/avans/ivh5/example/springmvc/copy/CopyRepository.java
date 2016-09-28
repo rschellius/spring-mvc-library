@@ -74,10 +74,8 @@ public class CopyRepository {
         //
         List<Copy> copies = new ArrayList<>();
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-        logger.debug("Query gaf " + rows.size() + " records terug.");
+        logger.debug("Found " + rows.size() + " copies");
         for (Map row : rows) {
-
-            logger.debug("Adding copy id " + (Long)row.get("CopyID"));
             Copy copy = new Copy(ean);
 
             // Deze attributen worden door de database gegenereerd.

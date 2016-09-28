@@ -103,6 +103,7 @@ public class CopyController {
      * @return
      */
     public List<Copy> findLendingInfoByBookEAN(Long ean) {
+        logger.debug("findLendingInfoByBookEAN " + ean);
         return copyRepository.findLendingInfoByBookEAN(ean);
     }
 

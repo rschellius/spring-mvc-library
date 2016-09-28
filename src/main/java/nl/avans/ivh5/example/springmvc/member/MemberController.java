@@ -63,7 +63,7 @@ public class MemberController {
      */
     @RequestMapping(value="/member/create", method = RequestMethod.GET)
     public String showCreateMemberForm(final Member member, final ModelMap model) {
-        logger.debug("Create a member");
+        logger.debug("showCreateMemberForm");
         return "views/member/create";
     }
 
@@ -79,12 +79,13 @@ public class MemberController {
      */
     @RequestMapping(value="/member/create", method = RequestMethod.POST)
     public String validateAndSaveMember(@Valid Member member, final BindingResult bindingResult, final ModelMap model) {
-        logger.debug("Create a member - new member = " + member.getFullName());
+        logger.debug("validateAndSaveMember - new member = " + member.getFullName());
 
         if (bindingResult.hasErrors()) {
             // Als er velden in het formulier zijn die niet correct waren ingevuld vinden we die hier.
             // We blijven dan op dezelfde pagina. De foutmeldingen worden daar getoond
             // (zie het create.html bestand.
+            logger.debug("validateAndSaveMember - bindingResult.hasErrors");
             return "/views/member/create";
         }
         // Maak de member aan via de repository

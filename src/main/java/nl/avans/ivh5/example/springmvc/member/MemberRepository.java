@@ -55,7 +55,8 @@ public class MemberRepository
      */
     public Member create(final Member member) {
 
-        logger.debug("create");
+        logger.debug("create member = " + member.getFullName());
+
         final String sql = "INSERT INTO member(`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) " +
                 "VALUES(?,?,?,?,?,?,?,?)";
 

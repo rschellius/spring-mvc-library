@@ -82,6 +82,11 @@ public class Book {
         return imageURL;
     }
 
+    @Override
+    public String toString(){
+        return "Book(EAN = " + this.getEAN() + ", Title = '" + this.getTitle() + "')";
+    }
+
     /**
      * Om een boek op id terug te kunnen vinden in de ArrayList moeten we een
      * vergelijkingsmethode maken die aangeeft wanneer boeken gelijk zijn aan elkaar.

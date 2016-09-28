@@ -92,7 +92,7 @@ public class BookController {
         // Zet de opgevraagde members in het model
         model.addAttribute("books", books);
         // Open de juiste view template als resultaat.
-        return "views/book/list";
+        return "views/member/list";
     }
 
     /**
@@ -101,13 +101,15 @@ public class BookController {
      */
     @RequestMapping(value = "/book/{ean}", method = RequestMethod.GET)
     public String getBookByEAN(@PathVariable Long ean, final ModelMap model) {
-        logger.debug("getBookByEAN");
 
         List<Book> books = bookRepository.findById(ean);
+        logger.debug("getBookByEAN - " + books.get(0).toString());
         // Bij het lenen van een boek moet je in ons geval een member selecteren.
         List<Member> members = memberController.findAllMembers();
+        logger.debug("getBookByEAN - " + members.size() + " members found");
         // Info over de copies van het boek dat we bekijken.
         List<Copy> copies = copyController.findLendingInfoByBookEAN(ean);
+        logger.debug("getBookByEAN - " + copies.size() + " copies found");
 
         // De gebruiker kan bij het bekijken van het boek via de view kiezen
         // of hij het wil lenen. In de view zit een formulier met een knop om een copy te lenen.

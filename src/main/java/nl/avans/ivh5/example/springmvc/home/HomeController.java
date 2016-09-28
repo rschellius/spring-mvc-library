@@ -36,7 +36,7 @@ class HomeController {
 
     /**
      * Geef een overzicht van alle boeken die te leen zijn. Ieder Book heeft één of meer copies.
-     * We willen de book cover tonen, met de titel en de auteur, en informatie over leningen.
+     * We willen de member cover tonen, met de titel en de auteur, en informatie over leningen.
      *
      * @param model
      * @return

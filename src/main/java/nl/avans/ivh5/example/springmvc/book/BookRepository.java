@@ -52,7 +52,7 @@ public class BookRepository {
      * @return
      */
     public Book create(final Book book)  {
-        logger.debug("Create a book");
+        logger.debug("Create a member");
 
         final String sql = "INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`, `ImageURL`) VALUES(?,?,?,?,?,?)";
 
