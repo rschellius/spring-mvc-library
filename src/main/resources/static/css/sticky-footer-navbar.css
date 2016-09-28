@@ -12,9 +12,9 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
+  background-color: #dddddd;
   /* Set the fixed height of the footer here */
   height: 60px;
-  background-color: #dddddd;
 }
 
 
@@ -32,6 +32,7 @@ body > .container {
 .footer > .container {
   padding-right: 15px;
   padding-left: 15px;
+  background-color: #dddddd;
 }
 
 code {
