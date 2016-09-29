@@ -45,7 +45,7 @@ public class BookController {
      */
     @ModelAttribute("page")
     public String module() {
-        return "BookController!";
+        return "BookController";
     }
 
     // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
