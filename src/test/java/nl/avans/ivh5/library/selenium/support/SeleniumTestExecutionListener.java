@@ -1,4 +1,4 @@
-package pl.codeleak.selenium.support;
+package nl.avans.ivh5.library.selenium.support;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -15,8 +15,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static nl.avans.ivh5.library.selenium.support.CaseFormat.toLowerUnderscore;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
-import static pl.codeleak.selenium.support.CaseFormat.toLowerUnderscore;
 
 public class SeleniumTestExecutionListener extends AbstractTestExecutionListener {
 

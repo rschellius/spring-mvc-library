@@ -1,11 +1,9 @@
-package pl.codeleak.selenium.support;
+package nl.avans.ivh5.library.selenium.support;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.test.context.TestExecutionListeners;
-
 import java.lang.annotation.*;
-
 import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
 
 @Documented
@@ -13,7 +11,7 @@ import static org.springframework.test.context.TestExecutionListeners.MergeMode.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @TestExecutionListeners(
-        listeners = SeleniumTestExecutionListener.class,
+        listeners = nl.avans.ivh5.library.selenium.support.SeleniumTestExecutionListener.class,
         mergeMode = MERGE_WITH_DEFAULTS)
 public @interface SeleniumTest {
 
