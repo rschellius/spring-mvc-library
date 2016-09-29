@@ -86,7 +86,7 @@ public class MemberController {
             // We blijven dan op dezelfde pagina. De foutmeldingen worden daar getoond
             // (zie het create.html bestand.
             logger.debug("validateAndSaveMember - bindingResult.hasErrors");
-            return "/views/member/create";
+            return "views/member/create";
         }
         // Maak de member aan via de repository
         Member newMember = this.memberRepository.create(member);
