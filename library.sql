@@ -11,7 +11,7 @@ CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
 USE `library` ;
 
 --
--- Table structure for table `book`
+-- Table structure for table `member`
 --
 
 CREATE TABLE `book` (
