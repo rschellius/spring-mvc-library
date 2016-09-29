@@ -1,6 +1,6 @@
-package nl.avans.ivh5.library.member;
+package nl.avans.ivh5.example.springmvc.member;
 
-import nl.avans.ivh5.library.selenium.support.SeleniumTest;
+import nl.avans.ivh5.example.springmvc.selenium.support.SeleniumTest;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

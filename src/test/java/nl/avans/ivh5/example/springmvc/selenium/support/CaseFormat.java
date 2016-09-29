@@ -1,4 +1,4 @@
-package nl.avans.ivh5.library.selenium.support;
+package nl.avans.ivh5.example.springmvc.selenium.support;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

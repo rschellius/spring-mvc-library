@@ -1,4 +1,4 @@
-package nl.avans.ivh5.library.selenium.support;
+package nl.avans.ivh5.example.springmvc.selenium.support;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -11,7 +11,7 @@ import static org.springframework.test.context.TestExecutionListeners.MergeMode.
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @TestExecutionListeners(
-        listeners = nl.avans.ivh5.library.selenium.support.SeleniumTestExecutionListener.class,
+        listeners = SeleniumTestExecutionListener.class,
         mergeMode = MERGE_WITH_DEFAULTS)
 public @interface SeleniumTest {
 

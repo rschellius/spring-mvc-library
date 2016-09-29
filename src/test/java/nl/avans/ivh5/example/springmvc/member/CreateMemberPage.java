@@ -1,4 +1,4 @@
-package nl.avans.ivh5.library.member;
+package nl.avans.ivh5.example.springmvc.member;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

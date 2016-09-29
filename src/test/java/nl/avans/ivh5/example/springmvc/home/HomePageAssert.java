@@ -1,4 +1,4 @@
-package nl.avans.ivh5.library.member;
+package nl.avans.ivh5.example.springmvc.home;
 
 import org.assertj.core.api.AbstractAssert;
 import org.openqa.selenium.WebElement;
@@ -8,18 +8,18 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateMemberPageAssert extends AbstractAssert<CreateMemberPageAssert, CreateMemberPage> {
+public class HomePageAssert extends AbstractAssert<HomePageAssert, HomePage> {
 
-    protected CreateMemberPageAssert(CreateMemberPage createMemberPage) {
-        super(createMemberPage, CreateMemberPageAssert.class);
+    protected HomePageAssert(HomePage homePage) {
+        super(homePage, HomePageAssert.class);
     }
 
-    public CreateMemberPageAssert hasActuatorLink(String... values) {
+    public HomePageAssert hasActuatorLink(String... values) {
         assertThat(getLinkNames()).contains(values);
         return this;
     }
 
-    public CreateMemberPageAssert hasNoActuatorLink(String... values) {
+    public HomePageAssert hasNoActuatorLink(String... values) {
         assertThat(getLinkNames()).doesNotContain(values);
         return this;
     }
