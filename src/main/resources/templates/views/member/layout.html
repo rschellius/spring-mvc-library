@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!--/*  Each token will be replaced by their respective titles in the resulting page. */-->
-    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">A Member List</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <meta http-equiv="Content-Type" summary="text/html; charset=UTF-8"/>
-    <link href="https://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
-          rel="stylesheet" media="screen" />
-    <link href="../static/css/core.css"
-          th:href="@{/css/core.css}"
-          rel="stylesheet" media="screen" />
-</head>
+<head th:replace="fragments/head :: head"></head>
 <body>
 
-    <!-- Header -->
+<!-- Header -->
     <div th:replace="fragments/header :: header"></div>
     <!-- ============================================================================ -->
     <!-- This summary is only used for static prototyping purposes (natural templates)-->
