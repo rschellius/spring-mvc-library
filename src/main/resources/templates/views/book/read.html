@@ -49,19 +49,19 @@
                                 <tr>
                                     <th class="col-md-1">CopyID</th>
                                     <th class="col-md-3">Status</th>
-                                    <th class="col-md-4">Naam</th>
-                                    <th class="col-md-4">Lenen</th>
+                                    <th class="col-md-4">Lener</th>
+                                    <th class="col-md-4"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:if="${copies.empty}">
-                                    <td colspan="4">Geen copies beschikbaar</td>
+                                    <td colspan="4">Geen exemplaren beschikbaar</td>
                                 </tr>
                                 <tr th:each="copy : ${copies}">
                                     <td th:text="${copy.CopyID}">1</td>
                                     <!-- Als LoanDate bestaat en ReturnedDate is null, dan is het boek uitgeleend. -->
-                                    <td th:text="*{copy.LoanDate != null and copy.ReturnedDate == null}? 'Uitgeleend op ' + ${copy.LoanDate} : 'Beschikbaar'">1</td>
-                                    <td><a th:href="@{/member/{id}(id=${copy.MemberID})}" th:text="*{copy.FirstName}? *{copy.FirstName} + ' ' + *{copy.LastName} : ''">1</a></td>
+                                    <td th:text="*{copy.Available == 0}? 'Uitgeleend op ' + ${copy.LoanDate} : 'Beschikbaar'">1</td>
+                                    <td><a th:if="${copy.Available == 0}" th:href="@{/member/{id}(id=${copy.MemberID})}" th:text="*{copy.FirstName}? *{copy.FirstName} + ' ' + *{copy.LastName} : ''">1</a></td>
                                     <td>
                                         <!--
                                             Formulier om een boek te lenen, als het beschikbaar is.
@@ -69,7 +69,7 @@
                                             Bij aanroep van deze template view moeten we dus een Loan object
                                             in het model meegeven.
                                             -->
-                                        <form th:action="@{/loan/create}" th:object="${loan}" method="post" class="form-horizontal">
+                                        <form th:if="${copy.Available == 1}" th:action="@{/loan/create}" th:object="${loan}" method="post" class="form-horizontal">
                                             <!-- Hier zetten we de CopyID en EAN/ISBN van het boek in het formulier. Nodig voor het maken van een Loan.
                                                 Dit zijn de precieze attributen zoals ze ook in de class zitten. Je kunt ook de getters/setters gebruiken.-->
                                             <input type="hidden" name="copyID" th:value="${copy.CopyID}" />

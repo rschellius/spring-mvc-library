@@ -98,9 +98,11 @@ public class CopyController {
     }
 
     /**
+     * Deze methode heeft geen RequestMapping omdat hij niet via een URL wordt aangeroepen,
+     * maar vanuit de BookController.
      *
-     * @param ean
-     * @return
+     * @param ean Het Ean van het boek waarvan we de copies zoeken
+     * @return Een lijst met de gevonden copies.
      */
     public List<Copy> findLendingInfoByBookEAN(Long ean) {
         logger.debug("findLendingInfoByBookEAN " + ean);

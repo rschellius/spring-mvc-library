@@ -21,6 +21,7 @@ public class Copy {
     private Long memberID;
     private String firstName;
     private String lastName;
+    private int available;
 
     public Copy(Long ISBN) {
         // Dit is een verplicht attribuut, omdat dit bij het toevoegen van
@@ -36,6 +37,7 @@ public class Copy {
         this.loanDate = this.returnedDate = new Date();
         this.memberID = this.lendingPeriod = 0L;
         this.firstName = this.lastName = "";
+        this.available = 0;
     }
 
     public Long getCopyID() {
@@ -108,6 +110,14 @@ public class Copy {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(int available) {
+        this.available = available;
     }
 
     @Override
