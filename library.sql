@@ -10,6 +10,9 @@ DROP SCHEMA IF EXISTS `library` ;
 CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
 USE `library` ;
 
+-- Prevents errors at Google Cloud SQL 
+SET sql_mode = '';
+
 --
 -- Table structure for table `member`
 --
@@ -146,7 +149,7 @@ SELECT
 FROM `book`
 LEFT JOIN `copy` ON book.ISBN = copy.BookISBN
 group by `book`.`ISBN`
-ORDER BY `book`.`ISBN`, `copy`.`CopyID`;
+ORDER BY `book`.`Title`;
 
 select * from view_all_books where `ISBN` = '9789023438786';
 
