@@ -148,16 +148,7 @@ LEFT JOIN `copy` ON book.ISBN = copy.BookISBN
 group by `book`.`ISBN`
 ORDER BY `book`.`ISBN`, `copy`.`CopyID`;
 
-
-
--- SELECT BookISBN, COUNT(CopyID)
--- from copy
--- group by BookISBN;
-
--- select * from view_all_books;
-
--- select BookISBN, CopyID from copy
--- group by BookISBN;
+select * from view_all_books where `ISBN` = '9789023438786';
 
 -- -----------------------------------------------------
 -- Toon alle uitleningen. 
@@ -181,7 +172,37 @@ LEFT JOIN `copy` USING(`CopyID`)
 LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`
 LEFT JOIN `member` USING (`MemberID`);
 
-select * from view_all_loans;
+-- -----------------------------------------------------
+-- Toon alle actueel beschikbare copies van boeken. 
+-- Je ziet dus alleen de laatst geleende of ingeleverde boeken. 
+--
+CREATE OR REPLACE VIEW `view_available_copies` AS 
+SELECT 
+	`book`.`ISBN`,
+	`copy`.`CopyID`,
+	`loan`.`LoanID`,
+	`loan`.`LoanDate`,
+	`loan`.`ReturnedDate`,
+	(`loan`.`ReturnedDate` IS NOT NULL OR `loan`.`LoanDate` IS NULL) AS `Available`,
+	`book`.`Title`,
+	`book`.`Author`,
+	`book`.`Edition`,
+	`copy`.`LendingPeriod`,
+	`member`.`MemberID`,
+	`member`.`FirstName`,
+	`member`.`LastName`
+FROM `book`
+LEFT JOIN `copy` ON `copy`.`BookISBN` = `book`.`ISBN`
+LEFT JOIN `loan` USING(`CopyID`)
+LEFT JOIN `member` USING (`MemberID`)
+WHERE (
+	(`loan`.`LoanDate` IS NULL) 
+	OR 
+	(`loan`.`LoanDate` = (SELECT MAX(`LoanDate`) FROM `loan` l2 WHERE `loan`.`CopyID` = l2.CopyID))
+)
+ORDER BY `CopyID`;
+
+-- select * from view_available_copies where `ISBN` = '9781683688815';
 
 -- -----------------------------------------------------
 -- Toon alle copies. 
@@ -197,7 +218,7 @@ SELECT
 FROM `copy`
 LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`;
 
-select * from view_all_copies;
+-- select * from view_all_copies;
 
 -- -----------------------------------------------------
 -- Toon alle copies per boek, met informatie over beschikbaarheid.
@@ -250,13 +271,13 @@ ORDER BY `CopyID`, `LoanID`;
 --
 
 INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) VALUES
-('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '076-5238754', 'ppth.vangastel@avans.nl', 0),
-('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231235', 'e.argante@avans.nl', 0),
-('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231236', 'j.montizaan@avans.nl', 0),
-('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231237', 'f.spijkerman@avans.nl', 0),
-('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231238', 'r.schellius@avans.nl', 0),
-('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231239', 'mpg.vanhaperen@avans.nl', 0),
-('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236790', 'mmcm.bastiaensen@avans.nl', 5);
+('Pascal', 'White', 'Somestreet', '61', 'Breda', '076-5234567', 'ppth.white@theserver.nl', 0),
+('Ernst', 'Green', 'Highschoollane', '10', 'Breda', '076-5231235', 'e.green@theserver.nl', 0),
+('Jan', 'Schwartz', 'Highhills', '1', 'Breda', '076-5231236', 'j.schwartz@theserver.nl', 0),
+('Franz', 'Spikeman', 'Somestreet', '1', 'Breda', '076-5231237', 'fr.spikeman@theserver.nl', 0),
+('Rob', 'Shellfish', 'Somestreet', '1', 'Breda', '076-5231238', 'rshellfish@theserver.nl', 0),
+('Maurice', 'White', 'Greenlane', '1', 'Breda', '076-5231239', 'm.white@theserver.nl', 0),
+('John', 'Bastians', 'Whitehall', '63', 'Breda', '076-5236790', 'john@theserver.nl', 5);
 
 -- -----------------------------------------------------
 
