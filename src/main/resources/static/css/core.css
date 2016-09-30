@@ -56,7 +56,7 @@ div.caption.frontpage {
 }
 
 @media (max-width: 550px) {
-    img.thumbnail {
+    img.thumbnail.smaller-img {
         height: 160px;
     }
     div.caption.frontpage {

@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-xs-6 col-sm-4 col-md-3" th:each="book : ${books}">
                 <div class="thumbnail frontpage">
-                    <img class="thumbnail" th:src="${book.ImageURL}" />
+                    <img class="thumbnail smaller-img" th:src="${book.ImageURL}" />
                     <div class="caption frontpage">
                         <!-- Toon alleen de eerste n letters van de titel - sommige zijn heel lang. -->
                         <h3><a th:href="@{/book/{id}(id=${book.EAN})}" th:text="${#strings.abbreviate(book.title,32)}">Titel</a></h3>
