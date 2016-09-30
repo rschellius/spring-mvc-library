@@ -33,7 +33,7 @@ public class BookRepository {
         logger.debug("findAll aangeroepen");
         List<Book> result = new ArrayList<>();
         try {
-            result = jdbcTemplate.query("SELECT * FROM book", new BookRowMapper());
+            result = jdbcTemplate.query("SELECT * FROM view_all_books", new BookRowMapper());
         } catch(Exception ex) {
             throw ex;
         }
@@ -43,7 +43,7 @@ public class BookRepository {
     @Transactional(readOnly=true)
     public List<Book> findById(Long id) {
         return jdbcTemplate.query(
-                "SELECT * FROM book WHERE ISBN=?",
+                "SELECT * FROM view_all_books WHERE ISBN=?",
                 new Object[]{id}, new BookRowMapper());
     }
 

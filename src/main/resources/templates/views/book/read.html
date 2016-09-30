@@ -43,7 +43,7 @@
                     <!-- Info over de lopende uitleningen van dit boek -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <h3>Beschikbaarheid</h3>
+                            <h3 th:text="${book.nrOfCopies} + ${book.nrOfCopies == 1 ? ' Exemplaar' : ' Exemplaren'} + ' beschikbaar'">Beschikbaarheid</h3>
                             <table class="table">
                                 <thead>
                                 <tr>

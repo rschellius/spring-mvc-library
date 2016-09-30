@@ -8,6 +8,7 @@ public class Book {
     private final String shortDescription;
     private final String edition;
     private final String imageURL;
+    private final int nrOfCopies;
 
     // Builder pattern
     public static class Builder {
@@ -21,6 +22,7 @@ public class Book {
         private String edition = "";
         private String shortDescription = "";
         private String imageURL = "";
+        private int nrOfCopies = 0;
 
         public Builder(Long EAN, String title, String author) {
             this.EAN = EAN;
@@ -43,9 +45,13 @@ public class Book {
             return this;
         }
 
+        public Builder nrOfCopies(int copies) {
+            this.nrOfCopies = copies;
+            return this;
+        }
+
         public Book build() {
             return new Book(this);
-
         }
     }
 
@@ -56,6 +62,7 @@ public class Book {
         this.shortDescription = builder.shortDescription;
         this.edition = builder.edition;
         this.imageURL = builder.imageURL;
+        this.nrOfCopies = builder.nrOfCopies;
     }
 
     public Long getEAN() {
@@ -81,6 +88,8 @@ public class Book {
     public String getImageURL() {
         return imageURL;
     }
+
+    public int getNrOfCopies() { return nrOfCopies; }
 
     @Override
     public String toString(){
