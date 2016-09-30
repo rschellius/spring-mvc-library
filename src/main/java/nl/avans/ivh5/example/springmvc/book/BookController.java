@@ -96,8 +96,11 @@ public class BookController {
     }
 
     /**
+     * Toon de pagina voor het boek met het gegeven ean. We halen ook de uitleningen van dit boek op.
+     * Om een nieuwe uitlening aan te kunnen maken geven we ook een lijst met members mee, zodat we
+     * eventueel een uitlening van een copy aan een member kunnen koppelen.
      *
-     * @return
+     * @return De view die we laten zien.
      */
     @RequestMapping(value = "/book/{ean}", method = RequestMethod.GET)
     public String getBookByEAN(@PathVariable Long ean, final ModelMap model) {

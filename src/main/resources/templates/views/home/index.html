@@ -1,17 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Hello Spring Boot!</title>
-
-    <link href="https://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
-    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
-</head>
+<html>
+<head th:replace="fragments/head :: head"></head>
 <body>
 
 <!-- Header -->
@@ -31,13 +20,13 @@
         <div class="row">
             <div class="col-xs-6 col-sm-4 col-md-3" th:each="book : ${books}">
                 <div class="thumbnail frontpage">
-                    <img class="thumbnail" th:src="${book.ImageURL}" />
+                    <img class="thumbnail smaller-img" th:src="${book.ImageURL}" />
                     <div class="caption frontpage">
                         <!-- Toon alleen de eerste n letters van de titel - sommige zijn heel lang. -->
                         <h3><a th:href="@{/book/{id}(id=${book.EAN})}" th:text="${#strings.abbreviate(book.title,32)}">Titel</a></h3>
                         <p th:text="${book.author}">Author</p>
                         <p th:text="${book.edition}">Edition</p>
-                        <p>3 Exemplaren aanwezig</p>
+                        <p th:text="${book.nrOfCopies} + ${book.nrOfCopies == 1 ? ' Exemplaar' : ' Exemplaren'} + ' beschikbaar'">Exemplaren aanwezig</p>
                     </div>
                 </div>
             </div>

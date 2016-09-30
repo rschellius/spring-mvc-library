@@ -57,10 +57,7 @@ public class CopyRepository {
         //
         // Querystring met named parameters.
         //
-        final String sql = "SELECT * FROM `view_booklending` WHERE `ISBN` = '" + ean +
-                            "' AND ((`ReturnedDate` IS NULL)" +
-                            "OR (`ReturnedDate` = (SELECT `ReturnedDate` FROM `loan` " +
-                            "WHERE `ISBN`= '" + ean +"' ORDER BY `ReturnedDate` DESC LIMIT 1)));";
+        final String sql = "SELECT * FROM `view_available_copies` WHERE `ISBN` = '" + ean + "';";
 
         // Map de de actuele waarde van ean op de named parameter.
 //        SqlParameterSource namedParameters = new MapSqlParameterSource("isbn", ean);
@@ -106,6 +103,10 @@ public class CopyRepository {
             if(row.get("LoanID") == null)
                 copy.setLoanID(null);
             else copy.setLoanID((Long) row.get("LoanID"));
+
+            if(row.get("Available") == null)
+                copy.setAvailable(0);
+            else copy.setAvailable((int) row.get("Available"));
 
             logger.debug(copy.toString());
             copies.add(copy);

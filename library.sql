@@ -10,8 +10,11 @@ DROP SCHEMA IF EXISTS `library` ;
 CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
 USE `library` ;
 
+-- Prevents errors at Google Cloud SQL 
+SET sql_mode = '';
+
 --
--- Table structure for table `book`
+-- Table structure for table `member`
 --
 
 CREATE TABLE `book` (
@@ -130,7 +133,25 @@ CREATE USER 'spring'@'%' IDENTIFIED BY '_avans_spring_';
 
 GRANT ALL ON `library`.* TO 'spring'@'%';
 
+-- -----------------------------------------------------
+-- 
+-- Toon alle boeken met het aantal copies. 
+--
+CREATE OR REPLACE VIEW `view_all_books` AS
+SELECT 
+	`book`.`ISBN`,
+	COUNT(`copy`.`CopyID`) AS `NrOfCopies`,
+	`book`.`Title`,
+	`book`.`Author`,
+	`book`.`ShortDescription`,
+	`book`.`Edition`,
+	`book`.`ImageURL`
+FROM `book`
+LEFT JOIN `copy` ON book.ISBN = copy.BookISBN
+group by `book`.`ISBN`
+ORDER BY `book`.`Title`;
 
+select * from view_all_books where `ISBN` = '9789023438786';
 
 -- -----------------------------------------------------
 -- Toon alle uitleningen. 
@@ -155,25 +176,36 @@ LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`
 LEFT JOIN `member` USING (`MemberID`);
 
 -- -----------------------------------------------------
--- Toon alle reserveringen. 
+-- Toon alle actueel beschikbare copies van boeken. 
+-- Je ziet dus alleen de laatst geleende of ingeleverde boeken. 
 --
-CREATE OR REPLACE VIEW `view_all_reservations` AS 
+CREATE OR REPLACE VIEW `view_available_copies` AS 
 SELECT 
-	`reservation`.`ReservationID`,
-	`reservation`.`ReservationDate`,
-	`copy`.`CopyID`,
-	`copy`.`LendingPeriod`,
 	`book`.`ISBN`,
+	`copy`.`CopyID`,
+	`loan`.`LoanID`,
+	`loan`.`LoanDate`,
+	`loan`.`ReturnedDate`,
+	(`loan`.`ReturnedDate` IS NOT NULL OR `loan`.`LoanDate` IS NULL) AS `Available`,
 	`book`.`Title`,
 	`book`.`Author`,
 	`book`.`Edition`,
+	`copy`.`LendingPeriod`,
 	`member`.`MemberID`,
 	`member`.`FirstName`,
 	`member`.`LastName`
-FROM `reservation`
-LEFT JOIN `copy` USING(`CopyID`)
-LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`
-LEFT JOIN `member` USING (`MemberID`);
+FROM `book`
+LEFT JOIN `copy` ON `copy`.`BookISBN` = `book`.`ISBN`
+LEFT JOIN `loan` USING(`CopyID`)
+LEFT JOIN `member` USING (`MemberID`)
+WHERE (
+	(`loan`.`LoanDate` IS NULL) 
+	OR 
+	(`loan`.`LoanDate` = (SELECT MAX(`LoanDate`) FROM `loan` l2 WHERE `loan`.`CopyID` = l2.CopyID))
+)
+ORDER BY `CopyID`;
+
+-- select * from view_available_copies where `ISBN` = '9781683688815';
 
 -- -----------------------------------------------------
 -- Toon alle copies. 
@@ -188,6 +220,8 @@ SELECT
 	`book`.`Edition`
 FROM `copy`
 LEFT JOIN `book` ON `copy`.`BookISBN` = `book`.`ISBN`;
+
+-- select * from view_all_copies;
 
 -- -----------------------------------------------------
 -- Toon alle copies per boek, met informatie over beschikbaarheid.
@@ -215,9 +249,9 @@ LEFT JOIN `member` ON `loan`.`MemberID` = `member`.`MemberID`;
 -- We willen zien of een boek beschikbaar is, en zo niet, aan wie het dan uitgeleend is.
 --
 CREATE OR REPLACE VIEW `view_booklending` AS 
-SELECT 
-	`book`.`ISBN`,
+SELECT
 	`copy`.`CopyID`,
+	`book`.`ISBN`,
 	`loan`.`LoanID`,
 	`loan`.`LoanDate`,
 	`loan`.`ReturnedDate`,
@@ -230,25 +264,8 @@ LEFT JOIN `copy` ON `copy`.`BookISBN` = `book`.`ISBN`
 LEFT JOIN `loan` USING(`CopyID`)
 LEFT JOIN `member` ON `loan`.`MemberID` = `member`.`MemberID`
 ORDER BY `CopyID`, `LoanID`;
-select * from view_booklending;
 
-
-
-SELECT * FROM `view_booklending`
-WHERE `ISBN`='9781683688815'
-AND 
-	(
-		(`ReturnedDate` IS NULL)
-		OR
-		(`ReturnedDate` = (
-			SELECT `ReturnedDate`
-			FROM `loan`
-			WHERE `ISBN`='9781683688815'
-			ORDER BY `ReturnedDate` DESC -- this means highest number (most recent) first
-   			LIMIT 1 
-		))
-	)
-;
+-- select * from view_booklending where ISBN = '9789023438786';
 
 -- -----------------------------------------------------
 -- We doen de inserts als laatste. Op dit moment zijn alle PK en FK constraints
@@ -257,13 +274,13 @@ AND
 --
 
 INSERT INTO `member` (`FirstName`, `LastName`, `Street`, `HouseNumber`, `City`, `PhoneNumber`, `EmailAddress`, `Fine`) VALUES
-('Pascal', 'van Gastel', 'Lovensdijkstraat', '61', 'Breda', '076-5238754', 'ppth.vangastel@avans.nl', 0),
-('Erco', 'Argante', 'Hogeschoollaan', '1', 'Breda', '076-5231235', 'e.argante@avans.nl', 0),
-('Jan', 'Montizaan', 'Hogeschoollaan', '1', 'Breda', '076-5231236', 'j.montizaan@avans.nl', 0),
-('Frans', 'Spijkerman', 'Hogeschoollaan', '1', 'Breda', '076-5231237', 'f.spijkerman@avans.nl', 0),
-('Robin', 'Schellius', 'Hogeschoollaan', '1', 'Breda', '076-5231238', 'r.schellius@avans.nl', 0),
-('Maurice', 'van Haperen', 'Hogeschoollaan', '1', 'Breda', '076-5231239', 'mpg.vanhaperen@avans.nl', 0),
-('Marice', 'Bastiaensen', 'Lovensdijkstraat', '63', 'Breda', '076-5236790', 'mmcm.bastiaensen@avans.nl', 5);
+('Pascal', 'White', 'Somestreet', '61', 'Breda', '076-5234567', 'ppth.white@theserver.nl', 0),
+('Ernst', 'Green', 'Highschoollane', '10', 'Breda', '076-5231235', 'e.green@theserver.nl', 0),
+('Jan', 'Schwartz', 'Highhills', '1', 'Breda', '076-5231236', 'j.schwartz@theserver.nl', 0),
+('Franz', 'Spikeman', 'Somestreet', '1', 'Breda', '076-5231237', 'fr.spikeman@theserver.nl', 0),
+('Rob', 'Shellfish', 'Somestreet', '1', 'Breda', '076-5231238', 'rshellfish@theserver.nl', 0),
+('Maurice', 'White', 'Greenlane', '1', 'Breda', '076-5231239', 'm.white@theserver.nl', 0),
+('John', 'Bastians', 'Whitehall', '63', 'Breda', '076-5236790', 'john@theserver.nl', 5);
 
 -- -----------------------------------------------------
 
@@ -345,42 +362,4 @@ INSERT INTO `copy` (`CopyID`, `LendingPeriod`, `BookISBN`, `UpdatedDate`) VALUES
 (1045, 5, 9789023462972, '2016-09-18 21:30:35');
 
 -- --------------------------------------------------------
-
---
--- Gegevens worden geëxporteerd voor tabel `loan`
---
-
-INSERT INTO `loan` (`LoanID`, `LoanDate`, `ReturnedDate`, `MemberID`, `CopyID`) VALUES
-(1, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1000, 1001),
-(2, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1005, 1005),
-(3, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1002, 1011),
-(4, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1004, 1012),
-(5, '2016-09-18 13:56:23', NULL, 1001, 1014),
-(6, '2016-09-18 13:56:23', NULL, 1005, 1015),
-(7, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1000, 1016),
-(8, '2016-09-18 13:56:23', NULL, 1003, 1017),
-(9, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1001, 1018),
-(10, '2016-09-18 13:56:23', NULL, 1000, 1021),
-(11, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1001, 1026),
-(12, '2016-09-18 13:56:23', '2016-09-17 22:00:00', 1004, 1000),
-(13, '2016-09-18 13:56:25', '2016-09-17 22:00:00', 1004, 1000),
-(14, '2016-09-18 13:56:25', '2016-09-17 22:00:00', 1000, 1001),
-(15, '2016-09-18 13:56:25', '2016-09-17 22:00:00', 1000, 1001),
-(16, '2016-09-18 13:56:25', '2016-09-17 22:00:00', 1006, 1002),
-(17, '2016-09-18 13:56:26', NULL, 1006, 1002),
-(21, '2016-09-18 15:20:50', NULL, 1005, 1013),
-(22, '2016-09-18 15:27:59', NULL, 1001, 1006),
-(23, '2016-09-18 15:34:51', NULL, 1006, 1027),
-(24, '2016-09-18 15:35:58', '2016-09-17 22:00:00', 1001, 1001),
-(25, '2016-09-18 15:37:10', '2016-09-17 22:00:00', 1000, 1001),
-(26, '2016-09-18 15:37:28', '2016-09-17 22:00:00', 1002, 1007),
-(27, '2016-09-18 15:40:36', '2016-09-17 22:00:00', 1003, 1008),
-(28, '2016-09-18 15:43:29', '2016-09-17 22:00:00', 1004, 1022),
-(29, '2016-09-18 16:02:42', '2016-09-17 22:00:00', 1002, 1029),
-(30, '2016-09-18 16:22:38', NULL, 1003, 1009),
-(31, '2016-09-18 18:20:55', NULL, 1001, 1000),
-(32, '2016-09-18 18:21:16', '2016-09-17 22:00:00', 1000, 1000),
-(33, '2016-09-18 18:22:49', '2016-09-17 22:00:00', 1004, 1028),
-(34, '2016-09-18 21:10:38', NULL, 1004, 1016);
-
 

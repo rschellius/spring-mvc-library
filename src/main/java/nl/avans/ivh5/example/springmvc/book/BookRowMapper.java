@@ -23,6 +23,7 @@ public class BookRowMapper implements RowMapper<Book>
                 .shortDescription(rs.getString("ShortDescription"))
                 .edition(rs.getString("Edition"))
                 .imageUrl(rs.getString("ImageURL"))
+                .nrOfCopies(rs.getInt("NrOfCopies"))
                 .build();
 
         return book;

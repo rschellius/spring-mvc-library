@@ -1,134 +1,120 @@
 <!DOCTYPE html>
-<!--<html layout:decorator="views/member/layout">-->
 <html>
-<head>
-    <title th:text="${page} + ' - Spring Boot'">Hello Spring Boot!</title>
-    <meta http-equiv="Content-Type" summary="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <link href="https://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <link href="../static/css/core.css" th:href="@{/css/core.css}" rel="stylesheet" media="screen" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css" th:src="@{/webjars/bootstrap-select/1.9.4/bootstrap-select.min.css}" rel="stylesheet" media="screen" />
-    <link href="../static/css/sticky-footer-navbar.css" th:href="@{/css/sticky-footer-navbar.css}" rel="stylesheet" media="screen" />
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"/>
-</head>
+<head th:replace="fragments/head :: head"></head>
 <body>
 
-    <!-- Header -->
-    <div th:replace="fragments/header :: header"></div>
+<!-- Header -->
+<div th:replace="fragments/header :: header"></div>
 
-    <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
-    <div class="container" layout:fragment="summary">
+<!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
+<div class="container" layout:fragment="summary">
 
-        <div class="page-header">
-            <h1 th:text="${book.Title}">Boek informatie</h1>
-            <p class="lead" th:text="${book.Author}">Auteur</p>
-        </div>
+    <div class="page-header">
+        <h1 th:text="${book.Title}">Boek informatie</h1>
+        <p class="lead" th:text="${book.Author}">Auteur</p>
+    </div>
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-3">EAN</div>
-                            <div class="col-sm-9">
-                                <p th:text="${book.EAN}">EAN</p>
-                            </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">EAN</div>
+                        <div class="col-sm-9">
+                            <p th:text="${book.EAN}">EAN</p>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-3">Summary</div>
-                            <div class="col-sm-9">
-                                <p th:utext="${book.Edition}">Beschrijving</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3">Short Description</div>
-                            <div class="col-sm-6">
-                                <p th:utext="${book.ShortDescription}">Beschrijving</p>
-                            </div>
-                            <div class="col-sm-3">
-                                <img class="thumbnail" th:src="${book.ImageURL}"/>
-                            </div>
-                        </div>
-
-                        <!-- Info over de lopende uitleningen van dit boek -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h3>Beschikbaarheid</h3>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th class="col-md-1">CopyID</th>
-                                            <th class="col-md-3">Status</th>
-                                            <th class="col-md-4">Naam</th>
-                                            <th class="col-md-4">Lenen</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:if="${copies.empty}">
-                                            <td colspan="4">Geen copies beschikbaar</td>
-                                        </tr>
-                                        <tr th:each="copy : ${copies}">
-                                            <td th:text="${copy.CopyID}">1</td>
-                                            <!-- Als LoanDate bestaat en ReturnedDate is null, dan is het boek uitgeleend. -->
-                                            <td th:text="*{copy.LoanDate != null and copy.ReturnedDate == null}? 'Uitgeleend op ' + ${copy.LoanDate} : 'Beschikbaar'">1</td>
-                                            <td><a th:href="@{/member/{id}(id=${copy.MemberID})}" th:text="*{copy.FirstName}? *{copy.FirstName} + ' ' + *{copy.LastName} : ''">1</a></td>
-                                            <td>
-                                                <!--
-                                                    Formulier om een boek te lenen, als het beschikbaar is.
-                                                    Het Loan object dat we hier gebruiken en invullen is afkomstig uit de Controller.
-                                                    Bij aanroep van deze template view moeten we dus een Loan object
-                                                    in het model meegeven.
-                                                    -->
-                                                <form th:action="@{/loan/create}" th:object="${loan}" method="post" class="form-horizontal">
-                                                    <!-- Hier zetten we de CopyID en EAN/ISBN van het boek in het formulier. Nodig voor het maken van een Loan.
-                                                        Dit zijn de precieze attributen zoals ze ook in de class zitten. Je kunt ook de getters/setters gebruiken.-->
-                                                    <input type="hidden" name="copyID" th:value="${copy.CopyID}" />
-                                                    <input type="hidden" name="bookISBN" th:value="${book.EAN}" />
-                                                    <div class="form-group">
-                                                        <!-- Deze selectbox zet de MemberID waarde in het loan object. Na verzenden van het
-                                                             formulier via de knop wordt het loan object meegestuurd naar de controller die de
-                                                             action van dit formulier afhandelt.
-
-                                                             Deze selectbox maakt gebruik van bootstrap-select. Zie de included css en js.
-                                                             Zie ook https://silviomoreto.github.io/bootstrap-select
-                                                             -->
-                                                        <select th:field="${loan.MemberID}" id="tagList" class="selectpicker  show-tick show-menu-arrow" name="selectId"
-                                                                th:attr="disabled=${copy.LoanDate != null and copy.ReturnedDate == null ? 'disabled' : null}">
-                                                            <option th:each="member : ${members}"
-                                                                    th:value="${member.MemberID}"
-                                                                    th:text="${member.FullName}"
-                                                            />
-                                                        </select>
-                                                        <button type="submit" class="btn pull-right" name="save"
-                                                                th:attr="disabled=${copy.LoanDate != null and copy.ReturnedDate == null ? 'disabled' : null}"
-                                                                th:classappend="${copy.LoanDate != null and copy.ReturnedDate == null} ? 'btn-secondary disabled' : 'btn-success'">
-                                                            <i class="glyphicon glyphicon-ok"></i>Lenen
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                     </div>
+                    <div class="row">
+                        <div class="col-sm-3">Summary</div>
+                        <div class="col-sm-9">
+                            <p th:utext="${book.Edition}">Beschrijving</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">Description</div>
+                        <div class="col-sm-5 col-md-6">
+                            <p th:utext="${book.ShortDescription}">Beschrijving</p>
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <img class="thumbnail" th:src="${book.ImageURL}"/>
+                        </div>
+                    </div>
+                    <!-- Info over de lopende uitleningen van dit boek -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3 th:text="${book.nrOfCopies} + ${book.nrOfCopies == 1 ? ' Exemplaar' : ' Exemplaren'} + ' beschikbaar'">Beschikbaarheid</h3>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-1">CopyID</th>
+                                    <th class="col-md-3">Status</th>
+                                    <th class="col-md-4">Lener</th>
+                                    <th class="col-md-4"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${copies.empty}">
+                                    <td colspan="4">Geen exemplaren beschikbaar</td>
+                                </tr>
+                                <tr th:each="copy : ${copies}">
+                                    <td th:text="${copy.CopyID}">1</td>
+                                    <!-- Als LoanDate bestaat en ReturnedDate is null, dan is het boek uitgeleend. -->
+                                    <td th:text="*{copy.Available == 0}? 'Uitgeleend op ' + ${copy.LoanDate} : 'Beschikbaar'">1</td>
+                                    <td><a th:if="${copy.Available == 0}" th:href="@{/member/{id}(id=${copy.MemberID})}" th:text="*{copy.FirstName}? *{copy.FirstName} + ' ' + *{copy.LastName} : ''">1</a></td>
+                                    <td>
+                                        <!--
+                                            Formulier om een boek te lenen, als het beschikbaar is.
+                                            Het Loan object dat we hier gebruiken en invullen is afkomstig uit de Controller.
+                                            Bij aanroep van deze template view moeten we dus een Loan object
+                                            in het model meegeven.
+                                            -->
+                                        <form th:if="${copy.Available == 1}" th:action="@{/loan/create}" th:object="${loan}" method="post" class="form-horizontal">
+                                            <!-- Hier zetten we de CopyID en EAN/ISBN van het boek in het formulier. Nodig voor het maken van een Loan.
+                                                Dit zijn de precieze attributen zoals ze ook in de class zitten. Je kunt ook de getters/setters gebruiken.-->
+                                            <input type="hidden" name="copyID" th:value="${copy.CopyID}" />
+                                            <input type="hidden" name="bookISBN" th:value="${book.EAN}" />
+                                            <div class="form-group">
+                                                <!-- Deze selectbox zet de MemberID waarde in het loan object. Na verzenden van het
+                                                     formulier via de knop wordt het loan object meegestuurd naar de controller die de
+                                                     action van dit formulier afhandelt.
+
+                                                     Deze selectbox maakt gebruik van bootstrap-select. Zie de included css en js.
+                                                     Zie ook https://silviomoreto.github.io/bootstrap-select
+                                                     -->
+                                                <select th:field="${loan.MemberID}" id="tagList" class="selectpicker  show-tick show-menu-arrow" name="selectId"
+                                                        th:attr="disabled=${copy.LoanDate != null and copy.ReturnedDate == null ? 'disabled' : null}">
+                                                    <option th:each="member : ${members}"
+                                                            th:value="${member.MemberID}"
+                                                            th:text="${member.FullName}"
+                                                    />
+                                                </select>
+                                                <button type="submit" class="btn pull-right" name="save"
+                                                        th:attr="disabled=${copy.LoanDate != null and copy.ReturnedDate == null ? 'disabled' : null}"
+                                                        th:classappend="${copy.LoanDate != null and copy.ReturnedDate == null} ? 'btn-secondary disabled' : 'btn-success'">
+                                                    <i class="glyphicon glyphicon-ok"></i>Lenen
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
     </div>
 
-    <footer class="footer">
-        <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
-    </footer>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
-    <script src="https://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <script src="../static/js/app.js" th:href="@{/js/app.js}"></script>
+<footer class="footer">
+    <div th:replace="fragments/footer :: footer">&copy; 2016 blog.codeleak.pl</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/webjars/jquery/2.2.1/jquery.min.js" th:src="@{/webjars/jquery/2.2.1/jquery.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
 </body>
 </html>

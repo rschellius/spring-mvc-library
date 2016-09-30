@@ -31,8 +31,10 @@ public class MemberRepository
      */
     @Transactional(readOnly=true)
     public List<Member> findAll() {
-        logger.debug("findAll");
-        return jdbcTemplate.query("SELECT * FROM member", new MemberRowMapper());
+        logger.info("findAll");
+        List<Member> result = jdbcTemplate.query("SELECT * FROM member", new MemberRowMapper());
+        logger.info("found " + result.size() + " members");
+        return result;
     }
 
     /**
@@ -42,7 +44,7 @@ public class MemberRepository
      */
     @Transactional(readOnly=true)
     public Member findMemberById(int id) {
-        logger.debug("findMemberById");
+        logger.info("findMemberById");
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM member WHERE MemberID=?",
                 new Object[]{id}, new MemberRowMapper());
