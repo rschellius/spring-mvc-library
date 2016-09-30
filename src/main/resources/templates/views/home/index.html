@@ -25,7 +25,6 @@
                         <!-- Toon alleen de eerste n letters van de titel - sommige zijn heel lang. -->
                         <h3><a th:href="@{/book/{id}(id=${book.EAN})}" th:text="${#strings.abbreviate(book.title,32)}">Titel</a></h3>
                         <p th:text="${book.author}">Author</p>
-                        <p th:text="${book.edition}">Edition</p>
                         <p th:text="${book.nrOfCopies} + ${book.nrOfCopies == 1 ? ' Exemplaar' : ' Exemplaren'} + ' beschikbaar'">Exemplaren aanwezig</p>
                     </div>
                 </div>
