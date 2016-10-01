@@ -1,7 +1,11 @@
 package nl.avans.ivh5.example.springmvc.book;
 
+import nl.avans.ivh5.example.springmvc.copy.Copy;
+import nl.avans.ivh5.example.springmvc.copy.CopyService;
 import nl.avans.ivh5.example.springmvc.loan.Loan;
-import nl.avans.ivh5.example.springmvc.loan.LoanRepositoryIF;
+import nl.avans.ivh5.example.springmvc.loan.LoanService;
+import nl.avans.ivh5.example.springmvc.member.Member;
+import nl.avans.ivh5.example.springmvc.member.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +31,34 @@ public class BookService {
 
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
-    private LoanRepositoryIF loanRepositoryIF;
+    private LoanService loanService;
+    private CopyService copyService;
+    private MemberService memberService;
     private BookRepositoryIF bookRepositoryIF;
 
     // Lees een property uit resources/application.properties
     @Value("${avans.library.bookserver.url}")
     private String urlListAllBooks;
 
+
     @Autowired
-    public BookService(BookRepositoryIF bookRepositoryIF, LoanRepositoryIF loanRepositoryIF){
+    public void setLoanService(LoanService loanService) {
+        this.loanService = loanService;
+    }
+
+    @Autowired
+    public void setCopyService(CopyService copyService) {
+        this.copyService = copyService;
+    }
+
+    @Autowired
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @Autowired
+    public void setBookRepositoryIF(BookRepositoryIF bookRepositoryIF) {
         this.bookRepositoryIF = bookRepositoryIF;
-        this.loanRepositoryIF = loanRepositoryIF;
     }
 
     /**
@@ -88,30 +109,37 @@ public class BookService {
         return book;
     }
 
-    public boolean lendBook(Loan loan){
-//        loanRepositoryIF.create(loan);
-        return false;
+    /**
+     * Maak een boek.
+     *
+     * @return Het gemaakte boek.
+     */
+    public Book create(final Book book)  {
+        return bookRepositoryIF.create(book);
     }
 
     /**
-     * Exception handler for this BookController. Deze handler vangt de genoemde
-     * exceptions - maar geen andere dus. Maakt specifieke afhandeling van fouten mogelijk.
+     * Maak een uitlening aan op het geselecteerde boek.
      *
-     * @param req
-     * @param ex
+     * @param loan
      * @return
      */
-    @ExceptionHandler({ResourceAccessException.class, RestClientException.class})
-    public ModelAndView handleError(HttpServletRequest req, Exception ex) {
-        logger.error("Request " + req.getRequestURL() + " raised " + ex);
-
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("title", "Ooops :-(");
-        mav.addObject("lead", "Daar ging iets mis ...");
-        mav.addObject("message", "Het lijkt er op dat we de server op URL <b>" + urlListAllBooks + "</b> niet konden bereiken. Kan het zijn dat die nog niet gestart is?");
-        mav.addObject("exception", ex.getMessage());
-        mav.addObject("url", req.getRequestURL());
-        mav.setViewName("error/error");
-        return mav;
+    public Loan lendBook(Loan loan){
+        return loanService.createLoan(loan);
     }
+
+    /**
+     *
+     */
+    public List<Member> findAllMembers(){
+        return memberService.findAllMembers();
+    }
+
+    /**
+     *
+     */
+    public List<Copy> findLendingInfoByBookEAN(Long ean){
+        return copyService.findLendingInfoByBookEAN(ean);
+    }
+
 }

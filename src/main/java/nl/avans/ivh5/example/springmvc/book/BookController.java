@@ -1,21 +1,20 @@
 package nl.avans.ivh5.example.springmvc.book;
 
 import nl.avans.ivh5.example.springmvc.copy.Copy;
-import nl.avans.ivh5.example.springmvc.copy.CopyController;
 import nl.avans.ivh5.example.springmvc.loan.Loan;
 import nl.avans.ivh5.example.springmvc.member.Member;
-import nl.avans.ivh5.example.springmvc.member.MemberController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +24,7 @@ public class BookController {
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     // De repository waarin we onze boeken zoeken
-    private BookService bookService;
-    // De controller waarin we memberinfo opzoeken
-    private MemberController memberController;
-    // De controller waarin we copyinfo opzoeken
-    private CopyController copyController;
+    private BookService bookService = null;
 
     /**
      * Met ModelAttribute kun je attributen (waarden) toevoegen aan het model, zodat
@@ -46,12 +41,8 @@ public class BookController {
     public String highlightNavMenuItem(){ return "active"; }
 
     @Autowired
-    public BookController(BookService bookService,
-                          MemberController memberController,
-                          CopyController copyController) {
+    public void setBookService(BookService bookService) {
         this.bookService = bookService;
-        this.memberController = memberController;
-        this.copyController = copyController;
     }
 
     /**
@@ -64,16 +55,9 @@ public class BookController {
     @RequestMapping(value = "/book", method = RequestMethod.GET)
     public String listBooksAtRESTServer(Model model) {
 
-        ArrayList<Book> books;
-
-        //
-        // De service laag handelt deze aanroep af
-        //
-        books = bookService.listBooksAtRESTServer();
-
-        logger.debug("listBooksAtRESTServer", books);
-
-        // Zet de opgevraagde members in het model
+        logger.info("listBooksAtRESTServer");
+        ArrayList<Book> books = bookService.listBooksAtRESTServer();
+        // Zet de opgevraagde boeken in het model
         model.addAttribute("books", books);
         // Open de juiste view template als resultaat.
         return "views/member/list";
@@ -92,10 +76,10 @@ public class BookController {
         Book book = bookService.findByEAN(ean);
         logger.debug("getBookByEAN - " + book.toString());
         // Bij het lenen van een boek moet je in ons geval een member selecteren.
-        List<Member> members = memberController.findAllMembers();
+        List<Member> members = bookService.findAllMembers();
         logger.debug("getBookByEAN - " + members.size() + " members found");
         // Info over de copies van het boek dat we bekijken.
-        List<Copy> copies = copyController.findLendingInfoByBookEAN(ean);
+        List<Copy> copies = bookService.findLendingInfoByBookEAN(ean);
         logger.debug("getBookByEAN - " + copies.size() + " copies found");
 
         // De gebruiker kan bij het bekijken van het boek via de view kiezen
@@ -115,5 +99,26 @@ public class BookController {
         return "views/book/read";
     }
 
+    /**
+     * Exception handler for this BookController. Deze handler vangt de genoemde
+     * exceptions - maar geen andere dus. Maakt specifieke afhandeling van fouten mogelijk.
+     *
+     * @param req
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler({ResourceAccessException.class, RestClientException.class})
+    public ModelAndView handleError(HttpServletRequest req, Exception ex) {
+        logger.error("Request " + req.getRequestURL() + " raised " + ex);
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("title", "Ooops :-(");
+        mav.addObject("lead", "Daar ging iets mis ...");
+        mav.addObject("message", "Het lijkt er op dat we de server op URL <b>" + req.getRequestURI() + "</b> niet konden bereiken. Kan het zijn dat die nog niet gestart is?");
+        mav.addObject("exception", ex.getMessage());
+        mav.addObject("url", req.getRequestURL());
+        mav.setViewName("error/error");
+        return mav;
+    }
 
 }
