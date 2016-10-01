@@ -40,6 +40,7 @@ class GlobalDefaultExceptionHandler {
 
         // Otherwise setup and send the user to a default error-view.
         logger.error("defaultErrorHandler - " + e.getMessage());
+        e.printStackTrace();
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
         mav.addObject("title", "Error: " + e.getClass().getName());

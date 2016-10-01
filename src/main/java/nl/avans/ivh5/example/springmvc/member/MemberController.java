@@ -1,6 +1,5 @@
 package nl.avans.ivh5.example.springmvc.member;
 
-import nl.avans.ivh5.example.springmvc.loan.LoanRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,12 @@ public class MemberController {
 
     private final Logger logger = LoggerFactory.getLogger(MemberController.class);;
 
-    private MemberRepository memberRepository;
-    private LoanRepository loanRepository;
+    private MemberService memberService;
     private Member member;
 
     @Autowired
-    public MemberController(MemberRepository memberRepository, LoanRepository loanRepository) {
-        this.memberRepository = memberRepository;
-        this.loanRepository = loanRepository;
+    public MemberController(MemberService memberService){
+        this.memberService = memberService;
     }
 
     @ModelAttribute("page")
@@ -49,7 +46,7 @@ public class MemberController {
     public String listMembers(Model model) {
         logger.debug("listMembers");
         // Zet de opgevraagde members in het model
-        model.addAttribute("members", memberRepository.findAll());
+        model.addAttribute("members", memberService.findAllMembers());
         // Open de juiste view template als resultaat.
         return "views/member/list";
     }
@@ -89,10 +86,10 @@ public class MemberController {
             return "views/member/create";
         }
         // Maak de member aan via de repository
-        Member newMember = this.memberRepository.create(member);
+        Member newMember = memberService.create(member);
         // We gaan de lijst met members tonen, met een bericht dat de nieuwe member toegevoegd is.
         // Zet de opgevraagde members in het model
-        model.addAttribute("members", memberRepository.findAll());
+        model.addAttribute("members", memberService.findAllMembers());
         model.addAttribute("info", "Member '" + newMember.getFullName() + "' is toegevoegd.");
         // Open de juiste view template als resultaat.
         return "views/member/list";
@@ -103,10 +100,10 @@ public class MemberController {
         logger.debug("deleteMember, id = " + id);
 
         // Delete de member aan via de repository
-        this.memberRepository.deleteMemberById(id);
+        memberService.delete(id);
         // We gaan de lijst met members tonen, met een bericht dat de nieuwe member toegevoegd is.
         // Zet de opgevraagde members in het model
-        model.addAttribute("members", memberRepository.findAll());
+        model.addAttribute("members", memberService.findAllMembers());
         model.addAttribute("info", "Member is verwijderd.");
         // Open de juiste view template als resultaat.
         return "views/member/list";
@@ -121,9 +118,9 @@ public class MemberController {
     @RequestMapping(value = "/member/{id}", method = RequestMethod.GET)
     public String listOneMember(Model model, @PathVariable int id) {
         // Zet de opgevraagde waarden in het model
-        model.addAttribute("member", memberRepository.findMemberById(id));
+        model.addAttribute("member", memberService.findMemberById(id));
         // Zet de opgevraagde uitleningen van deze member in het model
-        model.addAttribute("loans", loanRepository.findAllByMemberId(id));
+        model.addAttribute("loans", memberService.findLoansByMemberId(id));
         // Open de juiste view template als resultaat.
         return "views/member/read";
     }
@@ -149,6 +146,6 @@ public class MemberController {
      *
      * @return
      */
-    public List<Member> findAllMembers() { return memberRepository.findAll(); }
+    public List<Member> findAllMembers() { return memberService.findAllMembers(); }
 
 }

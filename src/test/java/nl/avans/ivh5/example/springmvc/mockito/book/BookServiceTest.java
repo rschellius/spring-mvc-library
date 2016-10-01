@@ -3,7 +3,8 @@ package nl.avans.ivh5.example.springmvc.mockito.book;
 import nl.avans.ivh5.example.springmvc.book.Book;
 import nl.avans.ivh5.example.springmvc.book.BookRepository;
 import nl.avans.ivh5.example.springmvc.book.BookService;
-import nl.avans.ivh5.example.springmvc.loan.LoanRepositoryIF;
+import nl.avans.ivh5.example.springmvc.loan.LoanService;
+import nl.avans.ivh5.example.springmvc.member.MemberService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,24 +18,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by Robin Schellius on 1-10-2016.
+ * Deze class bevat testcases voor het testen van de BookService class. De BookService is de class
+ * die je in de Business Logic laag zou kunnen zien. De service ontvangt aanroepen van de controller
+ * (uit de Presentation laag) en kan functionaliteit aanroepen van de BookRepository (in de Data Access laag).
+ * Omdat we alleen de BookService willen testen moeten we onafhankelijk zijn van de omringende lagen. We willen
+ * dus eigenlijk niet naar de data laag om boeken op te halen, maar we willen dat simuleren - of mocken.
+ *
+ * Mockito is een framework dat het mogelijk maakt om stubs (of mocks) van bestaande classes te maken, en
+ * te bepalen hoe die mocks reageren op aanroepen, bv uit de BookService. Zo hebben we controle over de
+ * omliggende classen en kunnen we de functionaliteit van de BookService geïsoleerd testen. Dit is dus
+ * feitelijk een unit test.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(BookServiceTest.class);
 
+    // De volgende parameters worden met Mockito gemockt.
+    // We gaan verderop hun gedrag definiëren.
     @Mock
     private BookRepository bookRepositoryMock;
     @Mock
-    private LoanRepositoryIF loanRepositoryMock;
+    private LoanService loanServiceMock;
+    @Mock
+    private MemberService memberServiceMock;
     @Mock
     private Book bookMock;
 
-    // Deze parameter is niet gemockt.
+    // Deze parameters worden niet gemockt. Het zijn meer containers.
     private List<Book> bookArrayList;
     private Long ean = 1111L;
 
@@ -45,10 +60,14 @@ public class BookServiceTest {
     public void setupMock() {
         logger.info("---- setupMock ----");
 
-        //
+        // Geef aan dat Book gemockt wordt, en bepaal het gedrag.
+        // We hoeven niet al het gedrag van Book te bepalen; alleen
+        // datgene wat we voor de test nodig hebben.
         bookMock = mock(Book.class);
         when(bookMock.getEAN()).thenReturn(ean);
 
+        // De repository moet een lijst met boeken teruggeven.
+        // Hier is het voldoende als daar één boek in zit.
         bookArrayList = new ArrayList<>();
         bookArrayList.add(bookMock);
 
@@ -71,7 +90,7 @@ public class BookServiceTest {
     }
 
     /**
-     * Test het vinden van een boek op Ean.
+     * Test het vinden van een boek op Ean. We testen hier het succespad - we zoeken een boek dat bestaat.
      */
     @Test
     public void testFindByEAN(){
@@ -80,7 +99,10 @@ public class BookServiceTest {
         // Maak een instantie van de echte BookService, omdat we die willen testen. We gebruiken
         // de gemockte repositories hiervoor. Dat betekent dat wanneer we een call naar de service
         // doen, we controle hebben over wat er als resultaat terug komt, omdat we de repo's gemockt hebben.
-        BookService bookServiceToTest = new BookService(bookRepositoryMock, loanRepositoryMock);
+        BookService bookServiceToTest = new BookService();
+        bookServiceToTest.setBookRepositoryIF(bookRepositoryMock);
+        bookServiceToTest.setLoanService(loanServiceMock);
+        bookServiceToTest.setMemberService(memberServiceMock);
 
         // Roep de methode die we willen testen op de echte service aan.
         // Het resultaat dat terug komt, komt uit onze gemockte repo's, maar gaat wel via de Service.
@@ -94,4 +116,34 @@ public class BookServiceTest {
 //        verify(bookServiceToTest.findByEAN(ean).getEAN()).equals(ean);
 
     }
+
+    /**
+     * Test het vinden van een boek op Ean.
+     * We testen hier het failpad - we zoeken een boek dat NIET bestaat.
+     * Dat moet (volgens de specificatie van BookService...!) null teruggeven.
+     *
+     * Het zou misschien mooier zijn wanneer er een BookNotFound exception kwam.
+     */
+    @Test
+    public void testFindByNonExistingEAN(){
+        logger.info("---- testFindByNonExistingEAN ----");
+
+        // Hier willen we dat de repository null gaat retourneren.
+        when(bookRepositoryMock.findById(anyLong())).thenReturn(null);
+
+        // Een nieuwe instantie van de BookService
+        BookService bookServiceToTest = new BookService();
+        bookServiceToTest.setBookRepositoryIF(bookRepositoryMock);
+        bookServiceToTest.setLoanService(loanServiceMock);
+        bookServiceToTest.setMemberService(memberServiceMock);
+
+        // Zoek een boek dat niet bestaat. (de L geeft een Long aan)
+        Book result = bookServiceToTest.findByEAN(000L);
+
+        // Het resultaat moet hier null zijn. Met assert kun je checken of dat werkelijk zo is.
+        // Als result niet null is volgt er een exception omdat de testcase dan feitelijk failt.
+        assertNull(result);
+    }
+
+
 }

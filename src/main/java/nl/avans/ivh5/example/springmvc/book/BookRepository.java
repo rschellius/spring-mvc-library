@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,9 +29,14 @@ public class BookRepository implements BookRepositoryIF {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
     @Transactional(readOnly=true)
     public List<Book> findAll() {
-        logger.debug("findAll aangeroepen");
+        logger.info("findAll");
         List<Book> result = new ArrayList<>();
         try {
             result = jdbcTemplate.query("SELECT * FROM view_all_books", new BookRowMapper());
@@ -42,6 +48,7 @@ public class BookRepository implements BookRepositoryIF {
 
     @Transactional(readOnly=true)
     public List<Book> findById(Long id) {
+        logger.info("findById " + id);
         return jdbcTemplate.query(
                 "SELECT * FROM view_all_books WHERE ISBN=?",
                 new Object[]{id}, new BookRowMapper());
@@ -52,7 +59,7 @@ public class BookRepository implements BookRepositoryIF {
      * @return
      */
     public Book create(final Book book)  {
-        logger.debug("Create a book");
+        logger.info("create book = " + book);
 
         final String sql = "INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`, `ImageURL`) VALUES(?,?,?,?,?,?)";
 

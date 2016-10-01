@@ -17,11 +17,11 @@ public class LoanController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoanController.class);
 
-    private LoanRepository loanRepository;
+    private LoanService loanService;
 
     @Autowired
-    public LoanController(LoanRepository loanRepository) {
-        this.loanRepository = loanRepository;
+    public LoanController(LoanService loanService) {
+        this.loanService = loanService;
     }
 
     @ModelAttribute("page")
@@ -37,11 +37,11 @@ public class LoanController {
     public String createLoan(Loan loan, final ModelMap model) {
 
         logger.debug("createLoan copyID = " + loan.getCopyID() + ", memberID " + loan.getMemberID());
-        loanRepository.create(loan);
+        Loan result = loanService.createLoan(loan);
         // Open de juiste view template als resultaat.
-        // Eerst wordt de controlle van deze URL aangeroepen;
+        // Eerst wordt de controller van deze URL aangeroepen;
         // die haalt de updated data op en toont de view.
-        return "redirect:/book/" + loan.getBookISBN().toString();
+        return "redirect:/book/" + result.getBookISBN().toString();
     }
 
     /**
@@ -52,10 +52,7 @@ public class LoanController {
     public String finishLoan(Loan loan, final ModelMap model) {
 
         logger.debug("finishLoan LoanID = " + loan.getLoanID());
-        loanRepository.finish(loan);
-        // Open de juiste view template als resultaat.
-        // Eerst wordt de controlle van deze URL aangeroepen;
-        // die haalt de updated data op en toont de view.
+        loanService.finishLoan(loan);
         return "redirect:/member/" + loan.getMemberID().toString();
     }
 
