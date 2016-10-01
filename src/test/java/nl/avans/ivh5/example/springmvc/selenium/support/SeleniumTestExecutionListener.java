@@ -1,4 +1,4 @@
-package pl.codeleak.selenium.support;
+package nl.avans.ivh5.example.springmvc.selenium.support;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
-import static pl.codeleak.selenium.support.CaseFormat.toLowerUnderscore;
 
 public class SeleniumTestExecutionListener extends AbstractTestExecutionListener {
 
@@ -67,8 +66,8 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
         }
 
         File screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
-        String testName = toLowerUnderscore(testContext.getTestClass().getSimpleName());
-        String methodName = toLowerUnderscore(testContext.getTestMethod().getName());
+        String testName = CaseFormat.toLowerUnderscore(testContext.getTestClass().getSimpleName());
+        String methodName = CaseFormat.toLowerUnderscore(testContext.getTestMethod().getName());
 
         Files.copy(screenshot.toPath(),
                 Paths.get("screenshots", testName + "_" + methodName + "_" + screenshot.getName()));

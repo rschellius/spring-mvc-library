@@ -1,4 +1,4 @@
-package pl.codeleak.selenium.support;
+package nl.avans.ivh5.example.springmvc.selenium.support;
 
 import org.junit.Test;
 

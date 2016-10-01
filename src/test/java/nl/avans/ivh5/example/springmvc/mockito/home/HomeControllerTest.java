@@ -1,20 +1,18 @@
 package nl.avans.ivh5.example.springmvc.home;
 
+import nl.avans.ivh5.example.springmvc.selenium.support.SeleniumTest;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import pl.codeleak.selenium.support.SeleniumTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-// @SpringApplicationConfiguration(classes = Application.class)
-// @WebIntegrationTest(value = "server.port=9000")
-@SeleniumTest(driver = FirefoxDriver.class, baseUrl = "http://localhost:9000")
+@SeleniumTest(driver = ChromeDriver.class, baseUrl = "http://localhost:8080")
 public class HomeControllerTest {
 
     @Autowired

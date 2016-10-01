@@ -1,11 +1,9 @@
-package pl.codeleak.selenium.support;
+package nl.avans.ivh5.example.springmvc.selenium.support;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.test.context.TestExecutionListeners;
-
 import java.lang.annotation.*;
-
 import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
 
 @Documented
