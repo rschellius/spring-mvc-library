@@ -20,7 +20,7 @@ import java.util.List;
  * Created by Robin Schellius on 3-9-2016.
  */
 @Repository
-public class LoanRepository {
+public class LoanRepository implements LoanRepositoryIF {
 
     private static final Logger logger = LoggerFactory.getLogger(LoanRepository.class);
 

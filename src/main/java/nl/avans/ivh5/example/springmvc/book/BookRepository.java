@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Robin Schellius on 3-9-2016.
  */
 @Repository
-public class BookRepository {
+public class BookRepository implements BookRepositoryIF {
 
     private final Logger logger = LoggerFactory.getLogger(BookRepository.class);;
 
@@ -52,7 +52,7 @@ public class BookRepository {
      * @return
      */
     public Book create(final Book book)  {
-        logger.debug("Create a member");
+        logger.debug("Create a book");
 
         final String sql = "INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`, `ImageURL`) VALUES(?,?,?,?,?,?)";
 
