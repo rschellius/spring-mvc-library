@@ -60,11 +60,11 @@ div.caption.frontpage {
         height: 160px;
     }
     div.caption.frontpage {
-        height: 192px;
+        height: 160px;
     }
-}
-
-@media (max-width: 992px) {
+    h3 {
+        font-size: 20px;
+    }
 }
 
 .glyphicon {
