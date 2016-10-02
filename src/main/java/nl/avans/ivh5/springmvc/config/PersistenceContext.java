@@ -21,6 +21,7 @@ import javax.sql.DataSource;
  *
  * Dit bestand bevat database settings voor het starten van de applicatie.
  */
+@SuppressWarnings("Duplicates")
 @Profile("default")
 @Configuration
 @EnableTransactionManagement

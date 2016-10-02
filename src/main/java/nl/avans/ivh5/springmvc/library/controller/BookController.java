@@ -102,7 +102,7 @@ public class BookController {
         model.addAttribute("copies", copies);
         model.addAttribute("members", members);
         // Het Loan object dat in het formulier voor het lenen van een boek wordt ingevuld.
-        model.addAttribute("exception", loan);
+        model.addAttribute("loan", loan);
         // Open de juiste view template als resultaat.
         return "views/book/read";
     }

@@ -22,6 +22,7 @@ import javax.sql.DataSource;
  * java -jar -Dspring.profiles.active=production appnaam.jar.
  *
  */
+@SuppressWarnings("Duplicates")
 @Configuration
 @Profile("production")
 @EnableTransactionManagement
