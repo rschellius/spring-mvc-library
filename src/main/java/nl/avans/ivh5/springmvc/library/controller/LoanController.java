@@ -55,7 +55,7 @@ public class LoanController {
 
         logger.debug("finishLoan LoanID = " + loan.getLoanID());
         loanService.finishLoan(loan);
-        return "redirect:/repository/" + loan.getMemberID().toString();
+        return "redirect:/member/" + loan.getMemberID().toString();
     }
 
 }

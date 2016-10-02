@@ -108,7 +108,7 @@ public class LoanRepository implements LoanRepositoryIF {
      */
     public void finish(final Loan loan) {
         logger.debug("finish LoanID = " + loan.getLoanID());
-        final String sql = "UPDATE exception SET `ReturnedDate` = CURDATE() WHERE `LoanID` = ?";
+        final String sql = "UPDATE loan SET `ReturnedDate` = CURDATE() WHERE `LoanID` = ?";
         jdbcTemplate.update(sql, loan.getLoanID());
     }
 
