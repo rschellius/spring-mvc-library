@@ -43,9 +43,15 @@ public class BookController {
     public String highlightNavMenuItem(){ return "active"; }
 
     @Autowired
-    public void setBookService(BookService bookService) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
     }
+
+//    @Autowired
+//
+//    public void setBookService(BookService bookService) {
+//        this.bookService = bookService;
+//    }
 
     /**
      * Lees alle boeken die via de REST API beschikbaar zijn.

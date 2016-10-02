@@ -1,10 +1,17 @@
 package nl.avans.ivh5.springmvc.config;
 
+import nl.avans.ivh5.springmvc.library.repository.BookRepository;
+import nl.avans.ivh5.springmvc.library.repository.CopyRepository;
+import nl.avans.ivh5.springmvc.library.repository.LoanRepository;
+import nl.avans.ivh5.springmvc.library.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
@@ -36,6 +43,28 @@ public class PersistenceContext {
         dataSource.setPassword(PROPERTY_NAME_DATABASE_PASSWORD);
 
         return dataSource;
+    }
+
+    @Bean
+    @Qualifier("PersistenceContext")
+    @Primary
+    public BookRepository getBookRepository() {
+        return new BookRepository(this.dataSource());
+    }
+
+    @Bean
+    public CopyRepository getCopyRepository() {
+        return new CopyRepository(this.dataSource());
+    }
+
+    @Bean
+    public MemberRepository getMemberRepository() {
+        return new MemberRepository(this.dataSource());
+    }
+
+    @Bean
+    public LoanRepository getLoanRepository() {
+        return new LoanRepository(this.dataSource());
     }
 
 //    @Bean

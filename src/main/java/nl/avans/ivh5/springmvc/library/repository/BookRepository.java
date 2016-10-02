@@ -30,10 +30,13 @@ public class BookRepository implements BookRepositoryIF {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // Deze constructor wordt aangeroepen vanuit de config/PersistenceContext class.
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+    public BookRepository(DataSource dataSource) { this.jdbcTemplate = new JdbcTemplate(dataSource); }
+
+//    public void setDataSource(DataSource dataSource) {
+//        this.jdbcTemplate = new JdbcTemplate(dataSource);
+//    }
 
     @Transactional(readOnly=true)
     public List<Book> findAll() {

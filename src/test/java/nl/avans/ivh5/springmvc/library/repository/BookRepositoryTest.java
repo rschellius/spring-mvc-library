@@ -1,18 +1,20 @@
 package nl.avans.ivh5.springmvc.library.repository;
 
-import org.junit.runner.RunWith;
-
 import com.mysql.jdbc.PreparedStatement;
 import nl.avans.ivh5.springmvc.library.model.Book;
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -63,6 +65,9 @@ public class BookRepositoryTest {
     @InjectMocks
     private BookRepository bookRepository;
 
+    @Autowired
+    private ApplicationContext appContext;
+
     private List<Book> bookArrayList;
     private Long ean = 1111L;
 
@@ -103,8 +108,9 @@ public class BookRepositoryTest {
         when(mockJdbcTemplate.query(sql, new Object[]{ean}, new BookRowMapper() )).thenReturn(books);
         when(mockJdbcTemplate.query(anyString(), new BookRowMapper() )).thenReturn(books);
 
-        BookRepository bookRepository = new BookRepository();
-        bookRepository.setDataSource(mockDataSource);
+
+        BookRepository bookRepository = new BookRepository(appContext.getBean(DriverManagerDataSource.class));
+        // bookRepository.setDataSource(mockDataSource);
         List<Book> result = bookRepository.findById(ean);
 
         Assert.assertEquals(result, books);
@@ -127,7 +133,7 @@ public class BookRepositoryTest {
         when(mockJdbcTemplate.query(sql, new Object[]{ean}, new BookRowMapper() )).thenReturn(books);
 
         try {
-            BookRepository bookRepository = new BookRepository();
+            BookRepository bookRepository = new BookRepository(appContext.getBean(DriverManagerDataSource.class));
             List<Book> result = bookRepository.findById(ean);
         } catch (DataAccessException ex) {
             logger.info("---- Exception as expexted ----");

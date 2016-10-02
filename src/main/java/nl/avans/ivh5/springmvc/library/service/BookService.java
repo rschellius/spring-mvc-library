@@ -36,7 +36,6 @@ public class BookService {
     @Value("${avans.library.bookserver.url}")
     private String urlListAllBooks;
 
-
     @Autowired
     public void setLoanService(LoanService loanService) {
         this.loanService = loanService;

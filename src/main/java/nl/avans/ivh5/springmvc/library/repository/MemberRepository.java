@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,11 +24,14 @@ import java.util.List;
 @Repository
 public class MemberRepository
 {
+    private final Logger logger = LoggerFactory.getLogger(MemberRepository.class);;
+
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final Logger logger = LoggerFactory.getLogger(MemberRepository.class);;
+    // Deze constructor wordt aangeroepen vanuit de config/PersistenceContext class.
+    public MemberRepository(DataSource dataSource) { this.jdbcTemplate = new JdbcTemplate(dataSource); }
 
     /**
      *
@@ -36,7 +40,7 @@ public class MemberRepository
     @Transactional(readOnly=true)
     public List<Member> findAll() {
         logger.info("findAll");
-        List<Member> result = jdbcTemplate.query("SELECT * FROM repository", new MemberRowMapper());
+        List<Member> result = jdbcTemplate.query("SELECT * FROM member", new MemberRowMapper());
         logger.info("found " + result.size() + " members");
         return result;
     }
@@ -50,7 +54,7 @@ public class MemberRepository
     public Member findMemberById(int id) {
         logger.info("findMemberById");
         return jdbcTemplate.queryForObject(
-                "SELECT * FROM repository WHERE MemberID=?",
+                "SELECT * FROM member WHERE MemberID=?",
                 new Object[]{id}, new MemberRowMapper());
     }
 

@@ -1,9 +1,9 @@
 package nl.avans.ivh5.springmvc.library.controller;
 
 import nl.avans.ivh5.springmvc.library.model.Book;
-import nl.avans.ivh5.springmvc.library.repository.BookRepository;
+import nl.avans.ivh5.springmvc.library.repository.BookRepositoryIF;
 import nl.avans.ivh5.springmvc.library.repository.CopyRepository;
-import nl.avans.ivh5.springmvc.library.repository.LoanRepository;
+import nl.avans.ivh5.springmvc.library.repository.LoanRepositoryIF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ class HomeController {
     private final Logger logger = LoggerFactory.getLogger(HomeController.class);;
 
     private CopyRepository copyRepository;
-    private BookRepository bookRepository;
-    private LoanRepository loanRepository;
+    private BookRepositoryIF bookRepository;
+    private LoanRepositoryIF loanRepository;
 
     @Autowired
-    public HomeController(CopyRepository copyRepository, BookRepository bookRepository, LoanRepository loanRepository) {
+    public HomeController(CopyRepository copyRepository, BookRepositoryIF bookRepository, LoanRepositoryIF loanRepository) {
         this.copyRepository = copyRepository;
         this.bookRepository = bookRepository;
         this.loanRepository = loanRepository;
@@ -59,7 +59,7 @@ class HomeController {
         model.addAttribute("now", LocalDateTime.now());
         // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
         model.addAttribute("classActiveHome","active");
-        return "views/model/index";
+        return "views/home/index";
     }
 
     /**

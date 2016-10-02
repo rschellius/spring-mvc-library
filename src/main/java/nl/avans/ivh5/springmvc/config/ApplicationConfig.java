@@ -11,6 +11,10 @@ import javax.servlet.ServletRegistration;
 
 /**
  * @author Petri Kainulainen
+ *
+ * Dit is een van de configuratiebestanden die vanuit de Application.java class worden
+ * aangeroepen om je applicatie te initialiseren.
+ *
  */
 public class ApplicationConfig implements WebApplicationInitializer {
     private static final String DISPATCHER_SERVLET_NAME = "dispatcher";

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -18,15 +17,15 @@ import java.util.Properties;
 
 /**
  * @author Petri Kainulainen
+ *
+ * Dit is een van de configuratiebestanden die vanuit de Application.java class worden
+ * aangeroepen om je applicatie te initialiseren.
+ *
  */
 @Configuration
 @EnableAutoConfiguration
-@EnableWebMvc
 @ComponentScan(basePackages = {
-        "package nl.avans.ivh5.springmvc.library.controller",
-        "package nl.avans.ivh5.springmvc.library.model",
-        "package nl.avans.ivh5.springmvc.library.repository",
-        "package nl.avans.ivh5.springmvc.library.service",
+        "package nl.avans.ivh5.springmvc",
 })
 @Import({PersistenceContext.class})
 @PropertySource("classpath:application.properties")
@@ -34,15 +33,14 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 
     private static final String MESSAGE_SOURCE_BASE_NAME = "i18n/messages";
 
-    private static final String VIEW_RESOLVER_PREFIX = "classpath:/templates/";
+    private static final String VIEW_RESOLVER_PREFIX = "templates/";
     private static final String VIEW_RESOLVER_SUFFIX = ".html";
     private static final String VIEW_RESOLVER_MODE = "HTML5";
     private static final String VIEW_RESOLVER_ENCODING = "UTF-8";
-    private static final String VIEW_RESOLVER_SUMMARY_TYPE = "text/html";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+         registry.addResourceHandler("/static/**").addResourceLocations("static");
     }
 
     @Override
