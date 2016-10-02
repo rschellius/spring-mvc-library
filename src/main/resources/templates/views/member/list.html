@@ -9,7 +9,7 @@
     <!--/* Content of this page will be decorated by the elements of layout.html (student/layout) */-->
     <div class="container" layout:fragment="summary">
 
-        <!--/* Als er een nieuw member is toegevoegd tonen we een info bericht. */-->
+        <!--/* Als er een nieuw repository is toegevoegd tonen we een info bericht. */-->
         <div th:if="${info}" layout:include="fragments/alert :: alert" th:with="type='info', header='Info'" th:remove="tag">
             <!--/* Implements alert summary fragment with simple summary */-->
             <th:block layout:fragment="alert-summary">

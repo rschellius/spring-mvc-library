@@ -13,7 +13,7 @@
         </div>
         <p>Hier kunt je een nieuwe member toevoegen.</p>
 
-        <!-- Form om een nieuwe member te maken. Het object 'member' is het object waarin de
+        <!-- Form om een nieuwe repository te maken. Het object 'repository' is het object waarin de
             waarden uit het formulier worden ingevuld. Het is afkomstig uit de MemberController. -->
         <form action="#" th:action="@{/member/create}" th:object="${member}" method="post">
 
@@ -47,7 +47,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label for="firstname">Voornaam</label>
-                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'repository'-->
                         <input type="text" class="form-control" id="firstname" th:field="*{firstName}"/>
                         <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error</p>
                     </div>
@@ -55,7 +55,7 @@
                 <div class="col-sm-8">
                     <div class="form-group">
                         <label for="lastname">Achternaam</label>
-                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'repository'-->
                         <input type="text" class="form-control" id="lastname" th:field="*{lastName}"/>
                         <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name Error</p>
                     </div>
@@ -65,7 +65,7 @@
                 <div class="col-sm-8">
                     <div class="form-group">
                         <label for="street">Straat</label>
-                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'repository'-->
                         <input type="text" class="form-control" id="street" th:field="*{street}"/>
                         <p th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Name Error</p>
                     </div>
@@ -73,7 +73,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label for="housenumber">Huisnummer</label>
-                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'member'-->
+                        <!-- th:field="*{name}" is de koppeling naar het attribuut 'name' van het object 'repository'-->
                         <input type="text" class="form-control" id="housenumber" th:field="*{houseNumber}"/>
                         <p th:if="${#fields.hasErrors('houseNumber')}" th:errors="*{houseNumber}">Name Error</p>
                     </div>

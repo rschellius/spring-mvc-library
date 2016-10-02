@@ -14,7 +14,7 @@ USE `library` ;
 SET sql_mode = '';
 
 --
--- Table structure for table `member`
+-- Table structure for table `repository`
 --
 
 CREATE TABLE `book` (
@@ -31,7 +31,7 @@ CREATE TABLE `book` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `copy`
+-- Table structure for table `service`
 --
 
 CREATE TABLE `copy` (
@@ -50,7 +50,7 @@ ALTER TABLE `copy`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loan`
+-- Table structure for table `exception`
 --
 
 CREATE TABLE `loan` (
@@ -66,7 +66,7 @@ CREATE TABLE `loan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `member`
+-- Table structure for table `repository`
 --
 
 CREATE TABLE `member` (
@@ -106,7 +106,7 @@ ALTER TABLE `reservation`
   ADD KEY `CopyID` (`CopyID`);
 
 --
--- Constraints for table `copy`
+-- Constraints for table `service`
 --
 ALTER TABLE `copy`
   ADD CONSTRAINT `copy_book` FOREIGN KEY (`BookISBN`) REFERENCES `book` (`ISBN`) ON UPDATE CASCADE;
@@ -312,7 +312,7 @@ INSERT INTO `book` (`ISBN`, `Title`, `Author`, `ShortDescription`, `Edition`, `I
 
 -- --------------------------------------------------------
 --
--- Gegevens worden geëxporteerd voor tabel `copy`
+-- Gegevens worden geëxporteerd voor tabel `service`
 --
 
 INSERT INTO `copy` (`CopyID`, `LendingPeriod`, `BookISBN`, `UpdatedDate`) VALUES

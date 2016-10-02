@@ -1,5 +1,5 @@
 //
-//  Websocket example code
+//  Websocket springmvc code
 //  https://spring.io/guides/gs/messaging-stomp-websocket/
 //
 var stompClient = null;

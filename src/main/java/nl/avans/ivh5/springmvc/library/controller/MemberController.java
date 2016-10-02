@@ -1,0 +1,153 @@
+package nl.avans.ivh5.springmvc.library.controller;
+
+import nl.avans.ivh5.springmvc.library.model.Member;
+import nl.avans.ivh5.springmvc.library.service.MemberService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.sql.SQLException;
+import java.util.List;
+
+@Controller
+public class MemberController {
+
+    private final Logger logger = LoggerFactory.getLogger(MemberController.class);;
+
+    private MemberService memberService;
+    private Member member;
+
+    @Autowired
+    public MemberController(MemberService memberService){
+        this.memberService = memberService;
+    }
+
+    @ModelAttribute("page")
+    public String module() {
+        return "members";
+    }
+
+    // Zet een 'flag' om in Bootstrap header nav het actieve menu item te vinden.
+    @ModelAttribute("classActiveMember")
+    public String highlightNavMenuItem(){ return "active"; };
+
+    /**
+     * Haal een lijst van Members en toon deze in een view.
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/member", method = RequestMethod.GET)
+    public String listMembers(Model model) {
+        logger.debug("listMembers");
+        // Zet de opgevraagde members in het model
+        model.addAttribute("members", memberService.findAllMembers());
+        // Open de juiste view template als resultaat.
+        return "views/repository/list";
+    }
+
+    /**
+     * Hiermee open je de create view om een nieuwe repository aan te maken.
+     *
+     * @param member Dit object wordt aan de view meegegeven. Het object wordt gevuld met de waarden uit het formulier.
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/member/create", method = RequestMethod.GET)
+    public String showCreateMemberForm(final Member member, final ModelMap model) {
+        logger.debug("showCreateMemberForm");
+        return "views/repository/create";
+    }
+
+    /**
+     * Deze methode handelt een ingevuld formulier af. Als er fouten zijn opgetreden blijven we in dezelfde view.
+     * Als er geen fouten waren maken we een nieuwe repository en gaan we direct naar de list view voor het overzicht.
+     * De nieuwe repository moet dan in het overzicht staan.
+     *
+     * @param member De repository uit het formulier. De velden van repository komen uit de input velden van het formulier.
+     * @param bindingResult Het resultaat van de view.
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/member/create", method = RequestMethod.POST)
+    public String validateAndSaveMember(@Valid Member member, final BindingResult bindingResult, final ModelMap model) {
+        logger.debug("validateAndSaveMember - new repository = " + member.getFullName());
+
+        if (bindingResult.hasErrors()) {
+            // Als er velden in het formulier zijn die niet correct waren ingevuld vinden we die hier.
+            // We blijven dan op dezelfde pagina. De foutmeldingen worden daar getoond
+            // (zie het create.html bestand.
+            logger.debug("validateAndSaveMember - bindingResult.hasErrors");
+            return "views/repository/create";
+        }
+        // Maak de repository aan via de repository
+        Member newMember = memberService.create(member);
+        // We gaan de lijst met members tonen, met een bericht dat de nieuwe repository toegevoegd is.
+        // Zet de opgevraagde members in het model
+        model.addAttribute("members", memberService.findAllMembers());
+        model.addAttribute("info", "Member '" + newMember.getFullName() + "' is toegevoegd.");
+        // Open de juiste view template als resultaat.
+        return "views/repository/list";
+    }
+
+    @RequestMapping(value = "/member/{id}", method = RequestMethod.DELETE)
+    public String deleteMember(Model model, @PathVariable int id) {
+        logger.debug("deleteMember, id = " + id);
+
+        // Delete de repository aan via de repository
+        memberService.delete(id);
+        // We gaan de lijst met members tonen, met een bericht dat de nieuwe repository toegevoegd is.
+        // Zet de opgevraagde members in het model
+        model.addAttribute("members", memberService.findAllMembers());
+        model.addAttribute("info", "Member is verwijderd.");
+        // Open de juiste view template als resultaat.
+        return "views/repository/list";
+    }
+
+    /**
+     * Haal het repository met gegeven ID uit de database en toon deze in een view.
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/member/{id}", method = RequestMethod.GET)
+    public String listOneMember(Model model, @PathVariable int id) {
+        // Zet de opgevraagde waarden in het model
+        model.addAttribute("repository", memberService.findMemberById(id));
+        // Zet de opgevraagde uitleningen van deze repository in het model
+        model.addAttribute("loans", memberService.findLoansByMemberId(id));
+        // Open de juiste view template als resultaat.
+        return "views/repository/read";
+    }
+
+    @ExceptionHandler(value = SQLException.class)
+    public ModelAndView handleError(HttpServletRequest req, SQLException ex) {
+        // logger.error("Request: " + req.getRequestURL() + " raised " + ex);
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", ex);
+        mav.addObject("title", "Exception in MemberController");
+        mav.addObject("url", req.getRequestURL());
+        // Je kunt hier kiezen in welke view je een melding toont - op een
+        // aparte pagina, of als alertbox op de huidige pagina.
+         mav.setViewName("error/error");
+//        mav.setViewName("views/repository/create");
+        return mav;
+    }
+
+    /**
+     * Retourneer alle members. Wordt gebruikt bij het uitlenen van een boek,
+     * om een uitlening aan een repository te koppelen.
+     *
+     * @return
+     */
+    public List<Member> findAllMembers() { return memberService.findAllMembers(); }
+
+}
