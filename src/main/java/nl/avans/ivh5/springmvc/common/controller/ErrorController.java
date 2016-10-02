@@ -1,4 +1,4 @@
-package net.petrikainulainen.spring.testmvc.common.controller;
+package nl.avans.ivh5.springmvc.common.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
