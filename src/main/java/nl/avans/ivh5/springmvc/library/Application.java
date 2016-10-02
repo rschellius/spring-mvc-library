@@ -3,6 +3,7 @@ package nl.avans.ivh5.springmvc.library;
 import nl.avans.ivh5.springmvc.config.ApplicationConfig;
 import nl.avans.ivh5.springmvc.config.ApplicationContext;
 import nl.avans.ivh5.springmvc.config.PersistenceContext;
+import nl.avans.ivh5.springmvc.config.ProductionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -32,6 +33,7 @@ public class Application {
         ctx.register(ApplicationConfig.class);
         ctx.register(ApplicationContext.class);
         ctx.register(PersistenceContext.class);
+        ctx.register(ProductionContext.class);
 
         SpringApplication.run(Application.class);
 

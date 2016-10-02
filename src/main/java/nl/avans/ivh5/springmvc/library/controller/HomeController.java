@@ -27,6 +27,17 @@ class HomeController {
     private BookRepositoryIF bookRepository;
     private LoanRepositoryIF loanRepository;
 
+    /**
+     * Constructor.
+     *
+     * LET OP: dit ontwerp is nog niet zoals het zou moeten! Deze controller zou met zijn 'eigen'
+     * servicelaag moeten communiceren, die op zijn beurt met andere services communiceert.
+     * Direct naar de repositories (DAO's) zoals hier gebeurt is niet netjes! Moet nog gedaan worden.
+     *
+     * @param copyRepository
+     * @param bookRepository
+     * @param loanRepository
+     */
     @Autowired
     public HomeController(CopyRepository copyRepository, BookRepositoryIF bookRepository, LoanRepositoryIF loanRepository) {
         this.copyRepository = copyRepository;

@@ -17,21 +17,20 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 /**
- * @author Petri Kainulainen
+ * Deze configuratie wordt alleen geladen als in de omgevingsvariabelen de setting 'production'
+ * aanwezig is. Dat kan via de command line bij het starten van de app via
+ * java -jar -Dspring.profiles.active=production appnaam.jar.
  *
- * Dit bestand bevat database settings voor het starten van de applicatie.
  */
-@Profile("default")
 @Configuration
+@Profile("production")
 @EnableTransactionManagement
-public class PersistenceContext {
+public class ProductionContext {
 
     protected static final String PROPERTY_NAME_DATABASE_DRIVER = "com.mysql.jdbc.Driver";
-    protected static final String PROPERTY_NAME_DATABASE_PASSWORD = "test";
-    protected static final String PROPERTY_NAME_DATABASE_URL = "jdbc:mysql://localhost:3306/library";
+    protected static final String PROPERTY_NAME_DATABASE_PASSWORD = "_avans_spring_";
+    protected static final String PROPERTY_NAME_DATABASE_URL = "jdbc:mysql://104.155.74.161:3306/library";
     protected static final String PROPERTY_NAME_DATABASE_USERNAME = "spring";
-
-    private static final String PROPERTY_PACKAGES_TO_SCAN = "nl.avans.ivh5.springmvc.config";
 
     @Resource
     private Environment environment;
