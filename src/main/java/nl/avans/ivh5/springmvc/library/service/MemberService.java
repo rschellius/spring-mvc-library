@@ -41,16 +41,16 @@ public class MemberService {
 
     /**
      * Deze methode handelt een ingevuld formulier af. Als er fouten zijn opgetreden blijven we in dezelfde view.
-     * Als er geen fouten waren maken we een nieuwe repository en gaan we direct naar de list view voor het overzicht.
-     * De nieuwe repository moet dan in het overzicht staan.
+     * Als er geen fouten waren maken we een nieuwe member en gaan we direct naar de list view voor het overzicht.
+     * De nieuwe member moet dan in het overzicht staan.
      *
-     * @param member De repository uit het formulier. De velden van repository komen uit de input velden van het formulier.
+     * @param member De member uit het formulier. De velden van member komen uit de input velden van het formulier.
      * @return
      */
     public Member create(Member member) {
-        logger.info("validateAndSaveMember - new repository = " + member.getFullName());
+        logger.info("validateAndSaveMember - new member = " + member.getFullName());
 
-        // Maak de repository aan via de repository
+        // Maak de member aan via de repository
         Member newMember = memberRepository.create(member);
         return newMember;
     }
@@ -60,18 +60,18 @@ public class MemberService {
      * @param id
      */
     public void delete(int id) {
-        logger.info("delete repository, id = " + id);
+        logger.info("delete member, id = " + id);
         this.memberRepository.deleteMemberById(id);
     }
 
     /**
-     * Haal het repository met gegeven ID uit de database en toon deze in een view.
+     * Haal het member met gegeven ID uit de database en toon deze in een view.
      *
      * @param id
      * @return
      */
     public Member findMemberById(int id) {
-        logger.info("delete repository, id = " + id);
+        logger.info("findMemberById member, id = " + id);
         Member result = memberRepository.findMemberById(id);
         return result;
     }
@@ -85,25 +85,6 @@ public class MemberService {
         logger.info("findLoansByMemberId id = " + id);
         return loanService.findLoansByMemberId(id);
     }
-
-    /**
-     *
-     * @param req
-     * @param ex
-     * @return
-     */
-//    public ModelAndView handleError(HttpServletRequest req, SQLException ex) {
-//        // logger.error("Request: " + req.getRequestURL() + " raised " + ex);
-//
-//        ModelAndView mav = new ModelAndView();
-//        mav.addObject("exception", ex);
-//        mav.addObject("title", "Exception in MemberController");
-//        mav.addObject("url", req.getRequestURL());
-//        // Je kunt hier kiezen in welke view je een melding toont - op een
-//        // aparte pagina, of als alertbox op de huidige pagina.
-//         mav.setViewName("error/error");
-//        return mav;
-//    }
 
     /**
      * Retourneer alle members. Wordt gebruikt bij het uitlenen van een boek,
