@@ -17,7 +17,7 @@ It uses the following technologies:
 
 Demo
 --------------------
-You can see a deployed version running at [Heroku](https://spring-mvc-library.herokuapp.com/).
+You can see a deployed version running at [Heroku](https://spring-mvc-library.herokuapp.com/). See [the textfile](https://github.com/rschellius/spring-mvc-library/blob/master/Heroku_cloud.txt) and the Procfile for more info. 
 
 ![screenprint of the application](https://github.com/rschellius/spring-mvc-library/blob/master/src/main/resources/static/img/screenprint.png)
 

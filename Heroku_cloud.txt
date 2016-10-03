@@ -33,9 +33,9 @@ Wat nodig is:
   levert. Dit IP adres voer je in bij de Google SQL dashboard.
 
 Je app draait nu dus zowel lokaal in je 'ontwikkelomgeving', als in de cloud in je 'productie omgeving'. Je hebt hiervoor
-in Spring twee configuraties nodig. Dat kun je doen door een kopie te maken van de application.properties naar 
-bijvoorbeeld application-production.properties, en deze bij het starten van je Spring app mee te geven.
-Om te zorgen dat Heroku van je productie-settings gebruik maakt maak je een 'Procfile' in de root van je project.
+in Spring twee configuraties nodig. Dat kun je doen door de configuratie in het juiste bestand in de config folder aan te passen.
+
+Om te zorgen dat Heroku van je productie-settings gebruik maakt maak je een 'Procfile' in de root van je project. Je geeft hiervoor een propertie aan Java mee bij het runnen van de jar file.
 Kijk in het voorbeeld om te zien hoe dat er uit ziet. Er staat eigenlijk maar één regel in.
 
  
