@@ -47,12 +47,6 @@ public class BookController {
         this.bookService = bookService;
     }
 
-//    @Autowired
-//
-//    public void setBookService(BookService bookService) {
-//        this.bookService = bookService;
-//    }
-
     /**
      * Lees alle boeken die via de REST API beschikbaar zijn.
      * De REST API is een aparte server die je los van de bibliotheek moet starten.

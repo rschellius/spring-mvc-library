@@ -1,9 +1,17 @@
 package nl.avans.ivh5.springmvc.library.controller;
 
+import nl.avans.ivh5.springmvc.library.model.Book;
+import nl.avans.ivh5.springmvc.library.repository.BookRepository;
+import nl.avans.ivh5.springmvc.library.repository.CopyRepository;
+import nl.avans.ivh5.springmvc.library.repository.LoanRepository;
+import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,43 +22,69 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+
 @RunWith(SpringRunner.class)
 @SpringBootConfiguration
 @ContextConfiguration
 @SpringBootTest
-// =======
-//@RunWith(SpringJUnit4ClassRunner.class)
-// @SpringApplicationConfiguration(classes = Application.class)
-// @WebAppConfiguration
 public class HomeControllerClassicTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeControllerTest.class);
 
     @Autowired
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
 
+    @Mock
+    BookRepository bookRepository;
 
-    /**
-     *  Deze testcase moet nog uitgewerkt worden. Je test hiermee de homepage, maar om die te kunnen
-     *  tonen moet er een databaseconnectie zijn, een connectie met de repositories, en we moeten boeken
-     *  op de frontpage laten zien. Dat proces moet dus gemockt worden.
-     *
-     *  Nu nog niet uitgewerkt, ToDo.
-     */
+    @Mock
+    CopyRepository copyRepository;
 
-
+    @Mock
+    LoanRepository loanRepository;
 
     @Before
     public void setup() {
-//        mockMvc = mockMvc = standaloneSetup(new HomeController())
-//                .build();
+
+        logger.info("---- Setup ----");
+
+        bookRepository = mock(BookRepository.class);
+        loanRepository = mock(LoanRepository.class);
+        copyRepository = mock(CopyRepository.class);
+
+        mockMvc = standaloneSetup(new HomeController(copyRepository, bookRepository, loanRepository))
+                .build();
+    }
+
+    @After
+    public void tearDown(){
+        logger.info("---- tearDown ----");
     }
 
     @Test
-    @Ignore     // DIT MOET WEG OM TE TESTCASE MEE TE NEMEN IN DE TESTRUNNER !!!!!!!!!!!!!!!!!!!!!!!
     public void verifiesHomePageLoads() throws Exception {
+
+        Book book = new Book.Builder(1234L, "De Titel", "De Schrijver").build();
+        ArrayList<Book> booksFoundOnHomePage = new ArrayList<>();
+        booksFoundOnHomePage.add(book);
+        when(bookRepository.findAll()).thenReturn(booksFoundOnHomePage);
+
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("classActiveHome", Matchers.is("active")))
+                .andExpect(model().attributeExists("books"))
+                .andExpect(model().attribute("books", Matchers.hasSize(1)))
+                .andExpect(view().name("views/home/index"));
     }
 }

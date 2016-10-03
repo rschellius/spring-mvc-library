@@ -45,6 +45,8 @@ public class BookControllerTest {
 
     @Before
     public void setup() {
+        logger.info("---- setUp ----");
+
         webClient = MockMvcWebClientBuilder
                 .webAppContextSetup(context)
                 .contextPath("")
@@ -52,21 +54,17 @@ public class BookControllerTest {
     }
 
     @After
-    public void cleanup() {
+    public void tearDown() {
+        logger.info("---- tearDown ----");
         this.webClient.close();
     }
 
-
-
-
-
-    @Ignore
     @Test
     public void testExample() throws Exception {
         Long ean = 9789023457299L;
 
         given(this.bookService.findByEAN(ean).getTitle()).willReturn("Bonita Avenue");
-        HtmlPage page = this.webClient.getPage("http://localhost:8080/book/9789023457299");
+        HtmlPage page = this.webClient.getPage("/book/9789023457299");
         assertThat(page.getBody().getTextContent()).isEqualTo("Honda Civic");
     }
 
@@ -74,39 +72,11 @@ public class BookControllerTest {
     @Test
     public void showBookPage() throws IOException {
         // Load the Create Message Form
-        HtmlPage bookPage = webClient.getPage("http://localhost:8080/book/9789023457299");
+        HtmlPage bookPage = webClient.getPage("/book/9789023457299");
 
         // verify we successfully created a message and displayed the newly create message
         assertThat(bookPage.getUrl().toString()).endsWith("/book/9789023457299");
         assertThat(bookPage.getTitleText()).isEqualTo("Avans Bieb");
-//        String summary = newMessagePage.getHtmlElementById("summary").getTextContent();
-//        assertThat(summary).isEqualTo("Spring Rocks");
-//        String text = newMessagePage.getHtmlElementById("text").getTextContent();
-//        assertThat(text).isEqualTo("In case you didn't know, Spring Rocks!");
     }
 
-    @Ignore
-    @Test
-    public void createMessage() throws IOException {
-        // Load the Create Message Form
-        HtmlPage createMsgFormPage = webClient.getPage("http://localhost/messages/form");
-
-        // Submit the create message form
-        HtmlForm form = createMsgFormPage.getHtmlElementById("messageForm");
-        HtmlTextInput summaryInput = createMsgFormPage.getHtmlElementById("summary");
-        summaryInput.setValueAttribute("Spring Rocks");
-        HtmlTextArea textInput = createMsgFormPage.getHtmlElementById("text");
-        textInput.setText("In case you didn't know, Spring Rocks!");
-        HtmlSubmitInput submit = form.getOneHtmlElementByAttribute("input", "type", "submit");
-        HtmlPage newMessagePage = submit.click();
-
-        // verify we successfully created a message and displayed the newly create message
-        assertThat(newMessagePage.getUrl().toString()).endsWith("/messages/123");
-        String id = newMessagePage.getHtmlElementById("id").getTextContent();
-        assertThat(id).isEqualTo("123");
-        String summary = newMessagePage.getHtmlElementById("summary").getTextContent();
-        assertThat(summary).isEqualTo("Spring Rocks");
-        String text = newMessagePage.getHtmlElementById("text").getTextContent();
-        assertThat(text).isEqualTo("In case you didn't know, Spring Rocks!");
-    }
 }
