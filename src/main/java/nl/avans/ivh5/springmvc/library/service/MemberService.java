@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +27,6 @@ public class MemberService {
     }
 
     /**
-     * Haal een lijst van Members en toon deze in een view.
-     * @param model
-     * @return
-     */
-    public List<Member> listMembers(Model model) {
-        logger.info("listMembers");
-        // Zet de opgevraagde members in het model
-        List<Member> result = memberRepository.findAll();
-        return result;
-    }
-
-    /**
      * Deze methode handelt een ingevuld formulier af. Als er fouten zijn opgetreden blijven we in dezelfde view.
      * Als er geen fouten waren maken we een nieuwe member en gaan we direct naar de list view voor het overzicht.
      * De nieuwe member moet dan in het overzicht staan.
@@ -48,7 +35,7 @@ public class MemberService {
      * @return
      */
     public Member create(Member member) {
-        logger.info("validateAndSaveMember - new member = " + member.getFullName());
+        logger.info("create - new member = " + member.getFullName());
 
         // Maak de member aan via de repository
         Member newMember = memberRepository.create(member);
@@ -60,7 +47,7 @@ public class MemberService {
      * @param id
      */
     public void delete(int id) {
-        logger.info("delete member, id = " + id);
+        logger.info("delete - member = " + id);
         this.memberRepository.deleteMemberById(id);
     }
 
@@ -71,7 +58,7 @@ public class MemberService {
      * @return
      */
     public Member findMemberById(int id) {
-        logger.info("findMemberById member, id = " + id);
+        logger.info("findMemberById - member = " + id);
         Member result = memberRepository.findMemberById(id);
         return result;
     }
@@ -82,7 +69,7 @@ public class MemberService {
      * @return
      */
     public ArrayList<Loan> findLoansByMemberId(int id){
-        logger.info("findLoansByMemberId id = " + id);
+        logger.info("findLoansByMemberId - member = " + id);
         return loanService.findLoansByMemberId(id);
     }
 
@@ -92,6 +79,9 @@ public class MemberService {
      *
      * @return
      */
-    public List<Member> findAllMembers() { return memberRepository.findAll(); }
+    public List<Member> findAllMembers() {
+        logger.info("findAllMembers");
+        return memberRepository.findAll();
+    }
 
 }

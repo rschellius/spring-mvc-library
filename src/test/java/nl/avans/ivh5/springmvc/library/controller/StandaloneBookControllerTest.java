@@ -4,6 +4,8 @@ import nl.avans.ivh5.springmvc.config.TestContext;
 import nl.avans.ivh5.springmvc.config.ApplicationContext;
 import nl.avans.ivh5.springmvc.library.service.BookService;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,11 @@ public class StandaloneBookControllerTest {
         Mockito.reset(bookServiceMock);
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Ignore
+    @Test
+    public void someTestCase_ThatTestsSomething_AndReturnsResult(){
+        // template to fill in
     }
 }

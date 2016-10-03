@@ -84,6 +84,7 @@ public class WebApplicationContextBookControllerTest {
         this.webClient.close();
     }
 
+    @Ignore
     @Test
     public void showBookDetails_ShouldCreateFormObjectAndRenderAddTodoForm() throws Exception {
 

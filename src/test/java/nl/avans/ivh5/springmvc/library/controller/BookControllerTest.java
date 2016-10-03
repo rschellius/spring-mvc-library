@@ -59,6 +59,7 @@ public class BookControllerTest {
         this.webClient.close();
     }
 
+    @Ignore
     @Test
     public void testExample() throws Exception {
         Long ean = 9789023457299L;
