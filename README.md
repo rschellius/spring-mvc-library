@@ -5,7 +5,9 @@ Forked from https://github.com/kolorobot/spring-boot-thymeleaf.
 
 About
 -------------
-This is a worked example of a library case that is used at Avans Hogeschool in Breda, Netherlands. It uses the following technologies:
+This is a worked example of a library case that is used at [Avans Hogeschool](http://www.avans.nl) in Breda, Netherlands. Some of the content in the app is in Dutch.
+
+It uses the following technologies:
 
 - Spring Boot MVC with Maven and Spring IO
 - Thymeleaf templating engine with Java 8 Time (Java8TimeDialect)
@@ -13,7 +15,9 @@ This is a worked example of a library case that is used at Avans Hogeschool in B
 - WebJars for css and js includes
 - MockMVC tests
 
-You can see a deployed demo version running at https://spring-mvc-library.herokuapp.com/.
+Demo
+--------------------
+You can see a deployed version running at [Heroku](https://spring-mvc-library.herokuapp.com/).
 
 Tests
 --------------------
@@ -56,5 +60,5 @@ Referenced articles:
 
 - [Java 8 Date & Time with Thymeleaf](http://blog.codeleak.pl/2015/11/how-to-java-8-date-time-with-thymeleaf.html)
 - [Spring Boot and Thymeleaf with Maven](http://blog.codeleak.pl/2014/04/how-to-spring-boot-and-thymeleaf-with-maven.html)
-- [Spring Boot Integration Testing with Selenium](http://blog.codeleak.pl/2015/03/spring-boot-integration-testing-with.html)
 - [Unit Testing of Spring MVC Controllers](https://www.petrikainulainen.net/programming/spring-framework/unit-testing-of-spring-mvc-controllers-configuration/) 
+- [Spring Boot Integration Testing with Selenium](http://blog.codeleak.pl/2015/03/spring-boot-integration-testing-with.html)
