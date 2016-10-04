@@ -65,6 +65,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @Ignore
     public void testExample() throws Exception {
         Long ean = 9789023457299L;
 

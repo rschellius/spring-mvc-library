@@ -60,6 +60,8 @@ public class MemberControllerTest {
                 .build();
         // Voorkom dat de test failt op JavaScript errors
         webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setJavaScriptEnabled(false);
     }
 
     @After

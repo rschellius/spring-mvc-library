@@ -72,6 +72,7 @@ public class HomeControllerTest {
 
     @Test
     public void verifiesHomePageLoads() throws Exception {
+        logger.info("---- verifiesHomePageLoads ----");
 
         Book book = new Book.Builder(1234L, "De Titel", "De Schrijver").build();
         ArrayList<Book> booksFoundOnHomePage = new ArrayList<>();
