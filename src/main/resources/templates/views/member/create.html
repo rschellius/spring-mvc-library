@@ -15,7 +15,7 @@
 
         <!-- Form om een nieuwe repository te maken. Het object 'repository' is het object waarin de
             waarden uit het formulier worden ingevuld. Het is afkomstig uit de MemberController. -->
-        <form action="#" th:action="@{/member/create}" th:object="${member}" method="post">
+        <form id="createMemberForm" action="#" th:action="@{/member/create}" th:object="${member}" method="post">
 
             <!-- Het formulier wordt na verzenden gevalideerd in de MemberController.
                 Als er fouten waren kun je hier een lijst met foutmeldingen tonen.

@@ -25,7 +25,7 @@ import java.util.Properties;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {
-        "package nl.avans.ivh5.springmvc",
+        "nl.avans.ivh5.springmvc"
 })
 @Import({PersistenceContext.class})
 @PropertySource("classpath:application.properties")

@@ -21,7 +21,7 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
  */
 @SpringBootApplication
 @EnableConfigurationProperties
-@ComponentScan(basePackages = { "package nl.avans.ivh5.springmvc",})
+@ComponentScan(basePackages = {"nl.avans.ivh5.springmvc"})
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);

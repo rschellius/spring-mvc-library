@@ -62,7 +62,7 @@ public class BookController {
         // Zet de opgevraagde boeken in het model
         model.addAttribute("books", books);
         // Open de juiste view template als resultaat.
-        return "views/repository/list";
+        return "views/book/list";
     }
 
     /**

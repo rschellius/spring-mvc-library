@@ -1,43 +1,90 @@
 package nl.avans.ivh5.springmvc.library.controller;
 
-import nl.avans.ivh5.springmvc.library.selenium.SeleniumTest;
-import nl.avans.ivh5.springmvc.library.selenium.support.HomePage;
+import nl.avans.ivh5.springmvc.library.model.Book;
+import nl.avans.ivh5.springmvc.library.repository.BookRepository;
+import nl.avans.ivh5.springmvc.library.repository.CopyRepository;
+import nl.avans.ivh5.springmvc.library.repository.LoanRepository;
+import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
+import org.mockito.Mock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.context.WebApplicationContext;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SeleniumTest(driver = ChromeDriver.class, baseUrl = "http://localhost:8080")
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+
+@RunWith(SpringRunner.class)
+@SpringBootConfiguration
+@ContextConfiguration
+@SpringBootTest
 public class HomeControllerTest {
 
-    @Autowired
-    private WebDriver driver;
+    private static final Logger logger = LoggerFactory.getLogger(HomeControllerTest.class);
 
-    private HomePage homePage;
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
+    @Mock
+    BookRepository bookRepository;
+
+    @Mock
+    CopyRepository copyRepository;
+
+    @Mock
+    LoanRepository loanRepository;
 
     @Before
-    public void setUp() throws Exception {
-        homePage = PageFactory.initElements(driver, HomePage.class);
+    public void setup() {
+
+        logger.info("---- Setup ----");
+
+        bookRepository = mock(BookRepository.class);
+        loanRepository = mock(LoanRepository.class);
+        copyRepository = mock(CopyRepository.class);
+
+        mockMvc = standaloneSetup(new HomeController(copyRepository, bookRepository, loanRepository))
+                .build();
+    }
+
+    @After
+    public void tearDown(){
+        logger.info("---- tearDown ----");
     }
 
     @Test
-    @Ignore
-    public void containsActuatorLinks() {
-        homePage.assertThat()
-                .hasActuatorLink("autoconfig", "beans", "configprops", "dump", "env", "health", "info", "metrics", "mappings", "trace")
-                .hasNoActuatorLink("shutdown");
-    }
+    public void verifiesHomePageLoads() throws Exception {
 
-    @Test
-    @Ignore
-    public void failingTest() {
-        homePage.assertThat()
-                .hasNoActuatorLink("autoconfig");
+        Book book = new Book.Builder(1234L, "De Titel", "De Schrijver").build();
+        ArrayList<Book> booksFoundOnHomePage = new ArrayList<>();
+        booksFoundOnHomePage.add(book);
+        when(bookRepository.findAll()).thenReturn(booksFoundOnHomePage);
+
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("classActiveHome", Matchers.is("active")))
+                .andExpect(model().attributeExists("books"))
+                .andExpect(model().attribute("books", Matchers.hasSize(1)))
+                .andExpect(view().name("views/home/index"));
     }
 }
