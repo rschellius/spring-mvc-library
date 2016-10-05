@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static nl.avans.ivh5.springmvc.config.TestContext.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -87,19 +88,19 @@ public class MemberControllerIntegrationTest {
         HtmlForm form = page.getHtmlElementById("createMemberForm");
 
         HtmlTextInput inputFirstName = page.getHtmlElementById("firstname");
-        inputFirstName.setValueAttribute("Voornaam");
+        inputFirstName.setValueAttribute(MEMBER_FIRSTNAME);
         HtmlTextInput inputlastName = page.getHtmlElementById("lastname");
-        inputlastName.setValueAttribute("Achternaam");
+        inputlastName.setValueAttribute(MEMBER_LASTNAME);
         HtmlTextInput inputStreet = page.getHtmlElementById("street");
-        inputStreet.setValueAttribute("Straatnaam");
+        inputStreet.setValueAttribute(MEMBER_STREET);
         HtmlTextInput inputHousenumber = page.getHtmlElementById("housenumber");
-        inputHousenumber.setValueAttribute("45");
+        inputHousenumber.setValueAttribute(MEMBER_HOUSENUMBER);
         HtmlTextInput inputCity = page.getHtmlElementById("city");
-        inputCity.setValueAttribute("Stadnaam");
+        inputCity.setValueAttribute(MEMBER_STREET);
         HtmlTextInput inputPhone = page.getHtmlElementById("phone");
-        inputPhone.setValueAttribute("1234154314325");
+        inputPhone.setValueAttribute(MEMBER_PHONENUMBER);
         HtmlTextInput inputEmail = page.getHtmlElementById("email");
-        inputEmail.setValueAttribute("test@test.com");
+        inputEmail.setValueAttribute(MEMBER_EMAILADDRESS_VALID);
 
         HtmlButton submit =
                 form.getOneHtmlElementByAttribute("button", "type", "submit");
@@ -120,7 +121,7 @@ public class MemberControllerIntegrationTest {
         HtmlPage newPage = submit.click();
 
         logger.debug("---- Status = " + newPage.getWebResponse().getStatusMessage());
-        logger.debug("---- Body = \n" + newPage.getWebResponse().getContentAsString());
+        // logger.debug("---- Body = \n" + newPage.getWebResponse().getContentAsString());
 
         // Hier moeten we nu testen dat de Member die we gemaakt hebben,
         // ook daadwerkelijk door de MemberService is ontvangen.

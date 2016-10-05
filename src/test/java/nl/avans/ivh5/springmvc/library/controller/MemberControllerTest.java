@@ -89,13 +89,13 @@ public class MemberControllerTest {
                 //
                 // Deze params zijn de case sensitive attributen van de (in dit geval) Member class.
                 //
-                .param("firstName", "Voornaam")
-                .param("lastName", "Achternaam")
-                .param("street", "Straatnaam")
-                .param("houseNumber", "123")
-                .param("city", "Naam van de stad")
-                .param("phoneNumber", "06-12345678")
-                .param("emailAddress", "invalid_email_nl")        // Invalid emailAddress
+                .param("firstName", TestContext.MEMBER_FIRSTNAME)
+                .param("lastName", TestContext.MEMBER_LASTNAME)
+                .param("street", TestContext.MEMBER_STREET)
+                .param("houseNumber", TestContext.MEMBER_HOUSENUMBER)
+                .param("city", TestContext.MEMBER_CITY)
+                .param("phoneNumber", TestContext.MEMBER_PHONENUMBER)
+                .param("emailAddress", TestContext.MEMBER_EMAILADDRESS_INVALID)
                 .sessionAttr("member", new Member())
         )
                 .andDo(print())
@@ -105,7 +105,7 @@ public class MemberControllerTest {
                 // Attributen hieronder zijn de namen van de inputvelden van het formulier.
                 //
                 .andExpect(model().attributeHasFieldErrors("member", "emailAddress"))
-                .andExpect(model().attribute("member", hasProperty("emailAddress", equalTo("invalid_email_nl"))))
+                .andExpect(model().attribute("member", hasProperty("emailAddress", equalTo(TestContext.MEMBER_EMAILADDRESS_INVALID))))
                 // Deze foutmelding is gezet in Member.java. Kun je aanpassen via string vanuit properties file.
                 .andExpect(content().string(containsString("{invalid.email}")));
     }
@@ -118,13 +118,13 @@ public class MemberControllerTest {
                 //
                 // Deze params zijn de case sensitive attributen van de (in dit geval) Member class.
                 //
-                .param("firstName", "Voornaam")
-                .param("lastName", "Achternaam")
-                .param("street", "Straatnaam")
-                .param("houseNumber", "123")
-                .param("city", "Naam van de stad")
-                .param("phoneNumber", "06-12345678")
-                .param("emailAddress", "valid@email.nl")
+                .param("firstName", TestContext.MEMBER_FIRSTNAME)
+                .param("lastName", TestContext.MEMBER_LASTNAME)
+                .param("street", TestContext.MEMBER_STREET)
+                .param("houseNumber", TestContext.MEMBER_HOUSENUMBER)
+                .param("city", TestContext.MEMBER_CITY)
+                .param("phoneNumber", TestContext.MEMBER_PHONENUMBER)
+                .param("emailAddress", TestContext.MEMBER_EMAILADDRESS_VALID)
                 .sessionAttr("member", new Member())
         )
                 .andDo(print())
