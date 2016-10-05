@@ -78,21 +78,26 @@ public class MemberController {
      */
     @RequestMapping(value="/member/create", method = RequestMethod.POST)
     public String validateAndSaveMember(@Valid Member member, final BindingResult bindingResult, final ModelMap model) {
-        logger.debug("validateAndSaveMember - new member = " + member.getFullName());
+        logger.debug("validateAndSaveMember - adding member = " + member.getFullName());
 
         if (bindingResult.hasErrors()) {
             // Als er velden in het formulier zijn die niet correct waren ingevuld vinden we die hier.
             // We blijven dan op dezelfde pagina. De foutmeldingen worden daar getoond
             // (zie het create.html bestand.
-            logger.debug("validateAndSaveMember - bindingResult.hasErrors");
+            logger.debug("validateAndSaveMember - not added, bindingResult.hasErrors");
             return "views/member/create";
         }
         // Maak de member aan via de member
         Member newMember = memberService.create(member);
+        if(newMember != null) {
+            model.addAttribute("info", "Member '" + newMember.getFirstName() + " " + newMember.getLastName() + "' is toegevoegd.");
+        } else {
+            logger.error("Member kon niet gemaakt worden.");
+            model.addAttribute("info", "Member kon niet gemaakt worden.");
+        }
         // We gaan de lijst met members tonen, met een bericht dat de nieuwe member toegevoegd is.
         // Zet de opgevraagde members in het model
         model.addAttribute("members", memberService.findAllMembers());
-        model.addAttribute("info", "Member '" + newMember.getFullName() + "' is toegevoegd.");
         // Open de juiste view template als resultaat.
         return "views/member/list";
     }

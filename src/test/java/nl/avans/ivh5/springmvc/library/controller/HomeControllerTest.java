@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,12 +19,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -37,9 +36,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class HomeControllerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeControllerTest.class);
-
-    @Autowired
-    private WebApplicationContext wac;
 
     private MockMvc mockMvc;
 
@@ -77,15 +73,18 @@ public class HomeControllerTest {
         Book book = new Book.Builder(1234L, "De Titel", "De Schrijver").build();
         ArrayList<Book> booksFoundOnHomePage = new ArrayList<>();
         booksFoundOnHomePage.add(book);
+        booksFoundOnHomePage.add(book);
+        booksFoundOnHomePage.add(book);
         when(bookRepository.findAll()).thenReturn(booksFoundOnHomePage);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/"))
+                .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("classActiveHome", Matchers.is("active")))
                 .andExpect(model().attributeExists("books"))
-                .andExpect(model().attribute("books", Matchers.hasSize(1)))
+                .andExpect(model().attribute("books", Matchers.hasSize(3)))
                 .andExpect(view().name("views/home/index"));
     }
 }

@@ -1,10 +1,5 @@
 package nl.avans.ivh5.springmvc.library.controller;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import nl.avans.ivh5.springmvc.config.ApplicationContext;
 import nl.avans.ivh5.springmvc.config.TestContext;
 import nl.avans.ivh5.springmvc.library.model.Member;
@@ -17,18 +12,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  *
@@ -44,7 +42,7 @@ public class MemberControllerTest {
     @Autowired
     WebApplicationContext context;
 
-    WebClient webClient;
+    MockMvc mockMvc;
 
     @MockBean
     private MemberService memberService;
@@ -54,69 +52,84 @@ public class MemberControllerTest {
     public void setup() {
         logger.info("---- setUp ----");
 
-        webClient = MockMvcWebClientBuilder
+        mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .contextPath("")
                 .build();
-        // Voorkom dat de test failt op JavaScript errors
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setCssEnabled(false);
-        webClient.getOptions().setJavaScriptEnabled(false);
     }
 
     @After
     public void tearDown() {
         logger.info("---- tearDown ----");
-        this.webClient.close();
     }
 
     @Test
-    public void testCreateMemberPage() throws Exception {
+    public void PostEmptyForm() throws Exception {
 
-        HtmlPage page = this.webClient.getPage("http://localhost:8080/member/create");
+        logger.info("---- PostEmptyForm ----");
 
-        HtmlForm form = page.getHtmlElementById("createMemberForm");
-
-        HtmlTextInput inputFirstName = page.getHtmlElementById("firstname");
-        inputFirstName.setValueAttribute("Voornaam");
-        HtmlTextInput inputlastName = page.getHtmlElementById("firstname");
-        inputlastName.setValueAttribute("Achternaam");
-        HtmlTextInput inputStreet = page.getHtmlElementById("street");
-        inputStreet.setValueAttribute("Straatnaam");
-        HtmlTextInput inputHousenumber = page.getHtmlElementById("housenumber");
-        inputHousenumber.setValueAttribute("45");
-        HtmlTextInput inputCity = page.getHtmlElementById("city");
-        inputCity.setValueAttribute("Stadnaam");
-        HtmlTextInput inputPhone = page.getHtmlElementById("phone");
-        inputPhone.setValueAttribute("1234154314325");
-        HtmlTextInput inputEmail = page.getHtmlElementById("email");
-        inputEmail.setValueAttribute("test@test.com");
-
-        HtmlButton submit =
-                form.getOneHtmlElementByAttribute("button", "type", "submit");
-
-        Member newMember = new Member();
-        newMember.setFirstName("test");
-        MemberService memberService = mock(MemberService.class);
-        when(memberService.create(anyObject())).thenReturn(newMember);
-
-        HtmlPage newPage = submit.click();
-
-
-        // Hier moeten we nu testen dat de Member die we gemaakt hebben,
-        // ook daadwerkelijk door de MemberService is ontvangen.
-
-        // ToDo!
-
-
+        mockMvc.perform(post("/member/create")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .sessionAttr("member", new Member())
+        )
+                // Ondanks dat de VALIDATIE failt kan de HTML pagina wel gevonden worden = HTTP 200
+                .andExpect(status().isOk())
+                .andExpect(view().name("views/member/create"))
+                // Attributen hieronder zijn de attributen van de Member class.
+                .andExpect(model().attributeHasFieldErrors("member", "firstName"))
+                .andExpect(model().attributeHasFieldErrors("member", "lastName"))
+                .andExpect(model().attribute("member", hasProperty("firstName", isEmptyOrNullString())))
+                .andExpect(model().attribute("member", hasProperty("emailAddress", isEmptyOrNullString())));
     }
 
     @Test
-    public void showBookPage() throws IOException {
-        // Load the page
-        HtmlPage bookPage = webClient.getPage("http://localhost:8080/book");
+    public void EmailInvalid() throws Exception {
 
-        assertThat(bookPage.getTitleText()).isEqualTo("Avans Bieb");
+        mockMvc.perform(post("/member/create")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                //
+                // Deze params zijn de case sensitive attributen van de (in dit geval) Member class.
+                //
+                .param("firstName", "Voornaam")
+                .param("lastName", "Achternaam")
+                .param("street", "Straatnaam")
+                .param("houseNumber", "123")
+                .param("city", "Naam van de stad")
+                .param("phoneNumber", "06-12345678")
+                .param("emailAddress", "invalid_email_nl")        // Invalid emailAddress
+                .sessionAttr("member", new Member())
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("views/member/create"))
+                //
+                // Attributen hieronder zijn de namen van de inputvelden van het formulier.
+                //
+                .andExpect(model().attributeHasFieldErrors("member", "emailAddress"))
+                .andExpect(model().attribute("member", hasProperty("emailAddress", equalTo("invalid_email_nl"))))
+                // Deze foutmelding is gezet in Member.java. Kun je aanpassen via string vanuit properties file.
+                .andExpect(content().string(containsString("{invalid.email}")));
+    }
+
+    @Test
+    public void SuccessfullyCreateMember() throws Exception {
+
+        mockMvc.perform(post("/member/create")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                //
+                // Deze params zijn de case sensitive attributen van de (in dit geval) Member class.
+                //
+                .param("firstName", "Voornaam")
+                .param("lastName", "Achternaam")
+                .param("street", "Straatnaam")
+                .param("houseNumber", "123")
+                .param("city", "Naam van de stad")
+                .param("phoneNumber", "06-12345678")
+                .param("emailAddress", "valid@email.nl")
+                .sessionAttr("member", new Member())
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors());
     }
 
 }

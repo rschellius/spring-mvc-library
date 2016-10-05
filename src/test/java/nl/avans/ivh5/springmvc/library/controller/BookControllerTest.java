@@ -4,12 +4,19 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import nl.avans.ivh5.springmvc.config.ApplicationContext;
 import nl.avans.ivh5.springmvc.config.TestContext;
+import nl.avans.ivh5.springmvc.library.model.Book;
+import nl.avans.ivh5.springmvc.library.model.Copy;
+import nl.avans.ivh5.springmvc.library.model.Member;
 import nl.avans.ivh5.springmvc.library.service.BookService;
+import nl.avans.ivh5.springmvc.library.service.CopyService;
+import nl.avans.ivh5.springmvc.library.service.MemberService;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +28,13 @@ import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -45,12 +55,24 @@ public class BookControllerTest {
     @MockBean
     private BookService bookService;
 
+    @Mock
+    private CopyService copyService;
+
+    @Mock
+    private MemberService memberService;
+
+    @Mock
+    ArrayList<Copy> copies;
+
+    final private String BOOK_TITLE = "A Long Dummy Titel of this book";
+    final private String BOOK_AUTHOR = "Dummy Author";
+    final private Long BOOK_EAN = 12345L;
 
     @Before
     public void setup() {
         logger.info("---- setUp ----");
 
-        initMocks(this);
+        MockitoAnnotations.initMocks(this);
 
         webClient = MockMvcWebClientBuilder
                 .webAppContextSetup(context)
@@ -65,23 +87,40 @@ public class BookControllerTest {
     }
 
     @Test
-    @Ignore
-    public void testExample() throws Exception {
-        Long ean = 9789023457299L;
+    public void testFindBookById_SuccessfullyFindsBook() throws IOException {
+        logger.info("---- testFindBookById_SuccessfullyFindsBook ----");
 
-        given(this.bookService.findByEAN(ean).getTitle()).willReturn("Bonita Avenue");
-        HtmlPage page = this.webClient.getPage("http://localhost:8080/book/9789023457299");
-        assertThat(page.getTitleText()).isEqualTo("Bonita Avenue");
-    }
+        // Het boek dat we gaan vinden
+        Book book = new Book.Builder(BOOK_EAN, BOOK_TITLE, BOOK_AUTHOR).build();
+        when(bookService.findByEAN(anyLong())).thenReturn(book);
 
-    @Ignore
-    @Test
-    public void showBookPage() throws IOException {
-        // Load the Create Message Form
-        HtmlPage bookPage = webClient.getPage("http://localhost:8080/book");
+        Member dummyMember = new Member();
+        List<Member> members = new ArrayList<>();
+        members.add(dummyMember);
+        members.add(dummyMember);
+        members.add(dummyMember);
+        members.add(dummyMember);
+        when(memberService.findAllMembers()).thenReturn(members);
+
+        Copy dummyCopy = mock(Copy.class);
+        copies.add(dummyCopy);
+//        when(copyService.findLendingInfoByBookEAN(anyLong())).thenReturn(copies);
+        when(copies.size()).thenReturn(1);
+
+
+        List<Copy> spyCopies = Mockito.spy(new ArrayList<Copy>());
+        spyCopies.add(dummyCopy);
+        spyCopies.add(dummyCopy);
+        logger.info("copies size = " + spyCopies.size());
+
+        when(copyService.findLendingInfoByBookEAN(anyLong())).thenReturn(spyCopies);
+        Mockito.doReturn(100).when(spyCopies).size();
+
+        // Load the /book/id page
+        HtmlPage bookPage = webClient.getPage("http://localhost:8080/book/" + BOOK_EAN);
 
         // verify we successfully created a message and displayed the newly create message
-        assertThat(bookPage.getUrl().toString()).endsWith("/book/9789023457299");
+        assertThat(bookPage.getUrl().toString()).endsWith("/book/" + BOOK_EAN);
         assertThat(bookPage.getTitleText()).isEqualTo("Avans Bieb");
     }
 
