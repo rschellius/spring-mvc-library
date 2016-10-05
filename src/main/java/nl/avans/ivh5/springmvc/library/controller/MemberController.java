@@ -103,11 +103,11 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/member/{id}", method = RequestMethod.DELETE)
-    public String deleteMember(Model model, @PathVariable int id) {
+    public String deleteMember(Model model, @PathVariable String id) {
         logger.debug("deleteMember, id = " + id);
 
         // Delete de member aan via de member
-        memberService.delete(id);
+        memberService.delete(Integer.parseInt(id));
         // We gaan de lijst met members tonen, met een bericht dat de nieuwe member toegevoegd is.
         // Zet de opgevraagde members in het model
         model.addAttribute("members", memberService.findAllMembers());

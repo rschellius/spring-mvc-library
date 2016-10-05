@@ -100,7 +100,7 @@
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <div class="modal-summary">
+                <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -108,14 +108,14 @@
                         <h4 class="modal-title" id="myModalLabel">Member verwijderen</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Weet je zeker dat je deze member wilt verwijderen?</p>
+                        <p>Weet je zeker dat je <span th:text="${member.firstName} + ' ' + ${member.lastName}">deze member</span> wilt verwijderen?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Nee, annuleer</button>
-                        <!--
-                            We willen hier een HTTP DELETE bericht sturen ... Nog uitzoeken hoe. JavaScript AJAX wsch.
-                        -->
-                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Ja, verwijder</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nee, annuleer</button>
+                        <button type="button" class="btn btn-primary" th:onclick="'alert(\'' + ${member.memberID} + '\');'">Ja, verwijder</button>
+                        <button type="button" class="btn btn-primary" th:onclick="'javascript:sendAjaxDeleteRequest(\'' + ${member.memberID} + '\');'">Ja, verwijder</button>
+
+                        <!--  -->
                     </div>
                 </div>
             </div>
@@ -129,10 +129,14 @@
     <script>
         function sendAjaxDeleteRequest(id) {
             $.ajax({
-                url: '/member/id',
+                url: '/member/' + id,
                 type: 'DELETE',
                 success: function(result) {
-                    // Do something with the result
+                    // Go to the list of members
+                    location.href = "/member"
+                },
+                error: function(result) {
+                    alert('Error: kon deze persoon niet verwijderen.');
                 }
             });
          }
