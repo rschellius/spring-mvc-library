@@ -5,6 +5,12 @@
 --
 
 -- --------------------------------------------------------
+-- 
+-- Om een export te maken van een database naar het bestand 'databasedump.sql', vanaf de commandline:
+-- 
+-- \xampp\mysql\bin\mysqldump.exe --host=104.155.74.161 --extended-insert=FALSE -p --password=test --user=spring --databases library > databasedump.sql
+-- 
+-- 
 
 DROP SCHEMA IF EXISTS `library` ;
 CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
