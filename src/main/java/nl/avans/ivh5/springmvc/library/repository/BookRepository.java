@@ -51,11 +51,16 @@ public class BookRepository implements BookRepositoryIF {
     }
 
     @Transactional(readOnly=true)
-    public List<Book> findById(Long id) {
-        logger.info("findById " + id);
-        return jdbcTemplate.query(
+    public List<Book> findByEAN(Long id) {
+        logger.info("findByEAN ean = " + id);
+
+        List<Book> result = jdbcTemplate.query(
                 "SELECT * FROM view_all_books WHERE ISBN=?",
                 new Object[]{id}, new BookRowMapper());
+        if(result == null || 0 == result.size()) {
+            logger.info("findByEAN returns no results");
+        }
+        return result;
     }
 
     /**

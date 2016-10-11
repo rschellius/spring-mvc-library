@@ -2,6 +2,7 @@ package nl.avans.ivh5.springmvc.library.controller;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
 import nl.avans.ivh5.springmvc.config.ApplicationContext;
 import nl.avans.ivh5.springmvc.config.TestContext;
 import nl.avans.ivh5.springmvc.library.model.Book;
@@ -92,7 +93,11 @@ public class BookControllerTest {
 
         // Het boek dat we gaan vinden
         Book book = new Book.Builder(BOOK_EAN, BOOK_TITLE, BOOK_AUTHOR).build();
-        when(bookService.findByEAN(anyLong())).thenReturn(book);
+        try {
+            when(bookService.findByEAN(anyLong())).thenReturn(book);
+        } catch (BookNotFoundException ex){
+            logger.error(ex.getMessage());
+        }
 
         Member dummyMember = new Member();
         List<Member> members = new ArrayList<>();

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
 import nl.avans.ivh5.springmvc.library.model.Book;
 import nl.avans.ivh5.springmvc.library.service.BookServiceIF;
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ public class ApiBookController {
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Not Found"),
         @ApiResponse(code = 500, message = "Failure")})
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", headers = "Accept=application/json", method = RequestMethod.GET)
     public List<Book> findAllBooks() {
         log.debug("findAllBooks called");
 
@@ -73,22 +74,22 @@ public class ApiBookController {
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @RequestMapping(value = "/{ean}", method = RequestMethod.GET)
-    public Book findByEAN(@ApiParam(name = "ean", value = "European Article Number", required = true) @PathVariable Long ean) throws Exception{
+    @RequestMapping(value = "/{ean}", headers = "Accept=application/json", method = RequestMethod.GET)
+    public Book findByEAN(@ApiParam(name = "ean", value = "European Article Number", required = true) @PathVariable Long ean)
+            throws BookNotFoundException {
         log.debug("findByEAN ean = " + ean);
 
         Book book;
 
         try{
-         book = bookService.findByEAN(ean);
+            book = bookService.findByEAN(ean);
+            return book;
         } catch(Exception ex) {
             // Deze exception wordt afgehandeld door de RestResponseEntityExceptionHandler
             // Zie ook http://www.baeldung.com/2013/01/31/exception-handling-for-rest-with-spring-3-2/
-            // Eigenlijk zou je hier BookNotFoundException willen throwen - moet je zelf maken.
-            log.error("findById did not find ean");
-            throw new Exception("A book with ean = " + ean + " was not found!");
+            log.error("findByEAN did not find ean");
+            throw new BookNotFoundException("A book with ean = " + ean + " was not found!");
         }
-        return book;
     }
 
 }

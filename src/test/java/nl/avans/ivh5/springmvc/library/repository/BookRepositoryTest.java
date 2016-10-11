@@ -111,7 +111,7 @@ public class BookRepositoryTest {
 
         BookRepository bookRepository = new BookRepository(appContext.getBean(DriverManagerDataSource.class));
         // bookRepository.setDataSource(mockDataSource);
-        List<Book> result = bookRepository.findById(ean);
+        List<Book> result = bookRepository.findByEAN(ean);
 
         Assert.assertEquals(result, books);
     }
@@ -134,7 +134,7 @@ public class BookRepositoryTest {
 
         try {
             BookRepository bookRepository = new BookRepository(appContext.getBean(DriverManagerDataSource.class));
-            List<Book> result = bookRepository.findById(ean);
+            List<Book> result = bookRepository.findByEAN(ean);
         } catch (DataAccessException ex) {
             logger.info("---- Exception as expexted ----");
 //            //verify and assert

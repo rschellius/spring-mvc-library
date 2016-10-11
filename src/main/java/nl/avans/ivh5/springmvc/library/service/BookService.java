@@ -1,5 +1,6 @@
 package nl.avans.ivh5.springmvc.library.service;
 
+import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
 import nl.avans.ivh5.springmvc.library.model.Book;
 import nl.avans.ivh5.springmvc.library.model.Copy;
 import nl.avans.ivh5.springmvc.library.model.Loan;
@@ -101,19 +102,19 @@ public class BookService implements BookServiceIF {
      * @param ean ID of the book
      * @return The book we found
      */
-    public Book findByEAN(Long ean) {
+    public Book findByEAN(Long ean) throws BookNotFoundException {
         logger.info("findByEAN ean = " + ean);
 
         Book book = null;
         // We krijgen een lijst met boeken terug, maar we verwachten slechts 1 exemplaar.
-        List<Book> books = bookRepositoryIF.findById(ean);
-        if(books == null){
-            logger.error("findByEAN books = null!");
-        } else if(books != null && books.size() > 0){
+        List<Book> books = bookRepositoryIF.findByEAN(ean);
+        if(books == null || 0 == books.size()) {
+            throw new BookNotFoundException("Exception!");
+        } else {
             book = books.get(0);
             logger.info("findByEAN ean found " + book.getEAN());
+            return book;
         }
-        return book;
     }
 
     /**

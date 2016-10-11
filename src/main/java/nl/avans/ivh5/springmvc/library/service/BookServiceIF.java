@@ -1,5 +1,6 @@
 package nl.avans.ivh5.springmvc.library.service;
 
+import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
 import nl.avans.ivh5.springmvc.library.model.Book;
 import nl.avans.ivh5.springmvc.library.model.Copy;
 import nl.avans.ivh5.springmvc.library.model.Loan;
@@ -17,7 +18,7 @@ public interface BookServiceIF {
 
     public ArrayList<Book> listBooksAtRESTServer();
     public List<Book> findAll();
-    public Book findByEAN(Long ean);
+    public Book findByEAN(Long ean) throws BookNotFoundException;
     public Book create(final Book book);
     public Loan lendBook(Loan loan);
     public List<Member> findAllMembers();

@@ -11,7 +11,7 @@ public interface BookRepositoryIF {
 
     public List<Book> findAll();
 
-    public List<Book> findById(Long id);
+    public List<Book> findByEAN(Long id);
 
     public Book create(final Book book);
 }

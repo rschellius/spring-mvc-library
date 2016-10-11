@@ -1,4 +1,4 @@
-package nl.avans.ivh5.springmvc.library.exception;
+package nl.avans.ivh5.springmvc.common.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

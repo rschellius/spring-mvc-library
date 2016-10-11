@@ -1,5 +1,6 @@
 package nl.avans.ivh5.springmvc.springmvc.book;
 
+import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
 import nl.avans.ivh5.springmvc.library.model.Book;
 import nl.avans.ivh5.springmvc.library.repository.BookRepository;
 import nl.avans.ivh5.springmvc.library.service.BookService;
@@ -79,7 +80,7 @@ public class BookServiceTest {
         // We geven hier dus aan welke waarde we in de mock retourneren. De methode die daarvoor
         // gestubt moet worden is findById, omdat die in de BookService gebruikt wordt.
         // Wat je retourneert in thenReturn moet voldoen aan het datatype dat findById.
-        when(bookRepositoryMock.findById(anyLong())).thenReturn(bookArrayList);
+        when(bookRepositoryMock.findByEAN(anyLong())).thenReturn(bookArrayList);
     }
 
     @After
@@ -107,11 +108,17 @@ public class BookServiceTest {
         // Roep de methode die we willen testen op de echte service aan.
         // Het resultaat dat terug komt, komt uit onze gemockte repo's, maar gaat wel via de Service.
         // Dat resultaat kunnen we daarna dus valideren. Zo weten we dat de service correct werkte.
-        Book result = bookServiceToTest.findByEAN(ean);
+        Book book = null;
+        try {
+            book = bookServiceToTest.findByEAN(ean);
+            logger.debug("getBookByEAN - " + book.toString());
+        } catch(BookNotFoundException ex){
+            logger.error(ex.getMessage());
+        }
 
         // Voor de service is het nu alsof deze gewoon zijn call tegen de repo's heeft gedaan.
         // Omdat de repositories gemockt zijn weten we wat er terug komt. Dat moeten we valideren.
-        assertEquals(result.getEAN(), ean);
+        assertEquals(book.getEAN(), ean);
 
 //        verify(bookServiceToTest.findByEAN(ean).getEAN()).equals(ean);
 
@@ -129,7 +136,7 @@ public class BookServiceTest {
         logger.info("---- testFindByNonExistingEAN ----");
 
         // Hier willen we dat de repository null gaat retourneren.
-        when(bookRepositoryMock.findById(anyLong())).thenReturn(null);
+        when(bookRepositoryMock.findByEAN(anyLong())).thenReturn(null);
 
         // Een nieuwe instantie van de BookService
         BookService bookServiceToTest = new BookService();
@@ -138,11 +145,17 @@ public class BookServiceTest {
         bookServiceToTest.setMemberService(memberServiceMock);
 
         // Zoek een boek dat niet bestaat. (de L geeft een Long aan)
-        Book result = bookServiceToTest.findByEAN(000L);
+        Book book = null;
+        try {
+            book = bookServiceToTest.findByEAN(ean);
+            logger.debug("getBookByEAN - " + book.toString());
+        } catch(BookNotFoundException ex){
+            logger.error(ex.getMessage());
+        }
 
         // Het resultaat moet hier null zijn. Met assert kun je checken of dat werkelijk zo is.
         // Als result niet null is volgt er een exception omdat de testcase dan feitelijk failt.
-        assertNull(result);
+        assertNull(book);
     }
 
 

@@ -1,5 +1,6 @@
 package nl.avans.ivh5.springmvc.library.controller;
 
+import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
 import nl.avans.ivh5.springmvc.library.model.Book;
 import nl.avans.ivh5.springmvc.library.model.Copy;
 import nl.avans.ivh5.springmvc.library.model.Loan;
@@ -75,8 +76,13 @@ public class BookController {
     @RequestMapping(value = "/book/{ean}", method = RequestMethod.GET)
     public String getBookByEAN(@PathVariable Long ean, final ModelMap model) {
 
-        Book book = bookService.findByEAN(ean);
-        logger.debug("getBookByEAN - " + book.toString());
+        Book book = null;
+        try {
+            book = bookService.findByEAN(ean);
+            logger.debug("getBookByEAN - " + book.toString());
+        } catch(BookNotFoundException ex){
+            logger.error(ex.getMessage());
+        }
         // Bij het lenen van een boek moet je in ons geval een repository selecteren.
         List<Member> members = bookService.findAllMembers();
         logger.debug("getBookByEAN - " + members.size() + " members found");
