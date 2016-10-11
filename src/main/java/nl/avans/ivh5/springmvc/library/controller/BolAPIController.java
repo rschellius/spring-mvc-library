@@ -60,7 +60,7 @@ public class BolAPIController {
         model.addAttribute("classActiveCatalogus","active");
         model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
-        return "views/controller/list";
+        return "views/bolcom/list";
     }
 
     /**
@@ -112,7 +112,7 @@ public class BolAPIController {
         model.addAttribute("classActiveCatalogus","active");
         model.addAttribute("classActiveBooks","active");
         // Open de juiste view template als resultaat.
-        return "views/controller/read";
+        return "views/bolcom/read";
     }
 
 }
