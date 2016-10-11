@@ -10,9 +10,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Deze controller handelt alle exceptions af voor het project. Je moet wel de specifieke
- * Exception afhandelen met een eigen method, zodat je een juiste foutmelding kunt geven.
- *
+ * Deze ExceptionHandler class is buiten gebruik gezet. De code werkt, maar exceptions
+ * worden prima afgevangen door de GlobalExceptionHander, voor zowel de MVC kant als
+ * de REST API.
+ * Wanneer je specifieke exceptions wilt handlen kan dat nog steeds volgens de
+ * structuur in deze class.
+ * 
  * Zie bv. http://www.baeldung.com/2013/01/31/exception-handling-for-rest-with-spring-3-2/
  */
 @ControllerAdvice
