@@ -77,8 +77,7 @@ public class HomeControllerTest {
         booksFoundOnHomePage.add(book);
         when(bookRepository.findAll()).thenReturn(booksFoundOnHomePage);
 
-        mockMvc
-                .perform(MockMvcRequestBuilders.get("/"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().hasNoErrors())

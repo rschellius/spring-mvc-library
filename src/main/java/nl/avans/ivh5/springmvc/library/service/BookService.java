@@ -23,7 +23,7 @@ import java.util.List;
  * Er zou dus nooit direct een aanroep mogen zijn vanuit een controller naar een DAO (Repository in ons geval).
  */
 @Service
-public class BookService {
+public class BookService implements BookServiceIF {
 
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
@@ -80,6 +80,18 @@ public class BookService {
             throw e;
         }
 
+        return books;
+    }
+
+    @Override
+    public List<Book> findAll() {
+        logger.info("findAll");
+
+        // We krijgen een lijst met boeken terug, maar we verwachten slechts 1 exemplaar.
+        List<Book> books = bookRepositoryIF.findAll();
+        if(books == null){
+            logger.error("findAll - books = null!");
+        }
         return books;
     }
 
