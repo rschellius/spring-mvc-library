@@ -2,8 +2,9 @@ package nl.avans.ivh5.springmvc.api.controller;
 
 import io.swagger.annotations.*;
 import nl.avans.ivh5.springmvc.common.exception.BookNotFoundException;
-import nl.avans.ivh5.springmvc.library.model.Book;
-import nl.avans.ivh5.springmvc.library.service.BookServiceIF;
+import nl.avans.ivh5.springmvc.common.exception.LoanNotCreatedException;
+import nl.avans.ivh5.springmvc.library.model.Loan;
+import nl.avans.ivh5.springmvc.library.service.LoanService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,48 +14,53 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 // Hier geef je de mapping die geldt voor alle endpoints in deze controller.
 // Wordt voor aan URL toegevoegd.
-@RequestMapping("/api/book")
-@Api(value = "api value", tags = {"Books"})
+@RequestMapping("/api/loan")
+@Api(value = "api value", tags = {"Loans"})
 @ApiModel(value = "Modelnaam", description = "Beschrijving van het model")
-public class ApiBookController {
+public class ApiLoanController {
 
-    private static final Logger log = LoggerFactory.getLogger(ApiBookController.class);
+    private static final Logger log = LoggerFactory.getLogger(ApiLoanController.class);
 
     @Autowired
-    private BookServiceIF bookService;
+    private LoanService loanService;
 
     /**
      * Constructor
      *
-     * @param bookService
+     * @param loanService
      */
-    public ApiBookController(BookServiceIF bookService){
-        this.bookService = bookService;
+    public ApiLoanController(LoanService loanService){
+        this.loanService = loanService;
     }
 
     /**
-     * Retourneer alle boeken in de repository.
+     *
      *
      * @return
      */
-    @ApiOperation(value = "Find all books", notes = "Find all books in the system and return them as a list.")
+    @ApiOperation(value = "Create loan", notes = "Create a new loan.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = ArrayList.class),
+        @ApiResponse(code = 200, message = "Success", response = Loan.class),
         @ApiResponse(code = 401, message = "Unauthorized"),
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Not Found"),
         @ApiResponse(code = 500, message = "Failure")})
-    @RequestMapping(value = "/", headers = "Accept=application/json", method = RequestMethod.GET)
-    public List<Book> findAllBooks() {
-        log.debug("findAllBooks called");
+    @RequestMapping(value = "/", headers = "Accept=application/json", method = RequestMethod.POST)
+    public Loan createLoan(Loan loan) throws LoanNotCreatedException {
+        log.debug("createLoan");
 
-        List<Book> books = bookService.findAll();
-        return books;
+        Loan result = null;
+        try {
+            result = loanService.createLoan(loan);
+        } catch (Exception ex) {
+            log.error("Exception in createLoan: " + ex.getMessage());
+            throw ex;
+        }
+        return result;
     }
 
     /**
@@ -63,31 +69,28 @@ public class ApiBookController {
      *
      * Start de app en ga daarvoor naar http://localhost:8090/swagger-ui.html
      *
-     * @param ean
+     * @param id
      * @return
      */
-    @ApiOperation(value = "Find by EAN", notes = "Find a book based on its EAN.")
+    @ApiOperation(value = "Find by member ID", notes = "Find loans by member ID")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Book.class),
+            @ApiResponse(code = 200, message = "Success", response = ArrayList.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")})
-    @RequestMapping(value = "/{ean}", headers = "Accept=application/json", method = RequestMethod.GET)
-    public Book findByEAN(@ApiParam(name = "ean", value = "European Article Number", required = true) @PathVariable Long ean)
+    @RequestMapping(value = "/{id}", headers = "Accept=application/json", method = RequestMethod.GET)
+    public ArrayList<Loan> findLoansByMemberId(@ApiParam(name = "ean", value = "European Article Number", required = true) @PathVariable int id)
             throws BookNotFoundException {
-        log.debug("findByEAN ean = " + ean);
-
-        Book book;
+        log.debug("findLoansByMemberId id = " + id);
 
         try{
-            book = bookService.findByEAN(ean);
-            return book;
+            return loanService.findLoansByMemberId(id);
         } catch(Exception ex) {
             // Deze exception wordt afgehandeld door de RestResponseEntityExceptionHandler
             // Zie ook http://www.baeldung.com/2013/01/31/exception-handling-for-rest-with-spring-3-2/
             log.error("findByEAN did not find ean");
-            throw new BookNotFoundException("A book with ean = " + ean + " was not found!");
+            throw new BookNotFoundException("No loans found for member with id = " + id);
         }
     }
 

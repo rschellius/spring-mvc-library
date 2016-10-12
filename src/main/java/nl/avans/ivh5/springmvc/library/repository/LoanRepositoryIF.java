@@ -13,7 +13,7 @@ public interface LoanRepositoryIF {
     public List<Loan> findAllByMemberId(int id);
     public List<Loan> findAllByBookEAN(Long ean);
     public Loan findLoanById(int id);
-    public Loan create(final Loan loan);
+    public Loan create(final Loan loan) throws Exception;
     public void finish(final Loan loan);
 
 }

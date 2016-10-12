@@ -1,5 +1,6 @@
 package nl.avans.ivh5.springmvc.library.service;
 
+import nl.avans.ivh5.springmvc.common.exception.LoanNotCreatedException;
 import nl.avans.ivh5.springmvc.library.model.Loan;
 import nl.avans.ivh5.springmvc.library.repository.LoanRepositoryIF;
 import org.slf4j.Logger;
@@ -36,9 +37,15 @@ public class LoanService {
      *
      * @return
      */
-    public Loan createLoan(Loan loan) {
+    public Loan createLoan(Loan loan) throws LoanNotCreatedException {
         logger.info("createLoan copyID = " + loan.getCopyID() + ", memberID " + loan.getMemberID());
-        Loan result = loanRepository.create(loan);
+        Loan result = null;
+        try {
+            result = loanRepository.create(loan);
+        } catch (Exception ex) {
+            logger.error("Exception in createLoan: " + ex.getMessage());
+            throw new LoanNotCreatedException("Could not create the selected loan.");
+        }
         return result;
     }
 

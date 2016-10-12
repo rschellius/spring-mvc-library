@@ -1,5 +1,6 @@
 package nl.avans.ivh5.springmvc.library.controller;
 
+import nl.avans.ivh5.springmvc.common.exception.LoanNotCreatedException;
 import nl.avans.ivh5.springmvc.library.model.Loan;
 import nl.avans.ivh5.springmvc.library.service.LoanService;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class LoanController {
      * @return
      */
     @RequestMapping(value = "/loan/create", method = RequestMethod.POST)
-    public String createLoan(Loan loan, final ModelMap model) {
+    public String createLoan(Loan loan, final ModelMap model) throws LoanNotCreatedException {
 
         logger.debug("createLoan copyID = " + loan.getCopyID() + ", memberID " + loan.getMemberID());
         Loan result = loanService.createLoan(loan);

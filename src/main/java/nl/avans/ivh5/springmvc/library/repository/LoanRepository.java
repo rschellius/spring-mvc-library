@@ -79,9 +79,9 @@ public class LoanRepository implements LoanRepositoryIF {
      * @param loan
      * @return
      */
-    public Loan create(final Loan loan) {
+    public Loan create(final Loan loan) throws Exception {
 
-        logger.debug("create exception copyID " + loan.getCopyID() + ", repository " + loan.getMemberID());
+        logger.debug("create - member = " + loan.getMemberID() + ", copyID = " + loan.getCopyID());
 
         final String sql = "INSERT INTO loan(`MemberID`, `CopyID`) VALUES(?,?)";
 
@@ -96,8 +96,6 @@ public class LoanRepository implements LoanRepositoryIF {
                 return ps;
             }
         }, holder);
-
-        // Zet de auto increment waarde in de Member
         return loan;
     }
 

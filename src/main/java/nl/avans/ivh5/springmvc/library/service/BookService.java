@@ -133,7 +133,13 @@ public class BookService implements BookServiceIF {
      * @return
      */
     public Loan lendBook(Loan loan){
-        return loanService.createLoan(loan);
+        Loan result = null;
+        try {
+            result = loanService.createLoan(loan);
+        } catch (Exception ex) {
+            logger.error("lendBook - Exception: " + ex.getMessage());
+        }
+        return result;
     }
 
     /**

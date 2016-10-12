@@ -1,5 +1,8 @@
 package nl.avans.ivh5.springmvc.library.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
@@ -26,6 +29,12 @@ public class Loan
         return loanID;
     }
 
+    //
+    // The JsonProperty and ApiModelProperty annotations set information in the Swagger documentation.
+    //
+    //
+    @JsonProperty(required = false)
+    @ApiModelProperty(notes = "The id of the loan", required = false)
     public void setLoanID(int loanID) {
         this.loanID = loanID;
     }
@@ -34,6 +43,8 @@ public class Loan
         return loanDate;
     }
 
+    @JsonProperty(required = false)
+    @ApiModelProperty(notes = "The date of the loan", required = false)
     public void setLoanDate(Date loanDate) {
         this.loanDate = loanDate;
     }
@@ -50,6 +61,8 @@ public class Loan
         return bookISBN;
     }
 
+    @JsonProperty(required = true)
+    @ApiModelProperty(notes = "The book ISBM (EAN)", required = true)
     public void setBookISBN(Long bookISBN) {
         this.bookISBN = bookISBN;
     }
@@ -58,6 +71,8 @@ public class Loan
         return bookTitle;
     }
 
+    @JsonProperty(required = false)
+    @ApiModelProperty(notes = "The book title", required = false)
     public void setBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
     }
@@ -66,6 +81,8 @@ public class Loan
         return bookAuthor;
     }
 
+    @JsonProperty(required = false)
+    @ApiModelProperty(notes = "The book author", required = false)
     public void setBookAuthor(String bookAuthor) {
         this.bookAuthor = bookAuthor;
     }
