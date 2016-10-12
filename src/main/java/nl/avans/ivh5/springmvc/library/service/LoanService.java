@@ -67,7 +67,7 @@ public class LoanService {
     public ArrayList<Loan> findLoansByMemberId(int id){
 
         logger.info("findAllByMemberId id = " + id);
-        List<Loan> resltList = loanRepository.findAllByMemberId(id);
-        return new ArrayList<Loan>(resltList);
+        List<Loan> resultList = loanRepository.findAllByMemberId(id);
+        return new ArrayList<Loan>(resultList);
     };
 }
