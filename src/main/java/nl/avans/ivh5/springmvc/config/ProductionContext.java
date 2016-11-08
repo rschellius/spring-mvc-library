@@ -29,9 +29,11 @@ import javax.sql.DataSource;
 public class ProductionContext {
 
     protected static final String PROPERTY_NAME_DATABASE_DRIVER = "com.mysql.jdbc.Driver";
-    protected static final String PROPERTY_NAME_DATABASE_PASSWORD = "_avans_spring_";
-    protected static final String PROPERTY_NAME_DATABASE_URL = "jdbc:mysql://104.155.74.161:3306/library";
-    protected static final String PROPERTY_NAME_DATABASE_USERNAME = "spring";
+    protected static final String PROPERTY_NAME_DATABASE_PASSWORD = "n89ycx4h4blk7afm";
+    protected static final String PROPERTY_NAME_DATABASE_NAME = "xeslug6htvoz15qh";
+    protected static final String PROPERTY_NAME_DATABASE_HOST = "hrr5mwqn9zs54rg4.chr7pe7iynqr.eu-west-1.rds.amazonaws.com";
+    protected static final String PROPERTY_NAME_DATABASE_USERNAME = "p155m510vos40pf6";
+    protected static final String PROPERTY_NAME_DATABASE_URL = "jdbc:mysql://" + PROPERTY_NAME_DATABASE_HOST + "/" + PROPERTY_NAME_DATABASE_NAME;
 
     @Resource
     private Environment environment;
