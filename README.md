@@ -57,6 +57,13 @@ To test the project run:
 
 > mvn clean compile test
 
+Production Environment
+--------------------
+
+To test your application running in a production environment, type
+
+> java -Dspring.profiles.active=production -jar target\spring-boot-thymeleaf-1.0.jar
+
 Referenced articles:
 --------------------
 
