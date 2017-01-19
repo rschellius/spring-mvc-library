@@ -1,7 +1,7 @@
 Avans Spring Library Worked Example
 ====================================
 
-Forked from https://github.com/kolorobot/spring-boot-thymeleaf.
+[![Build Status](https://travis-ci.org/rschellius/spring-mvc-library.svg?branch=master)](https://travis-ci.org/rschellius/spring-mvc-library)
 
 About
 -------------
