@@ -6,5 +6,5 @@ cache:
   directories:
     - $HOME/.m2
 install: true
-before_script: travis_wait 45 ./mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+before_script: ./mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script: ./mvn test
