@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 
 --
--- Database: `library`
+-- Database: `xeslug6htvoz15qh`
 --
 
 -- --------------------------------------------------------
@@ -12,9 +12,9 @@
 -- 
 -- 
 
-DROP SCHEMA IF EXISTS `library` ;
-CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
-USE `library` ;
+DROP SCHEMA IF EXISTS `xeslug6htvoz15qh` ;
+CREATE SCHEMA IF NOT EXISTS `xeslug6htvoz15qh` DEFAULT CHARACTER SET utf8;
+USE `xeslug6htvoz15qh` ;
 
 -- Prevents errors at Google Cloud SQL 
 SET sql_mode = '';
@@ -136,9 +136,9 @@ ALTER TABLE `reservation`
 --
 -- 	
 -- CREATE USER 'spring'@'%' IDENTIFIED BY '_avans_spring_';
-CREATE USER 'spring'@'localhost' IDENTIFIED BY 'test';
+-- CREATE USER 'spring'@'localhost' IDENTIFIED BY 'test';
 
-GRANT ALL ON `library`.* TO 'spring'@'localhost';
+-- GRANT ALL ON `xeslug6htvoz15qh`.* TO 'spring'@'localhost';
 
 -- -----------------------------------------------------
 -- 
