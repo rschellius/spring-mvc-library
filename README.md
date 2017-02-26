@@ -13,11 +13,12 @@ It uses the following technologies:
 - Thymeleaf templating engine with Java 8 Time
 - MySql database using plain old SQL queries, so without JPA/Hibernate.
 - WebJars for css and js includes
+- Swagger to describe the (minimal) REST API 
 - MockMVC tests
 
 Demo
 --------------------
-You can see a deployed version running at [Heroku](https://spring-mvc-library.herokuapp.com/). See [the textfile](https://github.com/rschellius/spring-mvc-library/blob/master/Heroku_cloud.txt) and the Procfile for more info. 
+You can see a deployed version running at [Heroku](https://spring-mvc-library.herokuapp.com/). See [the textfile](https://github.com/rschellius/spring-mvc-library/blob/master/Heroku_cloud.md) and the Procfile for more info. 
 
 ![screenprint of the application](https://github.com/rschellius/spring-mvc-library/blob/master/src/main/resources/static/img/screenprint.png)
 
