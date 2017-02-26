@@ -9,9 +9,9 @@ This is a worked example of a library case that is used at [Avans Hogeschool](ht
 
 It uses the following technologies:
 
-- Spring Boot MVC with Maven and Spring IO
-- Thymeleaf templating engine with Java 8 Time (Java8TimeDialect)
-- MySql database
+- Spring Boot MVC with Maven
+- Thymeleaf templating engine with Java 8 Time
+- MySql database using plain old SQL queries, so without JPA/Hibernate.
 - WebJars for css and js includes
 - MockMVC tests
 
@@ -30,9 +30,9 @@ Prerequisites
 -------------
 
 - JDK 8 and JAVA_HOME environment variable set
-- Maven installed
-- MySql database with library.sql script imported and running on local host
-- Importing the .sql script should provide a user 'spring' with pwd 'test' and access to 'library' database.
+- Maven installed and configured
+- MySql database with library.sql script imported and running on local host (when running the app locally)
+- Importing the .sql script should provide a user 'spring' with pwd 'test' and access to the 'library' database.
 
 Building the project
 --------------------
