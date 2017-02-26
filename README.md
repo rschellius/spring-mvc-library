@@ -15,6 +15,7 @@ It uses the following technologies:
 - WebJars for css and js includes
 - Swagger to describe the (minimal) REST API 
 - MockMVC tests
+- [Travis CI](http://https://travis-ci.org) for automatic test CI
 
 Demo
 --------------------
