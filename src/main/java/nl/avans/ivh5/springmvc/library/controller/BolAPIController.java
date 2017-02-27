@@ -1,4 +1,4 @@
-package nl.avans.ivh5.springmvc.springmvc.bolcom;
+package nl.avans.ivh5.springmvc.library.controller;
 
 import com.bol.api.openapi_4_0.*;
 import com.bol.openapi.OpenApiClient;

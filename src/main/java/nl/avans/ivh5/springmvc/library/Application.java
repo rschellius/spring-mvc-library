@@ -9,6 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 /**
@@ -33,6 +35,12 @@ public class Application {
         ctx.register(ProductionContext.class);
         ctx.register(SwaggerConfig.class);
 
+//        ctx.register(ApplicationProperties.class);
+//        ctx.register(BuildProperties.class);
+//        ctx.register(CommitProperties.class);
+//        ctx.register(GitProperties.class);
+//        ctx.register(WebProperties.class);
+
         SpringApplication.run(Application.class);
 
         // Je kunt Bean uit de Ctx Context opvragen. Soms is dat nodig om bv een nieuw
@@ -46,4 +54,21 @@ public class Application {
         return new Java8TimeDialect();
     }
 
+    /**
+     * Include GIT properties in our application.
+     * @see "http://www.baeldung.com/spring-git-information"
+     *
+     */
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+
+        PropertySourcesPlaceholderConfigurer propsConfig
+                = new PropertySourcesPlaceholderConfigurer();
+
+        propsConfig.setLocation(new ClassPathResource("git.properties"));
+        propsConfig.setIgnoreResourceNotFound(false);
+        propsConfig.setIgnoreUnresolvablePlaceholders(true);
+
+        return propsConfig;
+    }
 }

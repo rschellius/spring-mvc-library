@@ -4,18 +4,18 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.avans.ivh5.example.springmvc</groupId>
-    <artifactId>spring-boot-thymeleaf</artifactId>
-    <version>1.0</version>
-    <name>Avans Spring Library Example</name>
+    <artifactId>avans-spring-boot-library</artifactId>
+    <version>1.1.2</version>
+    <name>Avans Spring Library</name>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source> <!-- REQUIRED -->
-        <maven.compiler.target>1.8</maven.compiler.target> <!-- REQUIRED -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
-        <appengine.maven.plugin>0.1.2</appengine.maven.plugin>
+		<maven.compiler.source>1.8</maven.compiler.source> <!-- REQUIRED -->
+		<maven.compiler.target>1.8</maven.compiler.target> <!-- REQUIRED -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
+		<appengine.maven.plugin>0.1.2</appengine.maven.plugin>
         <git-commit-id-plugin.version>2.2.1</git-commit-id-plugin.version>
     </properties>
 
@@ -25,9 +25,9 @@
         <version>1.5.1.RELEASE</version>
     </parent>
 
-    <prerequisites>                       <!-- Optional, but suggested -->
-        <maven>3.3.9</maven>              <!-- Recommended minimum maven version -->
-    </prerequisites>
+	<prerequisites>                       <!-- Optional, but suggested -->
+		<maven>3.3.9</maven>              <!-- Recommended minimum maven version -->
+	</prerequisites>
 
     <dependencies>
         <dependency>
@@ -51,10 +51,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
@@ -110,11 +110,11 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.5.0</version>
-        </dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.5.0</version>
+		</dependency>
         <!--Swagger dependencies-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -147,10 +147,10 @@
             <version>2.23</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
@@ -170,21 +170,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
-
             <!-- Plugin to display Git version information in your Spring application -->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -232,6 +217,16 @@
                     <!--<abbrevLength>9</abbrevLength>-->
                     <!-- Formatting date - Java SimpleDateFormat options -->
                     <dateFormat>E dd M yyyy HH:mm z</dateFormat>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
         </plugins>
