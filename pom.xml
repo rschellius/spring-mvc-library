@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
         <appengine.maven.plugin>0.1.2</appengine.maven.plugin>
-        <git-commit-id-plugin.version>2.2.1</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>2.2.2</git-commit-id-plugin.version>
     </properties>
 
     <parent>
@@ -169,6 +169,18 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.html</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
