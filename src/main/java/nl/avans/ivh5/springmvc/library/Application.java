@@ -9,7 +9,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Description;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
@@ -35,18 +37,7 @@ public class Application {
         ctx.register(ProductionContext.class);
         ctx.register(SwaggerConfig.class);
 
-//        ctx.register(ApplicationProperties.class);
-//        ctx.register(BuildProperties.class);
-//        ctx.register(CommitProperties.class);
-//        ctx.register(GitProperties.class);
-//        ctx.register(WebProperties.class);
-
         SpringApplication.run(Application.class);
-
-        // Je kunt Bean uit de Ctx Context opvragen. Soms is dat nodig om bv een nieuw
-        // object te kunnen maken - bv bij XYZRepository.
-        // DriverManagerDataSource driverMgr = ctx.getBean(DriverManagerDataSource.class);
-        // logger.info("Database driver URL = "+ driverMgr.getUrl() + " usernem = " + driverMgr.getUsername());
     }
 
     @Bean
@@ -70,5 +61,18 @@ public class Application {
         propsConfig.setIgnoreUnresolvablePlaceholders(true);
 
         return propsConfig;
+    }
+
+    /**
+     * The th:text=”#{key}” tag attribute can be used to display values from property files.
+     * For this to work the property file must be configured as messageSource bean
+     */
+    @Bean
+    @Description("Spring Message Resolver")
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        // messageSource.setBasename("messages");
+        messageSource.setBasename("git");
+        return messageSource;
     }
 }

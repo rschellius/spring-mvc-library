@@ -7,19 +7,16 @@
 </head>
 <body>
     <div class="container" th:fragment="footer">
+        <p class="pull-right text-muted">
+            Version <span th:text="#{info.project.version}">Version from pom.xml</span> |
+            Build <a href="https://github.com/avansinformatica/spring-mvc-library" target="_blank" th:text="#{git.commit.id.abbrev}">Git commit id</a> |
+            <span th:text="#{git.commit.time}">Git commit date/time</span>
+        </p>
         <p class="text-muted">
             <a href="http://www.avans.nl" target="_blank">Avans Hogeschool Breda</a> |
             <a href="http://www.spring.io" target="_blank">Spring Boot</a>
             <a href="https://nl.wikipedia.org/wiki/Model-view-controller-model" target="_blank">MVC</a> with
             <a href="http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html" target="_blank">Thymeleaf</a>
-
-            <span class="text-right">
-                <a href="https://github.com/britter/spring-boot-heroku-demo">GitHub</a>
-                version <span th:text="#{project.version}">0.0.1</span>
-                build <a href="https://github.com" th:href="#{git.commit.id}" th:text="${#strings.substring('__#{git.commit.hash}__', 0, 7)}">1bb7244</a>.
-                <a href="https://blog.codecentric.de/en/2015/10/deploying-spring-boot-applications-to-heroku">See here</a>.
-            </span>
-
         </p>
     </div>
 

@@ -185,6 +185,8 @@
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                     <include>**/*.html</include>
+                    <include>**/*.css</include>
+                    <include>**/*.js</include>
                 </includes>
             </resource>
 
@@ -255,6 +257,7 @@
                         <includeOnlyProperty>^git.branch$</includeOnlyProperty>
                         <includeOnlyProperty>^git.tags$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.id.full$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.user.name$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.user.email$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.time$</includeOnlyProperty>
@@ -266,7 +269,7 @@
                     <!-- Controls the length of the abbreviated git commit id (git.commit.id.abbrev) -->
                     <!--<abbrevLength>9</abbrevLength>-->
                     <!-- Formatting date - Java SimpleDateFormat options -->
-                    <dateFormat>E dd M yyyy HH:mm z</dateFormat>
+                    <dateFormat>E dd-M-yyyy HH:mm z</dateFormat>
                 </configuration>
             </plugin>
         </plugins>

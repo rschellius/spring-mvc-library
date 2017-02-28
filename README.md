@@ -13,6 +13,7 @@ It uses the following technologies:
 - Thymeleaf templating engine with Java 8 Time
 - MySql database using plain old SQL queries, so without JPA/Hibernate.
 - WebJars for css and js includes
+- [maven-git-commit-id-plugin](https://github.com/ktoso/maven-git-commit-id-plugin) to display Git commit info in our Spring application footer
 - Swagger to describe the (minimal) REST API 
 - MockMVC tests
 - [Travis CI](http://https://travis-ci.org) for automatic test CI
