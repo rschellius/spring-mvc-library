@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.avans.ivh5.example.springmvc</groupId>
     <artifactId>spring-boot-thymeleaf</artifactId>
-    <version>1.0</version>
+    <version>1.4.5</version>
     <name>Avans Spring Library Example</name>
     <packaging>jar</packaging>
 
@@ -17,7 +17,15 @@
         <failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
         <appengine.maven.plugin>0.1.2</appengine.maven.plugin>
         <git-commit-id-plugin.version>2.2.2</git-commit-id-plugin.version>
+        <!--<git.commit.link>${project.scm.url}/commit/${buildNumber}</git.commit.link>-->
     </properties>
+
+    <!--<scm>-->
+        <!--<url>https://github.com/avansinformatica/spring-mvc-library</url>-->
+        <!--<connection>scm:git:git://github.com/avansinformatica/spring-mvc-library.git</connection>-->
+        <!--<developerConnection>scm:git:ssh://git@github.com/avansinformatica/spring-mvc-library.git</developerConnection>-->
+        <!--<tag>HEAD</tag>-->
+    <!--</scm>-->
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -179,6 +187,21 @@
                     <include>**/*.html</include>
                 </includes>
             </resource>
+
+            <!--<resource>-->
+                <!--<directory>src/main/resources</directory>-->
+                <!--<filtering>true</filtering>-->
+                <!--<includes>-->
+                    <!--<include>messages.properties</include>-->
+                <!--</includes>-->
+            <!--</resource>-->
+            <!--<resource>-->
+                <!--<directory>src/main/resources</directory>-->
+                <!--<filtering>false</filtering>-->
+                <!--<excludes>-->
+                    <!--<exclude>messages.properties</exclude>-->
+                <!--</excludes>-->
+            <!--</resource>-->
         </resources>
 
         <plugins>
@@ -197,7 +220,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin to display Git version information in your Spring application -->
+             <!--Plugin to display Git version information in your Spring application -->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -249,6 +272,63 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>git</id>
+            <activation>
+                <file>
+                    <missing>${basedir}/.git</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <id>clone-repo</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>git</executable>
+                                    <arguments>
+                                        <argument>clone</argument>
+                                        <argument>-n</argument>
+                                        <argument>https://github.com/avansinformatica/spring-mvc-library.git</argument>
+                                        <argument>${project.build.directory}/checkout</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <copy todir="${basedir}/.git">
+                                            <fileset dir="${project.build.directory}/checkout/.git"/>
+                                        </copy>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>atlassian-public</id>
@@ -276,6 +356,10 @@
                 <checksumPolicy>warn</checksumPolicy>
             </releases>
         </repository>
+        <repository>
+            <id>spring-milestone</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -301,6 +385,10 @@
             <id>jfrog-plugins</id>
             <name>jfrog-plugins-dist</name>
             <url>http://repo.jfrog.org/artifactory/plugins-releases</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-milestone</id>
+            <url>https://repo.spring.io/libs-release</url>
         </pluginRepository>
     </pluginRepositories>
 

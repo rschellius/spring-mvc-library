@@ -15,6 +15,7 @@
             <p>
                 Dit is een Spring Boot Thymeleaf MVC Application! Het is nu <span th:text="${#temporals.format(now, 'd MM yyyy HH:mm')}">31/12/2015 15:00</span>
             </p>
+            <p>The code is open source at <a href="https://github.com/britter/spring-boot-heroku-demo">GitHub</a>. You're currently looking at version <span th:text="#{project.version}">0.0.1</span> build from revision <a href="https://github.com" th:href="#{git.commit.link}" th:text="${#strings.substring('__#{git.commit.hash}__', 0, 7)}">1bb7244</a>. For more information have a look at the <a href="https://blog.codecentric.de/en/2015/10/deploying-spring-boot-applications-to-heroku">accompanying blog post</a>.</p>
         </div>
 
         <div class="row">
