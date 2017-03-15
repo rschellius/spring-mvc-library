@@ -4,7 +4,7 @@ Avans Spring Library Worked Example
 [![Build Status](https://travis-ci.org/avansinformatica/spring-mvc-library.svg?branch=master)](https://travis-ci.org/avansinformatica/spring-mvc-library)
 
 About
------------------
+----------------
 This is a worked example of a library case that is used at [Avans Hogeschool](http://www.avans.nl) in Breda, Netherlands. Some of the content in the app is in Dutch.
 
 It uses the following technologies:
