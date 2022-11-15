@@ -18,10 +18,8 @@ It uses the following technologies:
 - MockMVC tests
 - [Travis CI](http://https://travis-ci.org) for automatic test CI
 
-Demo
+When its running
 --------------------
-You can see a deployed version running at [Heroku](https://spring-mvc-library.herokuapp.com/). See [the textfile](https://github.com/rschellius/spring-mvc-library/blob/master/Heroku_cloud.md) and the Procfile for more info. 
-
 ![screenprint of the application](https://github.com/rschellius/spring-mvc-library/blob/master/src/main/resources/static/img/screenprint.png)
 
 Tests
